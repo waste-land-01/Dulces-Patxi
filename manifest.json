@@ -1,7 +1,7 @@
 {
   "name": "Dulces Patxi",
   "short_name": "Dulces Patxi",
-  "start_url": "/",
+  "start_url": "/Dulces-Patxi/",
   "display": "standalone",
   "background_color": "#FCF8F3",
   "theme_color": "#5C3B28",
@@ -18,4 +18,5 @@
       "type": "image/png"
     }
   ]
+
 }
