@@ -52,44 +52,59 @@
       margin-bottom: 12px;
       font-size: 1.1em;
     }
+    #buscador {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid var(--borde);
+      border-radius: 8px;
+      font-size: 0.95em;
+      margin: 12px 0;
+    }
     .toolbar {
       display: flex;
       gap: 10px;
       margin-bottom: 12px;
     }
-    #buscador, .btn-indice {
+    .btn-menu, .btn-atras {
+      flex: 1;
       padding: 10px;
       border: 1px solid var(--borde);
       border-radius: 8px;
-      font-size: 0.95em;
-      width: 100%;
+      font-weight: 600;
+      cursor: pointer;
     }
-    .btn-indice {
+    .btn-menu {
       background: var(--btn-bg);
       color: var(--btn-text);
-      cursor: pointer;
-      font-weight: 600;
     }
-    .menu-indice {
+    .btn-atras {
+      background: #f0f0f0;
+      color: var(--categoria);
+    }
+    .menu-categorias {
       background: white;
       border: 1px solid var(--borde);
       border-radius: 8px;
       max-height: 0;
       overflow: hidden;
       transition: max-height 0.3s ease;
+      margin-top: 8px;
     }
-    .menu-indice.visible {
+    .menu-categorias.visible {
       max-height: 500px;
     }
-    .menu-indice ul {
+    .menu-categorias ul {
       list-style: none;
       padding: 10px 0;
     }
-    .menu-indice li {
-      padding: 8px 16px;
+    .menu-categorias li {
+      padding: 10px 16px;
       cursor: pointer;
+      background: #f9f6f2;
+      margin: 4px 8px;
+      border-radius: 6px;
     }
-    .menu-indice li:hover {
+    .menu-categorias li:hover {
       background: var(--hover);
     }
     main {
@@ -127,19 +142,25 @@
       border: 1px solid var(--borde);
       text-align: center;
     }
+    .controls select {
+      width: 100%;
+      padding: 12px;
+      font-size: 1em;
+    }
     @media (min-width: 769px) {
       .controls {
         position: fixed;
         bottom: 20px;
         right: 20px;
         margin: 0;
+        width: auto;
       }
     }
   </style>
   <script>
     if ('serviceWorker' in navigator) {
       window.addEventListener('load', () => {
-        navigator.serviceWorker.register('/service-worker.js');
+        navigator.serviceWorker.register('service-worker.js');
       });
     }
   </script>
@@ -148,15 +169,25 @@
   <header>
     <h1>Dulces Patxi</h1>
     <p class="bienvenida">Bienvenidos a Dulces Patxi</p>
+    <input type="text" id="buscador" placeholder="Buscar receta..." />
     <div class="toolbar">
-      <button id="btn-indice" class="btn-indice">Índice ▼</button>
-      <input type="text" id="buscador" placeholder="Buscar receta..." />
+      <button id="btn-menu" class="btn-menu">Menú</button>
+      <button id="btn-atras" class="btn-atras" style="display:none;">← Atrás</button>
     </div>
-    <div id="menu-indice" class="menu-indice"></div>
+    <div id="menu-categorias" class="menu-categorias"></div>
   </header>
 
   <main id="receta-detalle">
-    <h2>Cargando recetas...</h2>
+    <h2>¡Hola, repostero! 👨‍🍳</h2>
+    <p>Toca <strong>“Menú”</strong> arriba para explorar las recetas.</p>
+    <div class="section">
+      <h4><i class="fas fa-star"></i> Categorías destacadas</h4>
+      <ul>
+        <li>Tartas del Ayer</li>
+        <li>Bizcochos, Magdalenas & Muffins</li>
+        <li>Dulces & Confites</li>
+      </ul>
+    </div>
   </main>
 
   <div class="controls">
@@ -1416,6 +1447,8 @@
       }
     ];
 
+    let historial = ["inicio"];
+
     function mostrarReceta(receta) {
       const personasBase = 4;
       const personasActuales = parseInt(document.getElementById("selector-personas").value);
@@ -1437,20 +1470,26 @@
       });
       html += `</ol></div>`;
       document.getElementById("receta-detalle").innerHTML = html;
+      historial = ["inicio", "categorias", "receta"];
+      actualizarBotonAtras();
       localStorage.setItem('ultimaReceta', receta.id);
     }
 
     function mostrarRecetasPorCategoria(categoria) {
+      const menu = document.getElementById("menu-categorias");
+      menu.classList.remove("visible");
       const detalle = document.getElementById("receta-detalle");
       const recetasFiltradas = recetas.filter(r => r.categoria === categoria);
       let html = `<h1>${categoria}</h1>`;
-      html += `<p><strong>${recetasFiltradas.length} recetas disponibles</strong></p>`;
+      html += `<p><strong>${recetasFiltradas.length} recetas</strong></p>`;
       html += `<ul style="list-style: disc; margin-left: 20px;">`;
       recetasFiltradas.forEach(r => {
-        html += `<li onclick="mostrarRecetaPorNombre('${r.nombre}')" style="cursor:pointer; margin: 5px 0;">${r.nombre}</li>`;
+        html += `<li onclick="mostrarRecetaPorNombre('${r.nombre}')" style="cursor:pointer; margin: 6px 0;">${r.nombre}</li>`;
       });
       html += `</ul>`;
       detalle.innerHTML = html;
+      historial = ["inicio", "categorias"];
+      actualizarBotonAtras();
     }
 
     function mostrarRecetaPorNombre(nombre) {
@@ -1458,44 +1497,84 @@
       if (receta) mostrarReceta(receta);
     }
 
-    function cargarIndice() {
-      const menuIndice = document.getElementById("menu-indice");
-      const categorias = {};
-      recetas.forEach(receta => {
-        if (!categorias[receta.categoria]) {
-          categorias[receta.categoria] = [];
-        }
-        categorias[receta.categoria].push(receta);
-      });
-
-      let html = '<ul>';
-      for (const [categoria, recs] of Object.entries(categorias)) {
-        html += `<li onclick="mostrarRecetasPorCategoria('${categoria}')" style="cursor:pointer; padding: 8px 16px; background: #f5f0eb; border-radius: 6px; margin: 4px 0;">${categoria} (${recs.length})</li>`;
-      }
-      html += '</ul>';
-      menuIndice.innerHTML = html;
+    function mostrarInicio() {
+      document.getElementById("receta-detalle").innerHTML = `
+        <h2>¡Hola, repostero! 👨‍🍳</h2>
+        <p>Toca <strong>“Menú”</strong> arriba para explorar las recetas.</p>
+        <div class="section">
+          <h4><i class="fas fa-star"></i> Categorías destacadas</h4>
+          <ul>
+            <li>Tartas del Ayer</li>
+            <li>Bizcochos, Magdalenas & Muffins</li>
+            <li>Dulces & Confites</li>
+          </ul>
+        </div>
+      `;
+      historial = ["inicio"];
+      actualizarBotonAtras();
     }
 
-    document.getElementById("btn-indice").addEventListener("click", () => {
-      const menu = document.getElementById("menu-indice");
+    function cargarIndice() {
+      const menu = document.getElementById("menu-categorias");
+      const categorias = {};
+      recetas.forEach(r => {
+        if (!categorias[r.categoria]) categorias[r.categoria] = [];
+        categorias[r.categoria].push(r);
+      });
+      let html = '<ul>';
+      for (const [cat, recs] of Object.entries(categorias)) {
+        html += `<li onclick="mostrarRecetasPorCategoria('${cat}')">${cat} (${recs.length})</li>`;
+      }
+      html += '</ul>';
+      menu.innerHTML = html;
+    }
+
+    function actualizarBotonAtras() {
+      const btn = document.getElementById("btn-atras");
+      if (historial.length > 1) {
+        btn.style.display = "block";
+      } else {
+        btn.style.display = "none";
+      }
+    }
+
+    document.getElementById("btn-menu").addEventListener("click", () => {
+      const menu = document.getElementById("menu-categorias");
       menu.classList.toggle("visible");
+    });
+
+    document.getElementById("btn-atras").addEventListener("click", () => {
+      if (historial.length > 1) {
+        historial.pop();
+        if (historial.includes("categorias")) {
+          // Volver a lista de recetas: necesitas recordar la última categoría
+          // Para simplicidad, volvemos al inicio
+          mostrarInicio();
+        } else {
+          mostrarInicio();
+        }
+      }
     });
 
     document.getElementById("buscador").addEventListener("input", (e) => {
       const term = e.target.value.toLowerCase();
+      const menu = document.getElementById("menu-categorias");
+      menu.classList.remove("visible");
       const detalle = document.getElementById("receta-detalle");
       const filtradas = recetas.filter(r => r.nombre.toLowerCase().includes(term));
       let html = `<h2>Resultados para "${term}"</h2>`;
       if (filtradas.length === 0) {
         html += `<p>No se encontraron recetas.</p>`;
       } else {
-        html += `<ul style="list-style: none; margin: 10px 0;">`;
+        html += `<ul style="list-style: none;">`;
         filtradas.forEach(r => {
-          html += `<li onclick="mostrarReceta(${JSON.stringify(r)})" style="padding: 8px 12px; cursor:pointer; background: #fff; border: 1px solid #ddd; margin: 4px 0; border-radius: 6px;">${r.nombre} <small>(${r.categoria})</small></li>`;
+          html += `<li onclick="mostrarReceta(${JSON.stringify(r)})" style="padding:10px; cursor:pointer; border-bottom:1px solid #eee;">${r.nombre} <small>(${r.categoria})</small></li>`;
         });
         html += `</ul>`;
       }
       detalle.innerHTML = html;
+      historial = ["inicio"];
+      actualizarBotonAtras();
     });
 
     document.getElementById("selector-personas").addEventListener("change", () => {
@@ -1508,9 +1587,7 @@
 
     window.onload = () => {
       cargarIndice();
-      const savedId = localStorage.getItem('ultimaReceta');
-      const primera = recetas.find(r => r.id === savedId) || recetas[0];
-      mostrarReceta(primera);
+      mostrarInicio();
     };
   </script>
 </body>
