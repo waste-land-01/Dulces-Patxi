@@ -61,14 +61,14 @@
       color: var(--categoria);
       font-style: italic;
       margin-bottom: 12px;
-      font-size: 1.3em;
+      font-size: 1.1em;
     }
     #buscador {
       width: 100%;
       padding: 10px;
       border: 1px solid var(--borde);
       border-radius: 8px;
-      font-size: 1.1em;
+      font-size: 0.95em;
       margin: 12px 0;
     }
     .toolbar {
@@ -109,20 +109,20 @@
       padding: 10px 0;
     }
     .menu-categorias li {
-  padding: 10px 16px;
-  cursor: pointer;
-  background: #f9f6f2;
-  margin: 4px 8px;
-  border-radius: 6px;
-  color: var(--texto); /* Asegura color en modo claro */
-}
-.modo-oscuro .menu-categorias li {
-  color: var(--texto);
-  background: var(--hover);
-}
-.menu-categorias li:hover {
-  background: var(--hover);
-}
+      padding: 10px 16px;
+      cursor: pointer;
+      background: #f9f6f2;
+      margin: 4px 8px;
+      border-radius: 6px;
+      color: var(--texto);
+    }
+    .modo-oscuro .menu-categorias li {
+      color: var(--texto);
+      background: var(--hover);
+    }
+    .menu-categorias li:hover {
+      background: var(--hover);
+    }
     main {
       padding: 20px 16px;
     }
@@ -158,14 +158,14 @@
       border: 1px solid var(--borde);
       text-align: center;
     }
+    .controls label {
+      font-weight: 700;
+      font-size: 1.1em;
+    }
     .controls select {
       width: 100%;
       padding: 12px;
       font-size: 1em;
-    }
-    .controls label {
-  font-weight: 700;
-  font-size: 1.1em;
     }
     .notas-seccion {
       margin-top: 20px;
@@ -182,6 +182,29 @@
       border-radius: 6px;
       font-family: inherit;
       resize: vertical;
+    }
+    #panel-temporizadores {
+      position: fixed;
+      bottom: 80px;
+      left: 10px;
+      right: 10px;
+      background: #5C3B28;
+      color: white;
+      padding: 12px;
+      border-radius: 10px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+      z-index: 2000;
+      font-size: 0.9em;
+    }
+    .btn-timer {
+      margin-left: 8px;
+      padding: 2px 6px;
+      background: #8B5A3E;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      font-size: 0.8em;
+      cursor: pointer;
     }
     @media (min-width: 769px) {
       .controls {
@@ -205,7 +228,7 @@
   <header>
     <h1>Dulces Patxi</h1>
     <p class="bienvenida">Bienvenidos a Dulces de Bachir Krai</p>
-    <input type="text" id="buscador" placeholder="Buscar receta o palabra clave..." />
+    <input type="text" id="buscador" placeholder="Buscar receta, ingrediente o palabra clave..." />
     <div class="toolbar">
       <button id="btn-menu" class="btn-menu">Menú</button>
       <button id="btn-atras" class="btn-atras" style="display:none;">← Atrás</button>
@@ -215,7 +238,7 @@
   </header>
 
   <main id="receta-detalle">
-    <h2>¡ Hola Reposter@s ! 👨‍🍳👩‍🍳</h2>
+    <h2>¡Hola Reposter@s! 👨‍🍳👩‍🍳</h2>
     <p>Toca <strong>“Menú”</strong> arriba para explorar las recetas.</p>
     <div class="section">
       <h4><i class="fas fa-star"></i> Categorías destacadas</h4>
@@ -1485,7 +1508,76 @@
     ];
 
     let historial = ["inicio"];
+    let temporizadores = [];
 
+    // --- TEMPORIZADOR ---
+    function crearTemporizador(minutos, etiqueta = "Temporizador") {
+      const id = Date.now();
+      const totalSegundos = minutos * 60;
+      let segundosRestantes = totalSegundos;
+
+      const reproducirAlarma = () => {
+        // Sonido de campana corto en base64
+        const sonido = "data:audio/mpeg;base64,SUQzBAAAAAABEVRYWFgAAAAtAAADY29tbWVudABCaWdTb3VuZEJhbmsuY29tIC8gTGlua3MgTWFkZSBCeSBEaXJlY3REb3dubG9hZGVyDEAAAAA=";
+        const audio = new Audio(sonido);
+        audio.play().catch(e => console.log("Audio no permitido:", e));
+        alert(`⏰ ¡Tiempo terminado!\n${etiqueta}`);
+      };
+
+      const intervalo = setInterval(() => {
+        segundosRestantes--;
+        if (segundosRestantes <= 0) {
+          clearInterval(intervalo);
+          reproducirAlarma();
+          temporizadores = temporizadores.filter(t => t.id !== id);
+          actualizarPanelTemporizadores();
+        } else {
+          actualizarPanelTemporizadores();
+        }
+      }, 1000);
+
+      temporizadores.push({ id, minutos, etiqueta, segundosRestantes, intervalo });
+      actualizarPanelTemporizadores();
+    }
+
+    function actualizarPanelTemporizadores() {
+      const panel = document.getElementById("panel-temporizadores");
+      if (temporizadores.length === 0) {
+        if (panel) panel.remove();
+        return;
+      }
+      if (!panel) {
+        const nuevoPanel = document.createElement("div");
+        nuevoPanel.id = "panel-temporizadores";
+        document.body.appendChild(nuevoPanel);
+      }
+      const formatoTiempo = (s) => {
+        const m = Math.floor(s / 60);
+        const ss = s % 60;
+        return `${m.toString().padStart(2, '0')}:${ss.toString().padStart(2, '0')}`;
+      };
+      document.getElementById("panel-temporizadores").innerHTML = `
+        <strong>⏰ Temporizadores activos</strong><br>
+        ${temporizadores.map(t => `${t.etiqueta} — ${formatoTiempo(t.segundosRestantes)}`).join('<br>')}
+        <br><button onclick="cerrarTodosTemporizadores()" style="margin-top:8px; padding:4px 8px; background:#fff; color:#5C3B28; border:none; border-radius:4px; font-weight:bold;">Cerrar todos</button>
+      `;
+    }
+
+    function cerrarTodosTemporizadores() {
+      temporizadores.forEach(t => clearInterval(t.intervalo));
+      temporizadores = [];
+      document.getElementById("panel-temporizadores").remove();
+    }
+
+    function abrirTemporizadorPersonalizado() {
+      const minutos = prompt("¿Cuántos minutos?", "10");
+      if (minutos && !isNaN(minutos)) {
+        const etiqueta = prompt("Nombre del temporizador (opcional):", "Mi temporizador");
+        crearTemporizador(parseInt(minutos), etiqueta || "Temporizador");
+      }
+    }
+
+    // --- FUNCIONES PRINCIPALES ---
     function mostrarReceta(receta) {
       const personasBase = 4;
       const personasActuales = parseInt(document.getElementById("selector-personas").value);
@@ -1503,9 +1595,23 @@
       html += `</ul></div>`;
       html += `<div class="section"><h4><i class="fas fa-mortar-pestle"></i> Elaboración</h4><ol>`;
       receta.elaboracion.forEach(paso => {
-        html += `<li>${paso}</li>`;
+        const match = paso.match(/(\d+)\s*(?:minutos?|min)/i);
+        if (match) {
+          const minutos = parseInt(match[1]);
+          html += `<li>${paso} <button class="btn-timer" onclick="crearTemporizador(${minutos}, '${paso.replace(/'/g, "\\'")}')" style="margin-left:8px; padding:2px 6px; background:#8B5A3E; color:white; border:none; border-radius:4px; font-size:0.8em;">⏰ ${minutos} min</button></li>`;
+        } else {
+          html += `<li>${paso}</li>`;
+        }
       });
       html += `</ol></div>`;
+
+      html += `
+        <div class="section">
+          <button onclick="abrirTemporizadorPersonalizado()" style="background:#E9DCCF; color:#5C3B28; border:1px solid #D4C2B3; padding:8px 12px; border-radius:6px; font-weight:600;">
+            + Añadir temporizador personalizado
+          </button>
+        </div>
+      `;
 
       const notasKey = `notas_${receta.id}`;
       const notasGuardadas = localStorage.getItem(notasKey) || "";
@@ -1598,7 +1704,7 @@
 
     function mostrarInicio() {
       document.getElementById("receta-detalle").innerHTML = `
-        <h2>¡ Hola Reposter@s ! 👨‍🍳👩‍🍳</h2>
+        <h2>¡Hola Reposter@s! 👨‍🍳👩‍🍳</h2>
         <p>Toca <strong>“Menú”</strong> arriba para explorar las recetas.</p>
         <div class="section">
           <h4><i class="fas fa-star"></i> Categorías destacadas</h4>
@@ -1651,5 +1757,3 @@
   </script>
 </body>
 </html>
-
-
