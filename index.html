@@ -109,15 +109,20 @@
       padding: 10px 0;
     }
     .menu-categorias li {
-      padding: 10px 16px;
-      cursor: pointer;
-      background: #f9f6f2;
-      margin: 4px 8px;
-      border-radius: 6px;
-    }
-    .menu-categorias li:hover {
-      background: var(--hover);
-    }
+  padding: 10px 16px;
+  cursor: pointer;
+  background: #f9f6f2;
+  margin: 4px 8px;
+  border-radius: 6px;
+  color: var(--texto); /* Asegura color en modo claro */
+}
+.modo-oscuro .menu-categorias li {
+  color: var(--texto);
+  background: var(--hover);
+}
+.menu-categorias li:hover {
+  background: var(--hover);
+}
     main {
       padding: 20px 16px;
     }
@@ -1646,4 +1651,5 @@
   </script>
 </body>
 </html>
+
 
