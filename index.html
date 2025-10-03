@@ -76,7 +76,7 @@
       gap: 10px;
       margin-bottom: 12px;
     }
-    .btn-menu, .btn-atras {
+    .btn-menu, .btn-atras, .btn-oscuro {
       flex: 1;
       padding: 10px;
       border: 1px solid var(--borde);
@@ -88,14 +88,9 @@
       background: var(--btn-bg);
       color: var(--btn-text);
     }
-    .btn-atras {
+    .btn-atras, .btn-oscuro {
       background: #f0f0f0;
       color: var(--categoria);
-      display: none; /* Oculto por defecto */
-    }
-    .modo-oscuro .btn-atras {
-      background: #3A2F28;
-      color: #F5E9D9;
     }
     .menu-categorias {
       background: white;
@@ -105,10 +100,6 @@
       overflow: hidden;
       transition: max-height 0.3s ease;
       margin-top: 8px;
-    }
-    .modo-oscuro .menu-categorias {
-      background: #2A241F;
-      border: 1px solid var(--borde);
     }
     .menu-categorias.visible {
       max-height: 500px;
@@ -124,15 +115,8 @@
       margin: 4px 8px;
       border-radius: 6px;
     }
-    .modo-oscuro .menu-categorias li {
-      background: #3A2F28;
-      color: #F5E9D9;
-    }
     .menu-categorias li:hover {
       background: var(--hover);
-    }
-    .modo-oscuro .menu-categorias li:hover {
-      background: #4A3A2F;
     }
     main {
       padding: 20px 16px;
@@ -175,10 +159,6 @@
       border: 1px solid var(--borde);
       text-align: center;
     }
-    .modo-oscuro .controls {
-      background: #2A241F;
-      border: 1px solid var(--borde);
-    }
     .controls select {
       width: 100%;
       padding: 12px;
@@ -191,10 +171,6 @@
       border-radius: 10px;
       border: 1px dashed var(--borde);
     }
-    .modo-oscuro .notas-seccion {
-      background: #3A2F28;
-      border: 1px dashed var(--borde);
-    }
     .notas-seccion textarea {
       width: 100%;
       height: 100px;
@@ -203,13 +179,6 @@
       border-radius: 6px;
       font-family: inherit;
       resize: vertical;
-      background: white;
-      color: var(--texto);
-    }
-    .modo-oscuro .notas-seccion textarea {
-      background: #2A241F;
-      border: 1px solid var(--borde);
-      color: #F5E9D9;
     }
     /* --- BOTÓN TEMPORIZADOR PERSONALIZADO MÁS GRUESO --- */
     .btn-temp-personalizado {
@@ -247,10 +216,6 @@
       font-size: 0.8em;
       cursor: pointer;
     }
-    .modo-oscuro .btn-timer {
-      background: #5C3B28;
-      color: #F5E9D9;
-    }
     @media (min-width: 769px) {
       .controls {
         position: fixed;
@@ -274,9 +239,6 @@
         z-index: 2000;
         font-size: 0.9em;
     }
-    .modo-oscuro #panel-temporizadores {
-        background: #3A2F28;
-    }
   </style>
   <script>
     if ('serviceWorker' in navigator) {
@@ -289,11 +251,12 @@
 <body>
   <header>
     <h1>Dulces Patxi</h1>
-    <p class="bienvenida">Bienvenidos a Dulces Bachir Krai</p>
+    <p class="bienvenida">Bienvenidos a Dulces Patxi</p>
     <input type="text" id="buscador" placeholder="Buscar receta, ingrediente o palabra clave..." />
     <div class="toolbar">
       <button id="btn-menu" class="btn-menu">Menú</button>
       <button id="btn-atras" class="btn-atras" style="display:none;">← Atrás</button>
+      <button id="btn-oscuro" class="btn-oscuro">🌙 Modo</button>
     </div>
     <div id="menu-categorias" class="menu-categorias"></div>
   </header>
@@ -324,6 +287,7 @@
   </div>
 
   <script>
+    // === DATOS DE LAS RECETAS ===
     const recetas = [
       // === TARTAS DEL AYER ===
       {
@@ -1630,150 +1594,18 @@
       alert("Notas guardadas ✅");
     }
 
-    function mostrarRecetasPorCategoria(categoria) {
-      const menu = document.getElementById("menu-categorias");
-      menu.classList.remove("visible"); // ✅ Cierra el menú al seleccionar
-      const detalle = document.getElementById("receta-detalle");
-      const recetasFiltradas = recetas.filter(r => r.categoria === categoria);
-      let html = `<h1>${categoria}</h1>`;
-      html += `<p><strong>${recetasFiltradas.length} recetas</strong></p>`;
-      html += `<ul style="list-style: disc; margin-left: 20px;">`;
-      recetasFiltradas.forEach(r => {
-        html += `<li onclick="mostrarRecetaPorNombre('${r.nombre}')" style="cursor:pointer; margin: 6px 0;">${r.nombre}</li>`;
-      });
-      html += `</ul>`;
-      detalle.innerHTML = html;
-      historial = ["inicio", "categorias"];
-      ultimaCategoria = categoria; // Guardar la categoría actual
-      actualizarBotonAtras();
-      localStorage.setItem('ultimaCategoria', categoria);
-    }
-
-    function mostrarRecetaPorNombre(nombre) {
-      const receta = recetas.find(r => r.nombre === nombre);
-      if (receta) mostrarReceta(receta);
-    }
-
-    // --- BÚSQUEDA ---
-    document.getElementById("buscador").addEventListener("input", (e) => {
-      const term = e.target.value.toLowerCase();
-      const menu = document.getElementById("menu-categorias");
-      menu.classList.remove("visible");
-      const detalle = document.getElementById("receta-detalle");
-      const filtradas = recetas.filter(r =>
-        r.nombre.toLowerCase().includes(term) ||
-        r.ingredientes.some(ing => ing.nombre.toLowerCase().includes(term))
-      );
-      let html = `<h2>Resultados para "${term}"</h2>`;
-      if (filtradas.length === 0) {
-        html += `<p>No se encontraron recetas.</p>`;
-      } else {
-        html += `<ul style="list-style: none; margin: 10px 0;">`;
-        filtradas.forEach(r => {
-          html += `<li onclick="mostrarReceta(${JSON.stringify(r)})" style="padding:10px; cursor:pointer; background: #fff; border: 1px solid #ddd; margin: 4px 0; border-radius: 6px;">${r.nombre} <small>(${r.categoria})</small></li>`;
-        });
-        html += `</ul>`;
-      }
-      detalle.innerHTML = html;
-      historial = ["inicio"];
-      actualizarBotonAtras();
-      localStorage.removeItem('ultimaCategoria'); // Limpiar categoría si se busca
-    });
-
-    // --- CAMBIO DE PORCIONES ---
-    document.getElementById("selector-personas").addEventListener("change", () => {
-      const currentName = document.querySelector("#receta-detalle h1")?.textContent;
-      if (currentName) {
-        const receta = recetas.find(r => r.nombre === currentName);
-        if (receta) mostrarReceta(receta);
-      }
-    });
-
-    // --- NAVEGACIÓN ATRÁS MEJORADA ---
-    document.getElementById("btn-atras").addEventListener("click", () => {
-      if (historial.length > 2) {
-        // De receta -> lista de su categoría
-        if (ultimaCategoria) {
-          mostrarRecetasPorCategoria(ultimaCategoria);
-        } else {
-          mostrarInicio();
+    function abrirTemporizadorPersonalizado() {
+        const minutosStr = prompt("Ingrese los minutos para el temporizador:", "10");
+        if (minutosStr !== null) {
+            const minutos = parseInt(minutosStr);
+            if (!isNaN(minutos) && minutos > 0) {
+                const etiqueta = prompt("Nombre del temporizador (opcional):", "Mi temporizador");
+                crearTemporizador(parseInt(minutos), etiqueta || `Temporizador ${minutos} min`);
+            } else {
+                alert("Por favor, ingrese un número válido de minutos.");
+            }
         }
-      } else if (historial.length > 1) {
-        // De lista de categoría -> inicio
-        mostrarInicio();
-      }
-    });
-
-    function actualizarBotonAtras() {
-      const btn = document.getElementById("btn-atras");
-      if (historial.length > 1) {
-        btn.style.display = "block";
-      } else {
-        btn.style.display = "none";
-      }
     }
-
-    function mostrarInicio() {
-      document.getElementById("receta-detalle").innerHTML = `
-        <h2>¡Hola, repostero! 👨‍🍳</h2>
-        <p>Toca <strong>“Menú”</strong> arriba para explorar las recetas.</p>
-        <div class="section">
-          <h4><i class="fas fa-star"></i> Categorías destacadas</h4>
-          <ul>
-            <li>Tartas del Ayer</li>
-            <li>Bizcochos, Magdalenas & Muffins</li>
-            <li>Dulces & Confites</li>
-          </ul>
-        </div>
-      `;
-      historial = ["inicio"];
-      actualizarBotonAtras();
-      localStorage.removeItem('ultimaCategoria'); // Limpiar categoría al volver al inicio
-    }
-
-    // --- MODO OSCURO ---
-    document.getElementById("btn-modo-oscuro").addEventListener("click", () => {
-        document.body.classList.toggle("modo-oscuro");
-        const estaOscuro = document.body.classList.contains("modo-oscuro");
-        localStorage.setItem("modoOscuro", estaOscuro);
-        document.getElementById("btn-modo-oscuro").textContent = estaOscuro ? "☀️ Claro" : "🌙 Modo";
-    });
-
-    if (localStorage.getItem("modoOscuro") === "true") {
-        document.body.classList.add("modo-oscuro");
-        document.getElementById("btn-modo-oscuro").textContent = "☀️ Claro";
-    }
-
-    // --- INICIALIZAR ---
-    window.onload = () => {
-      // Cargar índice
-      const menu = document.getElementById("menu-categorias");
-      const categorias = {};
-      recetas.forEach(r => {
-        if (!categorias[r.categoria]) categorias[r.categoria] = [];
-        categorias[r.categoria].push(r);
-      });
-      let html = '<ul>';
-      for (const [cat, recs] of Object.entries(categorias)) {
-        html += `<li onclick="mostrarRecetasPorCategoria('${cat}')">${cat} (${recs.length})</li>`;
-      }
-      html += '</ul>';
-      menu.innerHTML = html;
-      mostrarInicio();
-
-      // Restaurar última receta vista si existe
-      const savedId = localStorage.getItem('ultimaReceta');
-      if (savedId) {
-        const primera = recetas.find(r => r.id === savedId);
-        if (primera) mostrarReceta(primera);
-      }
-    };
-
-    // --- MENÚ ---
-    document.getElementById("btn-menu").addEventListener("click", () => {
-      const menu = document.getElementById("menu-categorias");
-      menu.classList.toggle("visible");
-    });
 
     // --- TEMPORIZADOR ---
     let temporizadores = [];
@@ -1857,21 +1689,35 @@
         if (panel) panel.remove();
         return;
       }
+
       if (!panel) {
         const nuevoPanel = document.createElement("div");
         nuevoPanel.id = "panel-temporizadores";
         document.body.appendChild(nuevoPanel);
       }
+
       const formatoTiempo = (s) => {
         const m = Math.floor(s / 60);
         const ss = s % 60;
         return `${m.toString().padStart(2, '0')}:${ss.toString().padStart(2, '0')}`;
       };
-      document.getElementById("panel-temporizadores").innerHTML = `
-        <strong>⏰ Temporizadores activos</strong><br>
-        ${temporizadores.map(t => `${t.etiqueta} — ${formatoTiempo(t.segundosRestantes)}`).join('<br>')}
-        <br><button onclick="cerrarTodosTemporizadores()" style="margin-top:8px; padding:4px 8px; background:#fff; color:#5C3B28; border:none; border-radius:4px; font-weight:bold;">Cerrar todos</button>
-      `;
+
+      let html = "<strong>⏰ Temporizadores activos</strong><br>";
+      temporizadores.forEach(t => {
+        html += `${t.etiqueta} — ${formatoTiempo(t.segundosRestantes)} <button class="btn-cerrar-temp" onclick="cerrarTemporizador(${t.id})">X</button><br>`;
+      });
+      html += `<button class="btn-cerrar-temp" style="margin-top:8px;" onclick="cerrarTodosTemporizadores()">Cerrar Todos</button>`;
+
+      document.getElementById("panel-temporizadores").innerHTML = html;
+    }
+
+    function cerrarTemporizador(id) {
+      const temp = temporizadores.find(t => t.id == id);
+      if (temp) {
+        clearInterval(temp.intervalo);
+        temporizadores = temporizadores.filter(t => t.id != id);
+        actualizarPanelTemporizadores();
+      }
     }
 
     function cerrarTodosTemporizadores() {
@@ -1881,20 +1727,155 @@
       if (panel) panel.remove();
     }
 
-    function abrirTemporizadorPersonalizado() {
-        const minutosStr = prompt("Ingrese los minutos para el temporizador:", "10");
-        if (minutosStr !== null) {
-            const minutos = parseInt(minutosStr);
-            if (!isNaN(minutos) && minutos > 0) {
-                const etiqueta = prompt("Nombre del temporizador (opcional):", "Mi temporizador");
-                crearTemporizador(parseInt(minutos), etiqueta || `Temporizador ${minutos} min`);
-            } else {
-                alert("Por favor, ingrese un número válido de minutos.");
-            }
-        }
+    function mostrarRecetasPorCategoria(categoria) {
+      const menu = document.getElementById("menu-categorias");
+      menu.classList.remove("visible"); // ✅ Cierra el menú al seleccionar
+      const detalle = document.getElementById("receta-detalle");
+      const recetasFiltradas = recetas.filter(r => r.categoria === categoria);
+      let html = `<h1>${categoria}</h1>`;
+      html += `<p><strong>${recetasFiltradas.length} recetas</strong></p>`;
+      html += `<ul style="list-style: disc; margin-left: 20px;">`;
+      recetasFiltradas.forEach(r => {
+        html += `<li onclick="mostrarRecetaPorNombre('${r.nombre}')" style="cursor:pointer; margin: 6px 0;">${r.nombre}</li>`;
+      });
+      html += `</ul>`;
+      detalle.innerHTML = html;
+      historial.push("categorias");
+      ultimaCategoria = categoria; // Guardar la categoría actual
+      actualizarBotonAtras();
+      localStorage.setItem('ultimaCategoria', categoria);
     }
 
-    // --- FIN DE TEMPORIZADOR ---
+    function mostrarRecetaPorNombre(nombre) {
+      const receta = recetas.find(r => r.nombre === nombre);
+      if (receta) mostrarReceta(receta);
+    }
+
+    function mostrarInicio() {
+      document.getElementById("receta-detalle").innerHTML = `
+        <h2>¡Hola, Reposter@s! 👨‍🍳👩‍🍳</h2>
+        <p>Toca <strong>“Menú”</strong> arriba para explorar las recetas.</p>
+        <div class="section">
+          <h4><i class="fas fa-star"></i> Categorías destacadas</h4>
+          <ul>
+            <li>Tartas del Ayer</li>
+            <li>Bizcochos, Magdalenas & Muffins</li>
+            <li>Dulces & Confites</li>
+          </ul>
+        </div>
+      `;
+      historial = ["inicio"];
+      actualizarBotonAtras();
+      localStorage.removeItem('ultimaCategoria'); // Limpiar categoría al volver al inicio
+    }
+
+    function cargarIndice() {
+      const menu = document.getElementById("menu-categorias");
+      const categorias = {};
+      recetas.forEach(r => {
+        if (!categorias[r.categoria]) categorias[r.categoria] = [];
+        categorias[r.categoria].push(r);
+      });
+      let html = '<ul>';
+      for (const [cat, recs] of Object.entries(categorias)) {
+        html += `<li onclick="mostrarRecetasPorCategoria('${cat}')">${cat} (${recs.length})</li>`;
+      }
+      html += '</ul>';
+      menu.innerHTML = html;
+    }
+
+    function actualizarBotonAtras() {
+      const btn = document.getElementById("btn-atras");
+      if (historial.length > 1) {
+        btn.style.display = "block";
+      } else {
+        btn.style.display = "none";
+      }
+    }
+
+    // --- EVENTOS ---
+    document.getElementById("btn-menu").addEventListener("click", () => {
+      const menu = document.getElementById("menu-categorias");
+      menu.classList.toggle("visible");
+    });
+
+    document.getElementById("btn-atras").addEventListener("click", () => {
+      if (historial.length > 2) {
+        // De receta -> lista de su categoría
+        if (ultimaCategoria) {
+          mostrarRecetasPorCategoria(ultimaCategoria);
+        } else {
+          mostrarInicio();
+        }
+      } else if (historial.length > 1) {
+        // De lista de categoría -> inicio
+        mostrarInicio();
+      }
+    });
+
+    document.getElementById("buscador").addEventListener("input", (e) => {
+      const term = e.target.value.toLowerCase();
+      const menu = document.getElementById("menu-categorias");
+      menu.classList.remove("visible");
+      const detalle = document.getElementById("receta-detalle");
+      const filtradas = recetas.filter(r =>
+        r.nombre.toLowerCase().includes(term) ||
+        r.ingredientes.some(ing => ing.nombre.toLowerCase().includes(term))
+      );
+      let html = `<h2>Resultados para "${term}"</h2>`;
+      if (filtradas.length === 0) {
+        html += `<p>No se encontraron recetas.</p>`;
+      } else {
+        html += `<ul style="list-style: none;">`;
+        filtradas.forEach(r => {
+          html += `<li onclick="mostrarReceta(${JSON.stringify(r)})" style="padding:10px; cursor:pointer; background: #fff; border: 1px solid #ddd; margin: 4px 0; border-radius: 6px;">${r.nombre} <small>(${r.categoria})</small></li>`;
+        });
+        html += `</ul>`;
+      }
+      detalle.innerHTML = html;
+      historial = ["inicio"];
+      actualizarBotonAtras();
+      localStorage.removeItem('ultimaCategoria'); // Limpiar categoría si se busca
+    });
+
+    document.getElementById("selector-personas").addEventListener("change", () => {
+      const currentName = document.querySelector("#receta-detalle h1")?.textContent;
+      if (currentName) {
+        const receta = recetas.find(r => r.nombre === currentName);
+        if (receta) mostrarReceta(receta);
+      }
+    });
+
+    // --- MODO OSCURO ---
+    document.getElementById("btn-modo-oscuro").addEventListener("click", () => {
+        document.body.classList.toggle("modo-oscuro");
+        const estaOscuro = document.body.classList.contains("modo-oscuro");
+        localStorage.setItem("modoOscuro", estaOscuro);
+        document.getElementById("btn-modo-oscuro").textContent = estaOscuro ? "☀️ Claro" : "🌙 Modo";
+    });
+
+    if (localStorage.getItem("modoOscuro") === "true") {
+        document.body.classList.add("modo-oscuro");
+        document.getElementById("btn-modo-oscuro").textContent = "☀️ Claro";
+    }
+
+    // --- INICIALIZAR ---
+    window.onload = () => {
+      // Solicitar permiso para notificaciones al cargar
+      if (Notification && Notification.permission === "default") {
+        Notification.requestPermission();
+      }
+
+      cargarIndice();
+      mostrarInicio();
+
+      // Restaurar última receta vista si existe
+      const savedId = localStorage.getItem('ultimaReceta');
+      if (savedId) {
+        const primera = recetas.find(r => r.id === savedId);
+        if (primera) mostrarReceta(primera);
+      }
+    };
   </script>
 </body>
 </html>
