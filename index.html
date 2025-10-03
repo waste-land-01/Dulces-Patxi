@@ -92,6 +92,11 @@
       background: #f0f0f0;
       color: var(--categoria);
     }
+    .modo-oscuro .btn-atras, .modo-oscuro .btn-oscuro {
+      background: #3A2F28;
+      color: #F5E9D9;
+      border: 1px solid #4A3A2F;
+    }
     .menu-categorias {
       background: white;
       border: 1px solid var(--borde);
@@ -100,6 +105,10 @@
       overflow: hidden;
       transition: max-height 0.3s ease;
       margin-top: 8px;
+    }
+    .modo-oscuro .menu-categorias {
+      background: #2A241F;
+      border: 1px solid #4A3A2F;
     }
     .menu-categorias.visible {
       max-height: 500px;
@@ -114,6 +123,10 @@
       background: #f9f6f2;
       margin: 4px 8px;
       border-radius: 6px;
+    }
+    .modo-oscuro .menu-categorias li {
+      background: #3A2F28;
+      color: #F5E9D9;
     }
     .menu-categorias li:hover {
       background: var(--hover);
@@ -159,6 +172,10 @@
       border: 1px solid var(--borde);
       text-align: center;
     }
+    .modo-oscuro .controls {
+      background: #2A241F;
+      border: 1px solid #4A3A2F;
+    }
     .controls select {
       width: 100%;
       padding: 12px;
@@ -171,6 +188,10 @@
       border-radius: 10px;
       border: 1px dashed var(--borde);
     }
+    .modo-oscuro .notas-seccion {
+      background: #3A2F28;
+      border: 1px dashed #4A3A2F;
+    }
     .notas-seccion textarea {
       width: 100%;
       height: 100px;
@@ -179,6 +200,13 @@
       border-radius: 6px;
       font-family: inherit;
       resize: vertical;
+      background: white;
+      color: var(--texto);
+    }
+    .modo-oscuro .notas-seccion textarea {
+      background: #2A241F;
+      border: 1px solid #4A3A2F;
+      color: #F5E9D9;
     }
     /* --- BOTÓN TEMPORIZADOR PERSONALIZADO MÁS GRUESO --- */
     .btn-temp-personalizado {
@@ -216,6 +244,10 @@
       font-size: 0.8em;
       cursor: pointer;
     }
+    .modo-oscuro .btn-timer {
+      background: #5C3B28;
+      color: #F5E9D9;
+    }
     @media (min-width: 769px) {
       .controls {
         position: fixed;
@@ -227,17 +259,20 @@
     }
     /* --- PANEL DE TEMPORIZADORES --- */
     #panel-temporizadores {
-        position: fixed;
-        bottom: 80px;
-        left: 10px;
-        right: 10px;
-        background: #5C3B28;
-        color: white;
-        padding: 12px;
-        border-radius: 10px;
-        box-shadow: 0 4px 12px rgba(0,0,0,0.3);
-        z-index: 2000;
-        font-size: 0.9em;
+      position: fixed;
+      bottom: 80px;
+      left: 10px;
+      right: 10px;
+      background: #5C3B28;
+      color: white;
+      padding: 12px;
+      border-radius: 10px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+      z-index: 2000;
+      font-size: 0.9em;
+    }
+    .modo-oscuro #panel-temporizadores {
+      background: #3A2F28;
     }
   </style>
   <script>
@@ -286,7 +321,7 @@
     </label>
   </div>
 
-   <script>
+  <script>
     // === DATOS DE LAS RECETAS ===
     const recetas = [
       // === TARTAS DEL AYER ===
@@ -1533,8 +1568,9 @@
     ];
 
     // --- VARIABLES GLOBALES ---
-    let ultimaCategoria = null;
     let historial = ["inicio"];
+    let ultimaCategoria = null;
+    let temporizadores = [];
 
     // --- FUNCIONES ---
     function mostrarReceta(receta) {
@@ -1608,8 +1644,6 @@
     }
 
     // --- TEMPORIZADOR ---
-    let temporizadores = [];
-
     function crearTemporizador(minutos, etiqueta = "Temporizador") {
       const id = Date.now();
       const totalSegundos = minutos * 60;
@@ -1625,10 +1659,7 @@
         } else if (Notification && Notification.permission !== "denied") {
           Notification.requestPermission().then(permission => {
             if (permission === "granted") {
-              new Notification("⏰ ¡Tiempo terminado!", {
-                body: etiqueta,
-                icon: "icon-192.png"
-              });
+              new Notification("⏰ ¡Tiempo terminado!", { body: etiqueta });
             } else {
               // Fallback si se deniega la notificación
               alert(`⏰ ¡Tiempo terminado!\n${etiqueta}`);
@@ -1740,7 +1771,7 @@
 
     function mostrarInicio() {
       document.getElementById("receta-detalle").innerHTML = `
-        <h2>¡Hola, Reposter@s! 👨‍🍳👩‍🍳</h2>
+        <h2>¡Hola, repostero! 👨‍🍳</h2>
         <p>Toca <strong>“Menú”</strong> arriba para explorar las recetas.</p>
         <div class="section">
           <h4><i class="fas fa-star"></i> Categorías destacadas</h4>
@@ -1813,7 +1844,7 @@
       if (filtradas.length === 0) {
         html += `<p>No se encontraron recetas.</p>`;
       } else {
-        html += `<ul style="list-style: none;">`;
+        html += `<ul style="list-style: none; margin: 10px 0;">`;
         filtradas.forEach(r => {
           html += `<li onclick="mostrarReceta(${JSON.stringify(r)})" style="padding:10px; cursor:pointer; background: #fff; border: 1px solid #ddd; margin: 4px 0; border-radius: 6px;">${r.nombre} <small>(${r.categoria})</small></li>`;
         });
