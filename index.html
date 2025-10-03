@@ -286,7 +286,7 @@
     </label>
   </div>
 
-  <script>
+   <script>
     // === DATOS DE LAS RECETAS ===
     const recetas = [
       // === TARTAS DEL AYER ===
@@ -1689,35 +1689,21 @@
         if (panel) panel.remove();
         return;
       }
-
       if (!panel) {
         const nuevoPanel = document.createElement("div");
         nuevoPanel.id = "panel-temporizadores";
         document.body.appendChild(nuevoPanel);
       }
-
       const formatoTiempo = (s) => {
         const m = Math.floor(s / 60);
         const ss = s % 60;
         return `${m.toString().padStart(2, '0')}:${ss.toString().padStart(2, '0')}`;
       };
-
-      let html = "<strong>⏰ Temporizadores activos</strong><br>";
-      temporizadores.forEach(t => {
-        html += `${t.etiqueta} — ${formatoTiempo(t.segundosRestantes)} <button class="btn-cerrar-temp" onclick="cerrarTemporizador(${t.id})">X</button><br>`;
-      });
-      html += `<button class="btn-cerrar-temp" style="margin-top:8px;" onclick="cerrarTodosTemporizadores()">Cerrar Todos</button>`;
-
-      document.getElementById("panel-temporizadores").innerHTML = html;
-    }
-
-    function cerrarTemporizador(id) {
-      const temp = temporizadores.find(t => t.id == id);
-      if (temp) {
-        clearInterval(temp.intervalo);
-        temporizadores = temporizadores.filter(t => t.id != id);
-        actualizarPanelTemporizadores();
-      }
+      document.getElementById("panel-temporizadores").innerHTML = `
+        <strong>⏰ Temporizadores activos</strong><br>
+        ${temporizadores.map(t => `${t.etiqueta} — ${formatoTiempo(t.segundosRestantes)}`).join('<br>')}
+        <br><button onclick="cerrarTodosTemporizadores()" style="margin-top:8px; padding:4px 8px; background:#fff; color:#5C3B28; border:none; border-radius:4px; font-weight:bold;">Cerrar todos</button>
+      `;
     }
 
     function cerrarTodosTemporizadores() {
@@ -1727,6 +1713,7 @@
       if (panel) panel.remove();
     }
 
+    // --- FUNCIONES DE LA APLICACIÓN ---
     function mostrarRecetasPorCategoria(categoria) {
       const menu = document.getElementById("menu-categorias");
       menu.classList.remove("visible"); // ✅ Cierra el menú al seleccionar
@@ -1740,7 +1727,7 @@
       });
       html += `</ul>`;
       detalle.innerHTML = html;
-      historial.push("categorias");
+      historial = ["inicio", "categorias"];
       ultimaCategoria = categoria; // Guardar la categoría actual
       actualizarBotonAtras();
       localStorage.setItem('ultimaCategoria', categoria);
