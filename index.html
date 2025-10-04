@@ -274,6 +274,158 @@
     .modo-oscuro #panel-temporizadores {
         background: #3A2F28;
     }
+    /* --- CALCULADORA DE PORCIONES MEJORADA --- */
+    .calculadora-porciones {
+      background: white;
+      padding: 14px 20px;
+      border-radius: 14px;
+      box-shadow: 0 6px 20px rgba(0,0,0,0.12);
+      margin: 20px auto;
+      max-width: 500px;
+      border: 1px solid var(--borde);
+      text-align: center;
+      font-weight: 700; /* Texto más grueso */
+      font-size: 1.1em; /* Letra más grande */
+    }
+    .modo-oscuro .calculadora-porciones {
+      background: #2A241F;
+      border: 1px solid #4A3A2F;
+      color: #F5E9D9;
+    }
+    .calculadora-porciones select {
+      width: 100%;
+      padding: 12px;
+      font-size: 1em;
+      color: var(--texto); /* Color del texto del select */
+      background: white; /* Fondo del select */
+    }
+    .modo-oscuro .calculadora-porciones select {
+      color: #F5E9D9;
+      background: #3A2F28;
+      border: 1px solid #4A3A2F;
+    }
+    @media (min-width: 769px) {
+      .calculadora-porciones {
+        position: fixed;
+        bottom: 20px;
+        right: 20px;
+        margin: 0;
+        width: auto;
+      }
+    }
+    /* --- PANEL DE TEMPORIZADORES SUPERIOR --- */
+    #panel-temporizadores-superior {
+      background: #5C3B28;
+      color: white;
+      padding: 12px;
+      border-radius: 10px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+      margin: 15px 0;
+      font-size: 0.9em;
+    }
+    .modo-oscuro #panel-temporizadores-superior {
+      background: #3A2F28;
+    }
+    .temp-item-superior {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 8px 0;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    .temp-item-superior:last-child {
+      border-bottom: none;
+    }
+    .btn-modificar-temp, .btn-cerrar-temp {
+      margin-left: 8px;
+      padding: 2px 6px;
+      background: #fff;
+      color: #5C3B28;
+      border: none;
+      border-radius: 4px;
+      font-size: 0.8em;
+      cursor: pointer;
+    }
+    .modo-oscuro .btn-modificar-temp, .modo-oscuro .btn-cerrar-temp {
+      background: #F5E9D9;
+      color: #5C3B28;
+    }
+    .btn-cerrar-temp:hover {
+      background: #d4c2b3;
+    }
+    .modo-oscuro .btn-cerrar-temp:hover {
+      background: #4a423a;
+    }
+    /* --- NOTAS EXPANDIDAS --- */
+    .notas-expandidas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.5);
+      z-index: 3000;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    .notas-contenido {
+      background: white;
+      padding: 20px;
+      border-radius: 10px;
+      width: 90%;
+      max-width: 600px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+    }
+    .modo-oscuro .notas-contenido {
+      background: #2A241F;
+      color: #F5E9D9;
+    }
+    .notas-contenido textarea {
+      width: 100%;
+      height: 300px;
+      padding: 10px;
+      border: 1px solid var(--borde);
+      border-radius: 6px;
+      font-family: inherit;
+      resize: none;
+      background: white;
+      color: var(--texto);
+    }
+    .modo-oscuro .notas-contenido textarea {
+      background: #3A2F28;
+      border: 1px solid #4A3A2F;
+      color: #F5E9D9;
+    }
+    .notas-botones {
+      margin-top: 15px;
+      text-align: center;
+    }
+    .notas-botones button {
+      margin: 0 5px;
+      padding: 8px 12px;
+      border: 1px solid var(--borde);
+      border-radius: 6px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+    .notas-botones .btn-guardar {
+      background: var(--btn-bg);
+      color: var(--btn-text);
+    }
+    .notas-botones .btn-borrar {
+      background: #f0f0f0;
+      color: var(--categoria);
+    }
+    .notas-botones .btn-copiar {
+      background: #e9dccf;
+      color: #5d4037;
+    }
+    .modo-oscuro .notas-botones .btn-borrar, .modo-oscuro .notas-botones .btn-copiar {
+      background: #3A2F28;
+      color: #F5E9D9;
+      border: 1px solid #4A3A2F;
+    }
   </style>
   <script>
     if ('serviceWorker' in navigator) {
@@ -309,8 +461,8 @@
     </div>
   </main>
 
-  <div class="controls">
-    <label>🍽️ Para:
+  <div class="calculadora-porciones">
+    <label>🍽️ Calculadora de Porciones:
       <select id="selector-personas">
         <option value="1">1</option>
         <option value="4" selected>4</option>
@@ -1574,7 +1726,7 @@
 
 
     let historial = ["inicio"];
-    let ultimaCategoria = null; // Variable para rastrear la categoría de la última receta vista
+    let ultimaCategoria = null;
     let temporizadores = [];
 
     // --- FUNCIONES ---
@@ -1593,14 +1745,18 @@
         html += `<li>${nuevaCantidad} ${ing.unidad} de <strong>${ing.nombre}</strong></li>`;
       });
       html += `</ul></div>`;
+      
+      // Panel de temporizadores superior
+      html += `<div id="panel-temporizadores-superior" style="display:none;"></div>`;
+      
       html += `<div class="section"><h4><i class="fas fa-mortar-pestle"></i> Elaboración</h4><ol>`;
-      receta.elaboracion.forEach(paso => {
+      receta.elaboracion.forEach((paso, index) => {
         const match = paso.match(/(\d+)\s*(?:minutos?|min)/i);
         if (match) {
           const minutos = parseInt(match[1]);
-          html += `<li>${paso} <button class="btn-timer" onclick="crearTemporizador(${minutos}, '${paso.replace(/'/g, "\\'")}')" style="margin-left:8px; padding:2px 6px; background:#8B5A3E; color:white; border:none; border-radius:4px; font-size:0.8em;">⏰ ${minutos} min</button></li>`;
+          html += `<li id="paso-${index}">${paso} <button class="btn-timer" onclick="crearTemporizador(${minutos}, '${paso.replace(/'/g, "\\'")}', ${index})" style="margin-left:8px; padding:2px 6px; background:#8B5A3E; color:white; border:none; border-radius:4px; font-size:0.8em;">⏰ ${minutos} min</button></li>`;
         } else {
-          html += `<li>${paso}</li>`;
+          html += `<li id="paso-${index}">${paso}</li>`;
         }
       });
       html += `</ol></div>`;
@@ -1619,12 +1775,17 @@
           <h4><i class="fas fa-sticky-note"></i> Mis notas</h4>
           <textarea id="notas-texto" placeholder="Anota tus ajustes, trucos o consejos...">${notasGuardadas}</textarea>
           <br><br>
-          <button onclick="guardarNotas('${receta.id}')">💾 Guardar notas</button>
+          <div class="notas-botones">
+            <button class="btn-guardar" onclick="guardarNotas('${receta.id}')">💾 Guardar</button>
+            <button class="btn-ampliar" onclick="ampliarNotas('${receta.id}')">🔍 Ampliar</button>
+            <button class="btn-borrar" onclick="borrarNotas('${receta.id}')">🗑️ Borrar</button>
+            <button class="btn-copiar" onclick="copiarNotas('${receta.id}')">📋 Copiar</button>
+          </div>
         </div>
       `;
       document.getElementById("receta-detalle").innerHTML = html;
       historial.push("receta");
-      ultimaCategoria = receta.categoria; // Guardar la categoría al mostrar la receta
+      ultimaCategoria = receta.categoria;
       actualizarBotonAtras();
       localStorage.setItem('ultimaReceta', receta.id);
     }
@@ -1633,6 +1794,76 @@
       const texto = document.getElementById("notas-texto").value;
       localStorage.setItem(`notas_${id}`, texto);
       alert("Notas guardadas ✅");
+    }
+
+    function borrarNotas(id) {
+      if (confirm("¿Estás seguro de que quieres borrar las notas?")) {
+        localStorage.removeItem(`notas_${id}`);
+        document.getElementById("notas-texto").value = "";
+        alert("Notas borradas 🗑️");
+      }
+    }
+
+    function copiarNotas(id) {
+      const texto = document.getElementById("notas-texto").value;
+      navigator.clipboard.writeText(texto).then(() => {
+        alert("Notas copiadas al portapapeles 📋");
+      }).catch(err => {
+        console.error("Error al copiar:", err);
+        alert("No se pudieron copiar las notas.");
+      });
+    }
+
+    function ampliarNotas(id) {
+      const texto = document.getElementById("notas-texto").value;
+      const modal = document.createElement("div");
+      modal.className = "notas-expandidas";
+      modal.innerHTML = `
+        <div class="notas-contenido">
+          <h4><i class="fas fa-sticky-note"></i> Mis notas (expandido)</h4>
+          <textarea id="notas-texto-expandido">${texto}</textarea>
+          <br><br>
+          <div class="notas-botones">
+            <button class="btn-guardar" onclick="guardarNotasExpandidas('${id}')">💾 Guardar</button>
+            <button class="btn-borrar" onclick="borrarNotasExpandidas('${id}')">🗑️ Borrar</button>
+            <button class="btn-copiar" onclick="copiarNotasExpandidas('${id}')">📋 Copiar</button>
+            <button class="btn-cerrar" onclick="cerrarModalNotas()">❌ Cerrar</button>
+          </div>
+        </div>
+      `;
+      document.body.appendChild(modal);
+    }
+
+    function guardarNotasExpandidas(id) {
+      const texto = document.getElementById("notas-texto-expandido").value;
+      localStorage.setItem(`notas_${id}`, texto);
+      document.getElementById("notas-texto").value = texto;
+      cerrarModalNotas();
+      alert("Notas guardadas ✅");
+    }
+
+    function borrarNotasExpandidas(id) {
+      if (confirm("¿Estás seguro de que quieres borrar las notas?")) {
+        localStorage.removeItem(`notas_${id}`);
+        document.getElementById("notas-texto-expandido").value = "";
+        document.getElementById("notas-texto").value = "";
+        alert("Notas borradas 🗑️");
+      }
+    }
+
+    function copiarNotasExpandidas(id) {
+      const texto = document.getElementById("notas-texto-expandido").value;
+      navigator.clipboard.writeText(texto).then(() => {
+        alert("Notas copiadas al portapapeles 📋");
+      }).catch(err => {
+        console.error("Error al copiar:", err);
+        alert("No se pudieron copiar las notas.");
+      });
+    }
+
+    function cerrarModalNotas() {
+      const modal = document.querySelector(".notas-expandidas");
+      if (modal) modal.remove();
     }
 
     function abrirTemporizadorPersonalizado() {
@@ -1649,7 +1880,7 @@
     }
 
     // --- TEMPORIZADOR ---
-    function crearTemporizador(minutos, etiqueta = "Temporizador") {
+    function crearTemporizador(minutos, etiqueta = "Temporizador", pasoIndex = null) {
       const id = Date.now();
       const totalSegundos = minutos * 60;
       let segundosRestantes = totalSegundos;
@@ -1659,30 +1890,27 @@
         if (Notification && Notification.permission === "granted") {
           new Notification("⏰ ¡Tiempo terminado!", {
             body: etiqueta,
-            icon: "icon-192.png" // Asegúrate de tener este icono
+            icon: "icon-192.png"
           });
         } else if (Notification && Notification.permission !== "denied") {
           Notification.requestPermission().then(permission => {
             if (permission === "granted") {
               new Notification("⏰ ¡Tiempo terminado!", { body: etiqueta });
             } else {
-              // Fallback si se deniega la notificación
               alert(`⏰ ¡Tiempo terminado!\n${etiqueta}`);
-              if (navigator.vibrate) navigator.vibrate([500, 200, 500]); // Vibrar
+              if (navigator.vibrate) navigator.vibrate([500, 200, 500]);
             }
           }).catch(err => {
-             // Fallback si hay error al pedir permiso
             console.error("Error al solicitar permiso de notificación:", err);
             alert(`⏰ ¡Tiempo terminado!\n${etiqueta}`);
-            if (navigator.vibrate) navigator.vibrate([500, 200, 500]); // Vibrar
+            if (navigator.vibrate) navigator.vibrate([500, 200, 500]);
           });
         } else {
-             // Fallback si las notificaciones están bloqueadas
-            alert(`⏰ ¡Tiempo terminado!\n${etiqueta}`);
-            if (navigator.vibrate) navigator.vibrate([500, 200, 500]); // Vibrar
+          alert(`⏰ ¡Tiempo terminado!\n${etiqueta}`);
+          if (navigator.vibrate) navigator.vibrate([500, 200, 500]);
         }
 
-        // Intentar reproducir sonido (puede fallar si no hay interacción)
+        // Intentar reproducir sonido
         try {
             const audioContext = new (window.AudioContext || window.webkitAudioContext)();
             const oscillator = audioContext.createOscillator();
@@ -1691,15 +1919,14 @@
             oscillator.connect(gainNode);
             gainNode.connect(audioContext.destination);
 
-            oscillator.type = 'sine'; // Tipo de onda
-            oscillator.frequency.value = 880; // Frecuencia (tono)
-            gainNode.gain.setValueAtTime(0.3, audioContext.currentTime); // Volumen
+            oscillator.type = 'sine';
+            oscillator.frequency.value = 880;
+            gainNode.gain.setValueAtTime(0.3, audioContext.currentTime);
 
             oscillator.start();
-            oscillator.stop(audioContext.currentTime + 1.5); // Duración del sonido
+            oscillator.stop(audioContext.currentTime + 1.5);
         } catch (e) {
             console.log("No se pudo reproducir el sonido:", e);
-            // El sonido fallará silenciosamente si no hay interacción previa o está bloqueado.
         }
       };
 
@@ -1709,49 +1936,128 @@
           clearInterval(intervalo);
           reproducirAlarma();
           temporizadores = temporizadores.filter(t => t.id !== id);
-          actualizarPanelTemporizadores();
+          actualizarPanelTemporizadoresSuperior();
         } else {
-          actualizarPanelTemporizadores();
+          actualizarPanelTemporizadoresSuperior();
         }
       }, 1000);
 
-      temporizadores.push({ id, minutos, etiqueta, segundosRestantes, intervalo });
-      actualizarPanelTemporizadores();
+      temporizadores.push({ id, minutos, etiqueta, segundosRestantes, intervalo, pasoIndex });
+      actualizarPanelTemporizadoresSuperior();
     }
 
-    function actualizarPanelTemporizadores() {
-      const panel = document.getElementById("panel-temporizadores");
+    function actualizarPanelTemporizadoresSuperior() {
+      const panel = document.getElementById("panel-temporizadores-superior");
       if (temporizadores.length === 0) {
-        if (panel) panel.remove();
+        if (panel) panel.style.display = "none";
         return;
       }
-      if (!panel) {
-        const nuevoPanel = document.createElement("div");
-        nuevoPanel.id = "panel-temporizadores";
-        document.body.appendChild(nuevoPanel);
-      }
+      panel.style.display = "block";
       const formatoTiempo = (s) => {
         const m = Math.floor(s / 60);
         const ss = s % 60;
         return `${m.toString().padStart(2, '0')}:${ss.toString().padStart(2, '0')}`;
       };
-      document.getElementById("panel-temporizadores").innerHTML = `
+      panel.innerHTML = `
         <strong>⏰ Temporizadores activos</strong><br>
-        ${temporizadores.map(t => `${t.etiqueta} — ${formatoTiempo(t.segundosRestantes)}`).join('<br>')}
-        <br><button onclick="cerrarTodosTemporizadores()" style="margin-top:8px; padding:4px 8px; background:#fff; color:#5C3B28; border:none; border-radius:4px; font-weight:bold;">Cerrar todos</button>
+        ${temporizadores.map(t => `
+          <div class="temp-item-superior">
+            ${t.etiqueta} — ${formatoTiempo(t.segundosRestantes)}
+            <button class="btn-modificar-temp" onclick="modificarTemporizador(${t.id})">✏️</button>
+            <button class="btn-cerrar-temp" onclick="cerrarTemporizador(${t.id})">❌</button>
+          </div>
+        `).join('')}
       `;
     }
 
-    function cerrarTodosTemporizadores() {
-      temporizadores.forEach(t => clearInterval(t.intervalo));
-      temporizadores = [];
-      const panel = document.getElementById("panel-temporizadores");
-      if (panel) panel.remove();
+    function modificarTemporizador(id) {
+      const temp = temporizadores.find(t => t.id === id);
+      if (temp) {
+        const nuevosMinutosStr = prompt("Ingrese los nuevos minutos:", temp.minutos.toString());
+        if (nuevosMinutosStr !== null) {
+          const nuevosMinutos = parseInt(nuevosMinutosStr);
+          if (!isNaN(nuevosMinutos) && nuevosMinutos > 0) {
+            clearInterval(temp.intervalo);
+            const nuevoId = Date.now();
+            const totalSegundos = nuevosMinutos * 60;
+            let segundosRestantes = totalSegundos;
+            const etiqueta = temp.etiqueta;
+            const pasoIndex = temp.pasoIndex;
+
+            const reproducirAlarma = () => {
+              if (Notification && Notification.permission === "granted") {
+                new Notification("⏰ ¡Tiempo terminado!", { body: etiqueta });
+              } else if (Notification && Notification.permission !== "denied") {
+                Notification.requestPermission().then(permission => {
+                  if (permission === "granted") {
+                    new Notification("⏰ ¡Tiempo terminado!", { body: etiqueta });
+                  } else {
+                    alert(`⏰ ¡Tiempo terminado!\n${etiqueta}`);
+                    if (navigator.vibrate) navigator.vibrate([500, 200, 500]);
+                  }
+                }).catch(err => {
+                  console.error("Error al solicitar permiso de notificación:", err);
+                  alert(`⏰ ¡Tiempo terminado!\n${etiqueta}`);
+                  if (navigator.vibrate) navigator.vibrate([500, 200, 500]);
+                });
+              } else {
+                alert(`⏰ ¡Tiempo terminado!\n${etiqueta}`);
+                if (navigator.vibrate) navigator.vibrate([500, 200, 500]);
+              }
+
+              try {
+                const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+                const oscillator = audioContext.createOscillator();
+                const gainNode = audioContext.createGain();
+
+                oscillator.connect(gainNode);
+                gainNode.connect(audioContext.destination);
+
+                oscillator.type = 'sine';
+                oscillator.frequency.value = 880;
+                gainNode.gain.setValueAtTime(0.3, audioContext.currentTime);
+
+                oscillator.start();
+                oscillator.stop(audioContext.currentTime + 1.5);
+              } catch (e) {
+                console.log("No se pudo reproducir el sonido:", e);
+              }
+            };
+
+            const intervalo = setInterval(() => {
+              segundosRestantes--;
+              if (segundosRestantes <= 0) {
+                clearInterval(intervalo);
+                reproducirAlarma();
+                temporizadores = temporizadores.filter(t => t.id !== nuevoId);
+                actualizarPanelTemporizadoresSuperior();
+              } else {
+                actualizarPanelTemporizadoresSuperior();
+              }
+            }, 1000);
+
+            temporizadores = temporizadores.filter(t => t.id !== id);
+            temporizadores.push({ id: nuevoId, minutos: nuevosMinutos, etiqueta, segundosRestantes, intervalo, pasoIndex });
+            actualizarPanelTemporizadoresSuperior();
+          } else {
+            alert("Por favor, ingrese un número válido de minutos.");
+          }
+        }
+      }
+    }
+
+    function cerrarTemporizador(id) {
+      const temp = temporizadores.find(t => t.id === id);
+      if (temp) {
+        clearInterval(temp.intervalo);
+        temporizadores = temporizadores.filter(t => t.id !== id);
+        actualizarPanelTemporizadoresSuperior();
+      }
     }
 
     function mostrarRecetasPorCategoria(categoria) {
       const menu = document.getElementById("menu-categorias");
-      menu.classList.remove("visible"); // ✅ Cierra el menú al seleccionar
+      menu.classList.remove("visible");
       const detalle = document.getElementById("receta-detalle");
       const recetasFiltradas = recetas.filter(r => r.categoria === categoria);
       let html = `<h1>${categoria}</h1>`;
@@ -1763,7 +2069,7 @@
       html += `</ul>`;
       detalle.innerHTML = html;
       historial = ["inicio", "categorias"];
-      ultimaCategoria = categoria; // Guardar la categoría actual
+      ultimaCategoria = categoria;
       actualizarBotonAtras();
       localStorage.setItem('ultimaCategoria', categoria);
     }
@@ -1795,7 +2101,7 @@
       detalle.innerHTML = html;
       historial = ["inicio"];
       actualizarBotonAtras();
-      localStorage.removeItem('ultimaCategoria'); // Limpiar categoría si se busca
+      localStorage.removeItem('ultimaCategoria');
     });
 
     document.getElementById("selector-personas").addEventListener("change", () => {
@@ -1845,7 +2151,7 @@
       `;
       historial = ["inicio"];
       actualizarBotonAtras();
-      localStorage.removeItem('ultimaCategoria'); // Limpiar categoría al volver al inicio
+      localStorage.removeItem('ultimaCategoria');
     }
 
     // --- MODO OSCURO ---
@@ -1863,7 +2169,6 @@
 
     // --- INICIALIZAR ---
     window.onload = () => {
-      // Solicitar permiso para notificaciones al cargar
       if (Notification && Notification.permission === "default") {
         Notification.requestPermission();
       }
@@ -1871,7 +2176,6 @@
       cargarIndice();
       mostrarInicio();
 
-      // Restaurar última receta vista si existe
       const savedId = localStorage.getItem('ultimaReceta');
       if (savedId) {
         const primera = recetas.find(r => r.id === savedId);
