@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -141,11 +142,10 @@
       margin: 15px 0;
       border-left: 4px solid var(--btn-bg);
     }
-    /* --- CORRECCIÓN CLAVE: Visibilidad en modo oscuro --- */
     .modo-oscuro .info-extra {
-      background: #3A2F28; /* Fondo oscuro pero visible */
-      border-left: 4px solid #D4AF37; /* Borde dorado */
-      color: #F5E9D9; /* Texto claro */
+      background: #3A2F28;
+      border-left: 4px solid #D4AF37;
+      color: #F5E9D9;
     }
     .section {
       margin: 24px 0;
@@ -208,7 +208,6 @@
       border: 1px solid #4A3A2F;
       color: #F5E9D9;
     }
-    /* --- BOTÓN TEMPORIZADOR PERSONALIZADO MÁS GRUESO --- */
     .btn-temp-personalizado {
       margin-top: 20px;
       padding: 10px 15px;
@@ -216,11 +215,11 @@
       color: #5d4037;
       border: 1px solid #d4c2b3;
       border-radius: 8px;
-      font-weight: 700; /* Texto más grueso */
+      font-weight: 700;
       font-size: 1.05em;
       cursor: pointer;
       transition: background-color 0.2s;
-      width: 100%; /* Ancho completo para mejor toque en móvil */
+      width: 100%;
     }
     .modo-oscuro .btn-temp-personalizado {
       background: #3a322a;
@@ -233,7 +232,6 @@
     .modo-oscuro .btn-temp-personalizado:hover {
       background: #4a423a;
     }
-    /* --- BOTÓN TEMPORIZADOR AUTOMÁTICO (junto a pasos) --- */
     .btn-timer {
       margin-left: 8px;
       padding: 2px 6px;
@@ -257,7 +255,6 @@
         width: auto;
       }
     }
-    /* --- PANEL DE TEMPORIZADORES --- */
     #panel-temporizadores {
       position: fixed;
       bottom: 80px;
@@ -320,6 +317,8 @@
       </select>
     </label>
   </div>
+<button class="btn-temp-personalizado" id="btn-temp-personalizado">⏲️ Temporizador personalizado</button>
+  <div id="panel-temporizadores" style="display:none;"></div>
 
   <script>
     // === DATOS DE LAS RECETAS ===
@@ -1566,335 +1565,165 @@
         ]
       }
     ];
+    // --- Estado global ---
+    let recetaActual = null;
+    let categoriaActual = null;
 
-    // --- VARIABLES GLOBALES ---
-    let historial = ["inicio"];
-    let ultimaCategoria = null;
-    let temporizadores = [];
-
-    // --- FUNCIONES ---
-    function mostrarReceta(receta) {
-      const personasBase = 4;
-      const personasActuales = parseInt(document.getElementById("selector-personas").value);
-      const factor = personasActuales / personasBase;
-      let html = `<h1>${receta.nombre}</h1>`;
-      html += `<h3><i class="fas fa-tag"></i> ${receta.categoria}</h3>`;
-      if (receta.temperatura && receta.tiempo) {
-        html += `<div class="info-extra"><strong>🔥 ${receta.temperatura}°C · ⏱️ ${receta.tiempo} min</strong></div>`;
-      }
-      html += `<div class="section"><h4><i class="fas fa-shopping-cart"></i> Ingredientes (para ${personasActuales} personas)</h4><ul>`;
-      receta.ingredientes.forEach(ing => {
-        const nuevaCantidad = (ing.cantidad * factor).toFixed(2).replace(/\.0+$/, '');
-        html += `<li>${nuevaCantidad} ${ing.unidad} de <strong>${ing.nombre}</strong></li>`;
-      });
-      html += `</ul></div>`;
-      html += `<div class="section"><h4><i class="fas fa-mortar-pestle"></i> Elaboración</h4><ol>`;
-      receta.elaboracion.forEach(paso => {
-        const match = paso.match(/(\d+)\s*(?:minutos?|min)/i);
-        if (match) {
-          const minutos = parseInt(match[1]);
-          html += `<li>${paso} <button class="btn-temp-auto" onclick="crearTemporizador(${minutos}, '${paso.replace(/'/g, "\\'")}')" style="margin-left:8px; padding:2px 6px; background:#8B5A3E; color:white; border:none; border-radius:4px; font-size:0.8em;">⏰ ${minutos} min</button></li>`;
-        } else {
-          html += `<li>${paso}</li>`;
-        }
-      });
-      html += `</ol></div>`;
-
-      // Botón para temporizador personalizado (más grueso)
-      html += `
-        <button class="btn-temp-personalizado" onclick="abrirTemporizadorPersonalizado()">
-          + Añadir temporizador personalizado
-        </button>
-      `;
-
-      const notasKey = `notas_${receta.id}`;
-      const notasGuardadas = localStorage.getItem(notasKey) || "";
-      html += `
-        <div class="notas-seccion">
-          <h4><i class="fas fa-sticky-note"></i> Mis notas</h4>
-          <textarea id="notas-texto" placeholder="Anota tus ajustes, trucos o consejos...">${notasGuardadas}</textarea>
-          <br><br>
-          <button onclick="guardarNotas('${receta.id}')">💾 Guardar notas</button>
-        </div>
-      `;
-      document.getElementById("receta-detalle").innerHTML = html;
-      historial.push("receta");
-      ultimaCategoria = receta.categoria; // Guardar la categoría al mostrar la receta
-      actualizarBotonAtras();
-      localStorage.setItem('ultimaReceta', receta.id);
-    }
-
-    function guardarNotas(id) {
-      const texto = document.getElementById("notas-texto").value;
-      localStorage.setItem(`notas_${id}`, texto);
-      alert("Notas guardadas ✅");
-    }
-
-    function abrirTemporizadorPersonalizado() {
-        const minutosStr = prompt("Ingrese los minutos para el temporizador:", "10");
-        if (minutosStr !== null) {
-            const minutos = parseInt(minutosStr);
-            if (!isNaN(minutos) && minutos > 0) {
-                const etiqueta = prompt("Nombre del temporizador (opcional):", "Mi temporizador");
-                crearTemporizador(parseInt(minutos), etiqueta || `Temporizador ${minutos} min`);
-            } else {
-                alert("Por favor, ingrese un número válido de minutos.");
-            }
-        }
-    }
-
-    // --- TEMPORIZADOR ---
-    function crearTemporizador(minutos, etiqueta = "Temporizador") {
-      const id = Date.now();
-      const totalSegundos = minutos * 60;
-      let segundosRestantes = totalSegundos;
-
-      const reproducirAlarma = () => {
-        // Intentar notificación
-        if (Notification && Notification.permission === "granted") {
-          new Notification("⏰ ¡Tiempo terminado!", {
-            body: etiqueta,
-            icon: "icon-192.png" // Asegúrate de tener este icono
-          });
-        } else if (Notification && Notification.permission !== "denied") {
-          Notification.requestPermission().then(permission => {
-            if (permission === "granted") {
-              new Notification("⏰ ¡Tiempo terminado!", { body: etiqueta });
-            } else {
-              // Fallback si se deniega la notificación
-              alert(`⏰ ¡Tiempo terminado!\n${etiqueta}`);
-              if (navigator.vibrate) navigator.vibrate([500, 200, 500]); // Vibrar
-            }
-          }).catch(err => {
-             // Fallback si hay error al pedir permiso
-            console.error("Error al solicitar permiso de notificación:", err);
-            alert(`⏰ ¡Tiempo terminado!\n${etiqueta}`);
-            if (navigator.vibrate) navigator.vibrate([500, 200, 500]); // Vibrar
-          });
-        } else {
-             // Fallback si las notificaciones están bloqueadas
-            alert(`⏰ ¡Tiempo terminado!\n${etiqueta}`);
-            if (navigator.vibrate) navigator.vibrate([500, 200, 500]); // Vibrar
-        }
-
-        // Intentar reproducir sonido (puede fallar si no hay interacción)
-        try {
-            const audioContext = new (window.AudioContext || window.webkitAudioContext)();
-            const oscillator = audioContext.createOscillator();
-            const gainNode = audioContext.createGain();
-
-            oscillator.connect(gainNode);
-            gainNode.connect(audioContext.destination);
-
-            oscillator.type = 'sine'; // Tipo de onda
-            oscillator.frequency.value = 880; // Frecuencia (tono)
-            gainNode.gain.setValueAtTime(0.3, audioContext.currentTime); // Volumen
-
-            oscillator.start();
-            oscillator.stop(audioContext.currentTime + 1.5); // Duración del sonido
-        } catch (e) {
-            console.log("No se pudo reproducir el sonido:", e);
-            // El sonido fallará silenciosamente si no hay interacción previa o está bloqueado.
-        }
-      };
-
-      const intervalo = setInterval(() => {
-        segundosRestantes--;
-        if (segundosRestantes <= 0) {
-          clearInterval(intervalo);
-          reproducirAlarma();
-          temporizadores = temporizadores.filter(t => t.id !== id);
-          actualizarPanelTemporizadores();
-        } else {
-          actualizarPanelTemporizadores();
-        }
-      }, 1000);
-
-      temporizadores.push({ id, minutos, etiqueta, segundosRestantes, intervalo });
-      actualizarPanelTemporizadores();
-    }
-
-    function actualizarPanelTemporizadores() {
-      const panel = document.getElementById("panel-temporizadores");
-      if (temporizadores.length === 0) {
-        if (panel) panel.remove();
-        return;
-      }
-      if (!panel) {
-        const nuevoPanel = document.createElement("div");
-        nuevoPanel.id = "panel-temporizadores";
-        document.body.appendChild(nuevoPanel);
-      }
-      const formatoTiempo = (s) => {
-        const m = Math.floor(s / 60);
-        const ss = s % 60;
-        return `${m.toString().padStart(2, '0')}:${ss.toString().padStart(2, '0')}`;
-      };
-      document.getElementById("panel-temporizadores").innerHTML = `
-        <strong>⏰ Temporizadores activos</strong><br>
-        ${temporizadores.map(t => `${t.etiqueta} — ${formatoTiempo(t.segundosRestantes)}`).join('<br>')}
-        <br><button onclick="cerrarTodosTemporizadores()" style="margin-top:8px; padding:4px 8px; background:#fff; color:#5C3B28; border:none; border-radius:4px; font-weight:bold;">Cerrar todos</button>
-      `;
-    }
-
-    function cerrarTodosTemporizadores() {
-      temporizadores.forEach(t => clearInterval(t.intervalo));
-      temporizadores = [];
-      const panel = document.getElementById("panel-temporizadores");
-      if (panel) panel.remove();
-    }
-
-    // --- FUNCIONES DE LA APLICACIÓN ---
-    function mostrarRecetasPorCategoria(categoria) {
-      const menu = document.getElementById("menu-categorias");
-      menu.classList.remove("visible"); // ✅ Cierra el menú al seleccionar
-      const detalle = document.getElementById("receta-detalle");
-      const recetasFiltradas = recetas.filter(r => r.categoria === categoria);
-      let html = `<h1>${categoria}</h1>`;
-      html += `<p><strong>${recetasFiltradas.length} recetas</strong></p>`;
-      html += `<ul style="list-style: disc; margin-left: 20px;">`;
-      recetasFiltradas.forEach(r => {
-        html += `<li onclick="mostrarRecetaPorNombre('${r.nombre}')" style="cursor:pointer; margin: 6px 0;">${r.nombre}</li>`;
-      });
-      html += `</ul>`;
-      detalle.innerHTML = html;
-      historial = ["inicio", "categorias"];
-      ultimaCategoria = categoria; // Guardar la categoría actual
-      actualizarBotonAtras();
-      localStorage.setItem('ultimaCategoria', categoria);
-    }
-
-    function mostrarRecetaPorNombre(nombre) {
-      const receta = recetas.find(r => r.nombre === nombre);
-      if (receta) mostrarReceta(receta);
-    }
-
-    function mostrarInicio() {
-      document.getElementById("receta-detalle").innerHTML = `
-        <h2>¡Hola, repostero! 👨‍🍳</h2>
-        <p>Toca <strong>“Menú”</strong> arriba para explorar las recetas.</p>
-        <div class="section">
-          <h4><i class="fas fa-star"></i> Categorías destacadas</h4>
-          <ul>
-            <li>Tartas del Ayer</li>
-            <li>Bizcochos, Magdalenas & Muffins</li>
-            <li>Dulces & Confites</li>
-          </ul>
-        </div>
-      `;
-      historial = ["inicio"];
-      actualizarBotonAtras();
-      localStorage.removeItem('ultimaCategoria'); // Limpiar categoría al volver al inicio
-    }
-
+    // --- Función para cargar menú de categorías ---
     function cargarIndice() {
-      const menu = document.getElementById("menu-categorias");
-      const categorias = {};
-      recetas.forEach(r => {
-        if (!categorias[r.categoria]) categorias[r.categoria] = [];
-        categorias[r.categoria].push(r);
-      });
+      const menu = document.getElementById('menu-categorias');
+      const categorias = [...new Set(recetas.map(r => r.categoria))];
       let html = '<ul>';
-      for (const [cat, recs] of Object.entries(categorias)) {
-        html += `<li onclick="mostrarRecetasPorCategoria('${cat}')">${cat} (${recs.length})</li>`;
-      }
+      categorias.forEach(cat => {
+        html += `<li onclick="mostrarCategoria('${cat}')">${cat}</li>`;
+      });
       html += '</ul>';
       menu.innerHTML = html;
     }
 
-    function actualizarBotonAtras() {
-      const btn = document.getElementById("btn-atras");
-      if (historial.length > 1) {
-        btn.style.display = "block";
-      } else {
-        btn.style.display = "none";
-      }
-    }
-
-    // --- EVENTOS ---
-    document.getElementById("btn-menu").addEventListener("click", () => {
-      const menu = document.getElementById("menu-categorias");
-      menu.classList.toggle("visible");
-    });
-
-    document.getElementById("btn-atras").addEventListener("click", () => {
-      if (historial.length > 2) {
-        // De receta -> lista de su categoría
-        if (ultimaCategoria) {
-          mostrarRecetasPorCategoria(ultimaCategoria);
-        } else {
-          mostrarInicio();
-        }
-      } else if (historial.length > 1) {
-        // De lista de categoría -> inicio
-        mostrarInicio();
-      }
-    });
-
-    document.getElementById("buscador").addEventListener("input", (e) => {
-      const term = e.target.value.toLowerCase();
-      const menu = document.getElementById("menu-categorias");
-      menu.classList.remove("visible");
-      const detalle = document.getElementById("receta-detalle");
-      const filtradas = recetas.filter(r =>
-        r.nombre.toLowerCase().includes(term) ||
-        r.ingredientes.some(ing => ing.nombre.toLowerCase().includes(term))
-      );
-      let html = `<h2>Resultados para "${term}"</h2>`;
-      if (filtradas.length === 0) {
-        html += `<p>No se encontraron recetas.</p>`;
-      } else {
-        html += `<ul style="list-style: none; margin: 10px 0;">`;
-        filtradas.forEach(r => {
-          html += `<li onclick="mostrarReceta(${JSON.stringify(r)})" style="padding:10px; cursor:pointer; background: #fff; border: 1px solid #ddd; margin: 4px 0; border-radius: 6px;">${r.nombre} <small>(${r.categoria})</small></li>`;
-        });
-        html += `</ul>`;
-      }
-      detalle.innerHTML = html;
-      historial = ["inicio"];
-      actualizarBotonAtras();
-      localStorage.removeItem('ultimaCategoria'); // Limpiar categoría si se busca
-    });
-
-    document.getElementById("selector-personas").addEventListener("change", () => {
-      const currentName = document.querySelector("#receta-detalle h1")?.textContent;
-      if (currentName) {
-        const receta = recetas.find(r => r.nombre === currentName);
-        if (receta) mostrarReceta(receta);
-      }
-    });
-
-    // --- MODO OSCURO ---
-    document.getElementById("btn-modo-oscuro").addEventListener("click", () => {
-        document.body.classList.toggle("modo-oscuro");
-        const estaOscuro = document.body.classList.contains("modo-oscuro");
-        localStorage.setItem("modoOscuro", estaOscuro);
-        document.getElementById("btn-modo-oscuro").textContent = estaOscuro ? "☀️ Claro" : "🌙 Modo";
-    });
-
-    if (localStorage.getItem("modoOscuro") === "true") {
-        document.body.classList.add("modo-oscuro");
-        document.getElementById("btn-modo-oscuro").textContent = "☀️ Claro";
-    }
-
-    // --- INICIALIZAR ---
-    window.onload = () => {
-      // Solicitar permiso para notificaciones al cargar
-      if (Notification && Notification.permission === "default") {
-        Notification.requestPermission();
-      }
-
+    document.getElementById('btn-menu').onclick = () => {
+      const menu = document.getElementById('menu-categorias');
+      menu.classList.toggle('visible');
       cargarIndice();
-      mostrarInicio();
+      document.getElementById('btn-atras').style.display = 'none';
+    };
 
-      // Restaurar última receta vista si existe
-      const savedId = localStorage.getItem('ultimaReceta');
-      if (savedId) {
-        const primera = recetas.find(r => r.id === savedId);
-        if (primera) mostrarReceta(primera);
+    window.mostrarCategoria = function(categoria) {
+      categoriaActual = categoria;
+      document.getElementById('menu-categorias').classList.remove('visible');
+      document.getElementById('btn-atras').style.display = '';
+      const recetasCat = recetas.filter(r => r.categoria === categoria);
+      let html = `<h2>${categoria}</h2><ul>`;
+      recetasCat.forEach(r => {
+        html += `<li><a href="#" onclick="mostrarReceta('${r.id}');return false;">${r.nombre}</a></li>`;
+      });
+      html += '</ul>';
+      document.getElementById('receta-detalle').innerHTML = html;
+    };
+
+    window.mostrarReceta = function(id) {
+      recetaActual = recetas.find(r => r.id === id);
+      if (!recetaActual) return;
+      localStorage.setItem('recetaActual', id);
+
+      let html = `<h2>${recetaActual.nombre}</h2><div class="info-extra"><b>Categoría:</b> ${recetaActual.categoria}</div>`;
+      html += `<div class="section"><h4>Ingredientes</h4><ul>`;
+      recetaActual.ingredientes.forEach(ing => {
+        html += `<li>${ing.nombre}: <b>${ing.cantidad} ${ing.unidad || ''}</b></li>`;
+      });
+      html += `</ul></div>`;
+
+      html += `<div class="section"><h4>Elaboración</h4><ol>`;
+      recetaActual.elaboracion.forEach((paso, i) => {
+        html += `<li>${paso}`;
+        if (recetaActual.tiempo && recetaActual.temperatura && i === recetaActual.elaboracion.length - 1) {
+          html += ` <button class="btn-timer" onclick="iniciarTemporizador('${recetaActual.nombre}', ${recetaActual.tiempo})">⏲️ ${recetaActual.tiempo} min</button>`;
+        }
+        html += `</li>`;
+      });
+      html += `</ol></div>`;
+      if (recetaActual.temperatura)
+        html += `<div class="info-extra"><i class="fas fa-temperature-high"></i> Horno: <b>${recetaActual.temperatura}°C</b></div>`;
+      document.getElementById('receta-detalle').innerHTML = html;
+      document.getElementById('btn-atras').style.display = '';
+    };
+
+    document.getElementById('btn-atras').onclick = function() {
+      if (categoriaActual) {
+        mostrarCategoria(categoriaActual);
+      } else {
+        document.getElementById('receta-detalle').innerHTML =
+          `<h2>¡Hola, Reposter@s! 👨‍🍳👩‍🍳</h2>
+            <p>Toca <strong>“Menú”</strong> arriba para explorar las recetas.</p>
+            <div class="section">
+              <h4><i class="fas fa-star"></i> Categorías destacadas</h4>
+              <ul>
+                <li>Tartas del Ayer</li>
+                <li>Bizcochos, Magdalenas & Muffins</li>
+                <li>Dulces & Confites</li>
+              </ul>
+            </div>`;
+        document.getElementById('btn-atras').style.display = 'none';
+        categoriaActual = null;
+        recetaActual = null;
       }
+    };
+
+    document.getElementById('btn-oscuro').onclick = function() {
+      document.body.classList.toggle('modo-oscuro');
+      localStorage.setItem('modoOscuro', document.body.classList.contains('modo-oscuro') ? '1' : '');
+    };
+    if (localStorage.getItem('modoOscuro') === '1') {
+      document.body.classList.add('modo-oscuro');
+    }
+
+    document.getElementById('buscador').addEventListener('input', function(e) {
+      const q = e.target.value.trim().toLowerCase();
+      if (!q) {
+        document.getElementById('btn-atras').onclick();
+        return;
+      }
+      const resultados = recetas.filter(r =>
+        r.nombre.toLowerCase().includes(q) ||
+        r.categoria.toLowerCase().includes(q) ||
+        r.ingredientes.some(ing => ing.nombre.toLowerCase().includes(q))
+      );
+      let html = `<h2>Resultados:</h2><ul>`;
+      resultados.forEach(r => {
+        html += `<li><a href="#" onclick="mostrarReceta('${r.id}');return false;">${r.nombre} <span style="color:gray;font-size:0.9em">(${r.categoria})</span></a></li>`;
+      });
+      html += '</ul>';
+      document.getElementById('receta-detalle').innerHTML = html;
+      document.getElementById('btn-atras').style.display = '';
+      categoriaActual = null;
+    });
+
+    window.addEventListener('DOMContentLoaded', () => {
+      const id = localStorage.getItem('recetaActual');
+      if (id) mostrarReceta(id);
+    });
+
+    document.getElementById('btn-temp-personalizado').onclick = () => {
+      const minutos = prompt('¿Cuántos minutos necesitas?');
+      const mins = parseInt(minutos, 10);
+      if (!mins || mins <= 0) return;
+      iniciarTemporizador('Personalizado', mins);
+    };
+
+    function iniciarTemporizador(nombre, minutos) {
+      const panel = document.getElementById('panel-temporizadores');
+      panel.style.display = '';
+      panel.innerHTML = `<b>⏲️ Temporizador:</b> <span id="temporizador-nombre">${nombre}</span>
+        <span id="temporizador-restante">${minutos}:00</span>
+        <button onclick="cancelarTemporizador()">Cancelar</button>`;
+      let segundos = minutos * 60;
+      let timerInterval = setInterval(() => {
+        segundos--;
+        const m = Math.floor(segundos / 60);
+        const s = segundos % 60;
+        document.getElementById('temporizador-restante').textContent = `${m}:${s.toString().padStart(2, '0')}`;
+        if (segundos <= 0) {
+          clearInterval(timerInterval);
+          panel.innerHTML = `<b>¡Tiempo terminado para ${nombre}!</b>`;
+          if (window.navigator.vibrate) navigator.vibrate([300, 100, 300]);
+          if (window.Notification && Notification.permission === 'granted') {
+            new Notification('¡Temporizador terminado!', { body: nombre });
+          } else if (window.Notification && Notification.permission !== 'denied') {
+            Notification.requestPermission().then(function(permission) {
+              if (permission === 'granted') new Notification('¡Temporizador terminado!', { body: nombre });
+            });
+          }
+          setTimeout(() => panel.style.display = 'none', 4000);
+        }
+      }, 1000);
+      window._timerInterval = timerInterval;
+    }
+    window.cancelarTemporizador = function() {
+      clearInterval(window._timerInterval);
+      document.getElementById('panel-temporizadores').style.display = 'none';
     };
   </script>
 </body>
 </html>
 
+    
