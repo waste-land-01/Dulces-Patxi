@@ -63,15 +63,6 @@
       margin-bottom: 12px;
       font-size: 1.1em;
     }
-    /* --- NUEVA FRASE "By Yahya" --- */
-    .by-yahya {
-      color: var(--categoria);
-      font-style: italic;
-      font-size: 0.9em;
-      text-align: right;
-      margin-top: -10px; /* Alineación debajo de la "i" de "Patxi" */
-      margin-right: 16px; /* Alineación a la derecha */
-    }
     #buscador {
       width: 100%;
       padding: 10px;
@@ -269,7 +260,7 @@
     /* --- PANEL DE TEMPORIZADORES --- */
     #panel-temporizadores {
         position: fixed;
-        bottom: 80px;
+        top: 80px; /* Arriba, debajo del header */
         left: 10px;
         right: 10px;
         background: #5C3B28;
@@ -296,8 +287,6 @@
   <header>
     <h1>Dulces Patxi</h1>
     <p class="bienvenida">Bienvenidos a Dulces Bachir Krai</p>
-    <!-- --- NUEVA FRASE "By Yahya" --- -->
-    <p class="by-yahya">By Yahya</p>
     <input type="text" id="buscador" placeholder="Buscar receta, ingrediente o palabra clave..." />
     <div class="toolbar">
       <button id="btn-menu" class="btn-menu">Menú</button>
@@ -321,7 +310,7 @@
   </main>
 
   <div class="controls">
-    <label>🍽️ Para:
+    <label>🍽️ Calculadora de Porciones:
       <select id="selector-personas">
         <option value="1">1</option>
         <option value="4" selected>4</option>
@@ -331,6 +320,10 @@
       </select>
     </label>
   </div>
+
+  
+
+
 
  <script>
     // === DATOS DE LAS RECETAS ===
@@ -1578,8 +1571,9 @@
       }
     ];
 
+
     let historial = ["inicio"];
-    let ultimaCategoria = null; // Variable para rastrear la categoría de la última receta vista
+    let ultimaCategoria = null;
     let temporizadores = [];
 
     // --- TEMPORIZADOR ---
@@ -1706,6 +1700,14 @@
       if (receta.temperatura && receta.tiempo) {
         html += `<div class="info-extra"><strong>🔥 ${receta.temperatura}°C · ⏱️ ${receta.tiempo} min</strong></div>`;
       }
+      
+      // ✅ Botón para temporizador personalizado (más grueso)
+      html += `
+        <button class="btn-temp-personalizado" onclick="abrirTemporizadorPersonalizado()">
+          + Añadir temporizador personalizado
+        </button>
+      `;
+
       html += `<div class="section"><h4><i class="fas fa-shopping-cart"></i> Ingredientes (para ${personasActuales} personas)</h4><ul>`;
       receta.ingredientes.forEach(ing => {
         const nuevaCantidad = (ing.cantidad * factor).toFixed(2).replace(/\.0+$/, '');
@@ -1724,13 +1726,6 @@
       });
       html += `</ol></div>`;
 
-      // Botón para temporizador personalizado (más grueso)
-      html += `
-        <button class="btn-temp-personalizado" onclick="abrirTemporizadorPersonalizado()">
-          + Añadir temporizador personalizado
-        </button>
-      `;
-
       const notasKey = `notas_${receta.id}`;
       const notasGuardadas = localStorage.getItem(notasKey) || "";
       html += `
@@ -1743,7 +1738,7 @@
       `;
       document.getElementById("receta-detalle").innerHTML = html;
       historial.push("receta");
-      ultimaCategoria = receta.categoria; // Guardar la categoría al mostrar la receta
+      ultimaCategoria = receta.categoria;
       actualizarBotonAtras();
       localStorage.setItem('ultimaReceta', receta.id);
     }
@@ -1756,7 +1751,7 @@
 
     function mostrarRecetasPorCategoria(categoria) {
       const menu = document.getElementById("menu-categorias");
-      menu.classList.remove("visible"); // ✅ Cierra el menú al seleccionar
+      menu.classList.remove("visible");
       const detalle = document.getElementById("receta-detalle");
       const recetasFiltradas = recetas.filter(r => r.categoria === categoria);
       let html = `<h1>${categoria}</h1>`;
@@ -1768,7 +1763,7 @@
       html += `</ul>`;
       detalle.innerHTML = html;
       historial = ["inicio", "categorias"];
-      ultimaCategoria = categoria; // Guardar la categoría actual
+      ultimaCategoria = categoria;
       actualizarBotonAtras();
       localStorage.setItem('ultimaCategoria', categoria);
     }
@@ -1800,7 +1795,7 @@
       detalle.innerHTML = html;
       historial = ["inicio"];
       actualizarBotonAtras();
-      localStorage.removeItem('ultimaCategoria'); // Limpiar categoría si se busca
+      localStorage.removeItem('ultimaCategoria');
     });
 
     document.getElementById("selector-personas").addEventListener("change", () => {
@@ -1850,7 +1845,7 @@
       `;
       historial = ["inicio"];
       actualizarBotonAtras();
-      localStorage.removeItem('ultimaCategoria'); // Limpiar categoría al volver al inicio
+      localStorage.removeItem('ultimaCategoria');
     }
 
     // --- MODO OSCURO ---
