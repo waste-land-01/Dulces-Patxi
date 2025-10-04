@@ -25,6 +25,12 @@
       --receta-bold: #5C3B28;
       --calc-bg: #e9dccf;
       --calc-bold: #8B5A3E;
+      --notas-bg: #FFFBE5;
+      --notas-bold: #5C3B28;
+      --notas-shadow: 0 6px 32px rgba(0,0,0,0.13);
+      --notas-border: #D4C2B3;
+      --notas-ampliado-bg: #fffde9;
+      --notas-ampliado-shadow: 0 4px 60px rgba(0,0,0,0.25);
     }
     .modo-oscuro {
       --fondo: #1C1410;
@@ -42,6 +48,12 @@
       --receta-bold: #FFD700;
       --calc-bg: #3A2F28;
       --calc-bold: #D4AF37;
+      --notas-bg: #2A241F;
+      --notas-bold: #FFD700;
+      --notas-shadow: 0 10px 40px rgba(0,0,0,0.38);
+      --notas-border: #4A3A2F;
+      --notas-ampliado-bg: #241d10;
+      --notas-ampliado-shadow: 0 4px 60px rgba(30,20,10,0.32);
     }
     * {
       margin: 0;
@@ -214,33 +226,6 @@
       font-weight: bold;
       color: var(--calc-bold);
     }
-    .notas-seccion {
-      margin-top: 20px;
-      padding: 15px;
-      background: #f9f6f2;
-      border-radius: 10px;
-      border: 1px dashed var(--borde);
-    }
-    .modo-oscuro .notas-seccion {
-      background: #3A2F28;
-      border: 1px dashed #4A3A2F;
-    }
-    .notas-seccion textarea {
-      width: 100%;
-      height: 100px;
-      padding: 10px;
-      border: 1px solid var(--borde);
-      border-radius: 6px;
-      font-family: inherit;
-      resize: vertical;
-      background: white;
-      color: var(--texto);
-    }
-    .modo-oscuro .notas-seccion textarea {
-      background: #2A241F;
-      border: 1px solid #4A3A2F;
-      color: #F5E9D9;
-    }
     .btn-temp-personalizado {
       margin-top: 20px;
       padding: 10px 15px;
@@ -279,15 +264,6 @@
       background: #5C3B28;
       color: #F5E9D9;
     }
-    @media (min-width: 769px) {
-      .controls {
-        position: fixed;
-        bottom: 20px;
-        right: 20px;
-        margin: 0;
-        width: auto;
-      }
-    }
     #panel-temporizadores {
       position: fixed;
       bottom: 80px;
@@ -315,6 +291,193 @@
       background: #4A3A2F;
       color: #FFD700;
       border: 1px solid #FFD700;
+    }
+    .notas-seccion {
+      background: var(--notas-bg);
+      color: var(--notas-bold);
+      font-weight: bold;
+      border-radius: 12px;
+      padding: 20px 18px 22px 18px;
+      box-shadow: var(--notas-shadow);
+      margin: 24px 0 18px 0;
+      border: 1.5px solid var(--notas-border);
+      position: relative;
+      transition: box-shadow 0.3s, background 0.3s;
+    }
+    .notas-seccion label {
+      font-size: 1.2em;
+      font-weight: bold;
+      display: block;
+      color: var(--notas-bold);
+      margin-bottom: 8px;
+      letter-spacing: 0.03em;
+    }
+    .notas-seccion textarea {
+      width: 100%;
+      min-height: 70px;
+      max-height: 280px;
+      font-size: 1.12em;
+      font-family: inherit;
+      border-radius: 8px;
+      border: 1px solid var(--notas-border);
+      padding: 10px;
+      background: white;
+      color: var(--notas-bold);
+      font-weight: bold;
+      resize: vertical;
+      transition: box-shadow 0.2s;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.07);
+    }
+    .modo-oscuro .notas-seccion textarea {
+      background: #1C1410;
+      border: 1px solid #FFD700;
+      color: #FFD700;
+    }
+    .notas-seccion .notas-btns {
+      margin-top: 10px;
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+    .notas-btn {
+      font-size: 1em;
+      font-weight: bold;
+      padding: 8px 16px;
+      border-radius: 8px;
+      border: 1px solid var(--notas-border);
+      background: var(--btn-bg);
+      color: var(--btn-text);
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    .notas-btn:hover {
+      background: #d4c2b3;
+      color: #5C3B28;
+    }
+    .modo-oscuro .notas-btn {
+      background: #4A3A2F;
+      color: #FFD700;
+      border: 1px solid #FFD700;
+    }
+    .notas-btn-ampliar {
+      background: #FFD700;
+      color: #5C3B28;
+      border: 1px solid #FFD700;
+    }
+    .modo-oscuro .notas-btn-ampliar {
+      background: #fffde9;
+      color: #241d10;
+      border: 1px solid #FFD700;
+    }
+    .notas-ampliada {
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: var(--notas-ampliado-bg);
+      color: var(--notas-bold);
+      box-shadow: var(--notas-ampliado-shadow);
+      z-index: 4000;
+      padding: 28px 18px 36px 18px;
+      border-radius: 0;
+      animation: aparecerNotas 0.30s ease;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+      min-width: 320px;
+    }
+    @keyframes aparecerNotas {
+      from { opacity: 0; transform: scale(0.95);}
+      to { opacity: 1; transform: scale(1);}
+    }
+    .notas-ampliada label {
+      font-size: 1.3em;
+      margin-bottom: 18px;
+      margin-top: 8px;
+      color: var(--notas-bold);
+      font-weight: bold;
+    }
+    .notas-ampliada textarea {
+      font-size: 1.18em;
+      min-height: 320px;
+      max-height: 70vh;
+      font-family: inherit;
+      border-radius: 10px;
+      border: 1.5px solid var(--notas-border);
+      padding: 14px;
+      background: #fffbe5;
+      color: var(--notas-bold);
+      font-weight: bold;
+      transition: box-shadow 0.2s;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.12);
+    }
+    .modo-oscuro .notas-ampliada textarea {
+      background: #1C1410;
+      border: 1.5px solid #FFD700;
+      color: #FFD700;
+    }
+    .notas-ampliada .notas-btns {
+      margin-top: 20px;
+      justify-content: flex-end;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+    .notas-ampliada .notas-btn {
+      font-size: 1.1em;
+      font-weight: bold;
+      padding: 11px 20px;
+      border-radius: 10px;
+    }
+    .notas-ampliada .notas-btn-ampliar {
+      background: #FFD700;
+      color: #5C3B28;
+      border: 1.5px solid #FFD700;
+    }
+    .modo-oscuro .notas-ampliada .notas-btn-ampliar {
+      background: #fffde9;
+      color: #241d10;
+      border: 1.5px solid #FFD700;
+    }
+    .notas-ampliada .notas-btn-atras {
+      background: #8B5A3E;
+      color: white;
+      border: 1.5px solid #5C3B28;
+    }
+    .modo-oscuro .notas-ampliada .notas-btn-atras {
+      background: #3A2F28;
+      color: #FFD700;
+      border: 1.5px solid #FFD700;
+    }
+    .notas-ampliada .notas-btn-borrar {
+      background: #FFD700;
+      color: #5C3B28;
+      border: 1.5px solid #FFD700;
+    }
+    .modo-oscuro .notas-ampliada .notas-btn-borrar {
+      background: #fffde9;
+      color: #241d10;
+      border: 1.5px solid #FFD700;
+    }
+    .notas-ampliada .notas-btn-copiar {
+      background: #8B5A3E;
+      color: white;
+      border: 1.5px solid #5C3B28;
+    }
+    .modo-oscuro .notas-ampliada .notas-btn-copiar {
+      background: #3A2F28;
+      color: #FFD700;
+      border: 1.5px solid #FFD700;
+    }
+    @media (min-width: 769px) {
+      .controls {
+        position: fixed;
+        bottom: 20px;
+        right: 20px;
+        margin: 0;
+        width: auto;
+      }
+      .notas-ampliada textarea {
+        min-height: 320px;
+        max-height: 600px;
+      }
     }
   </style>
   <script>
@@ -356,8 +519,9 @@
   </div>
   <button class="btn-temp-personalizado" id="btn-temp-personalizado">⏲️ Temporizador personalizado</button>
   <div id="panel-temporizadores" style="display:none;"></div>
+  <div id="panel-notas-ampliada" style="display:none;"></div>
 
-  <script>
+ <script>
     // === DATOS DE LAS RECETAS ===
     const recetas = [
            // === TARTAS DEL AYER ===
@@ -1603,285 +1767,398 @@
       }
     ];
 
-    // --- Estado global ---
-    let recetaActual = null;
-    let categoriaActual = null;
-    let navegacion = [];
-    let temporizadorDatos = null;
+// --- Estado global ---
+let recetaActual = null;
+let categoriaActual = null;
+let navegacion = [];
+let temporizadorDatos = null;
+let notasAmpliada = false;
 
-    // --- Función para cargar menú de categorías ---
-    function cargarIndice() {
-      const menu = document.getElementById('menu-categorias');
-      const categorias = [...new Set(recetas.map(r => r.categoria))];
-      let html = '<ul>';
-      categorias.forEach(cat => {
-        html += `<li class="categoria-nombre" onclick="mostrarCategoria('${cat}')">${cat}</li>`;
-      });
-      html += '</ul>';
-      menu.innerHTML = html;
+// --- Función para cargar menú de categorías ---
+function cargarIndice() {
+  const menu = document.getElementById('menu-categorias');
+  const categorias = [...new Set(recetas.map(r => r.categoria))];
+  let html = '<ul>';
+  categorias.forEach(cat => {
+    html += `<li class="categoria-nombre" onclick="mostrarCategoria('${cat}')">${cat}</li>`;
+  });
+  html += '</ul>';
+  menu.innerHTML = html;
+}
+
+document.getElementById('btn-menu').onclick = () => {
+  cargarIndice();
+  document.getElementById('menu-categorias').classList.toggle('visible');
+  document.getElementById('btn-atras').style.display = 'none';
+  navegacion = [];
+};
+
+window.mostrarCategoria = function(categoria) {
+  categoriaActual = categoria;
+  navegacion = [{ tipo: 'categorias' }];
+  document.getElementById('menu-categorias').classList.remove('visible');
+  document.getElementById('btn-atras').style.display = '';
+  const recetasCat = recetas.filter(r => r.categoria === categoria);
+  let html = `<h2 class="categoria-nombre">${categoria}</h2><ul>`;
+  recetasCat.forEach(r => {
+    html += `<li><a href="#" class="receta-nombre" onclick="mostrarReceta('${r.id}');return false;">${r.nombre}</a></li>`;
+  });
+  html += '</ul>';
+  document.getElementById('receta-detalle').innerHTML = html;
+  navegacion.push({ tipo: 'recetas', categoria });
+};
+
+window.mostrarReceta = function(id, desdeBotonUltima=false) {
+  recetaActual = recetas.find(r => r.id === id);
+  if (!recetaActual) return;
+  // Actualiza última receta sólo si no es desde el botón de última receta (evita apilar navegación)
+  if (!desdeBotonUltima) {
+    localStorage.setItem('ultimaRecetaId', id);
+    navegacion.push({ tipo: 'receta', id: recetaActual.id, categoria: recetaActual.categoria });
+  }
+
+  let html = `<h2 class="receta-nombre">${recetaActual.nombre}</h2>
+    <div class="info-extra"><b>Categoría:</b> <span class="categoria-nombre">${recetaActual.categoria}</span></div>
+    <div class="section"><h4>Ingredientes</h4><ul>`;
+  recetaActual.ingredientes.forEach(ing => {
+    html += `<li>${ing.nombre}: <b>${ing.cantidad} ${ing.unidad || ''}</b></li>`;
+  });
+  html += `</ul></div>`;
+
+  html += `<div class="section"><h4>Elaboración</h4><ol>`;
+  recetaActual.elaboracion.forEach((paso, i) => {
+    html += `<li>${paso}`;
+    if (recetaActual.tiempo && recetaActual.temperatura && i === recetaActual.elaboracion.length - 1) {
+      html += ` <button class="btn-timer" onclick="iniciarTemporizador('${recetaActual.nombre}', ${recetaActual.tiempo})">⏲️ ${recetaActual.tiempo} min</button>`;
     }
+    html += `</li>`;
+  });
+  html += `</ol></div>`;
+  if (recetaActual.temperatura)
+    html += `<div class="info-extra"><i class="fas fa-temperature-high"></i> Horno: <b>${recetaActual.temperatura}°C</b></div>`;
+  // Bloque de notas
+  html += mostrarNotasRecetaHtml(recetaActual.id);
+  document.getElementById('receta-detalle').innerHTML = html;
+  document.getElementById('btn-atras').style.display = '';
+  mostrarUltimaRecetaBoton();
+};
 
-    document.getElementById('btn-menu').onclick = () => {
-      cargarIndice();
-      document.getElementById('menu-categorias').classList.toggle('visible');
-      document.getElementById('btn-atras').style.display = 'none';
+// --- Notas por receta ---
+function getNotasKey(id) {
+  return "notas_" + id;
+}
+function getNotasReceta(id) {
+  return localStorage.getItem(getNotasKey(id)) || '';
+}
+function setNotasReceta(id, texto) {
+  localStorage.setItem(getNotasKey(id), texto);
+}
+
+function borrarNotasReceta(id) {
+  localStorage.removeItem(getNotasKey(id));
+}
+
+function mostrarNotasRecetaHtml(id) {
+  let notas = getNotasReceta(id);
+  return `
+    <div class="notas-seccion" id="notas-seccion-${id}">
+      <label for="notas-receta-${id}">📝 Notas y observaciones</label>
+      <textarea id="notas-receta-${id}" onchange="guardarNotasReceta('${id}')" oninput="guardarNotasReceta('${id}')">${notas}</textarea>
+      <div class="notas-btns">
+        <button class="notas-btn notas-btn-ampliar" onclick="ampliarNotas('${id}')">Ampliar</button>
+        <button class="notas-btn notas-btn-borrar" onclick="borrarNotasYActualizar('${id}')">Borrar</button>
+        <button class="notas-btn notas-btn-copiar" onclick="copiarNotas('${id}')">Copiar</button>
+      </div>
+    </div>
+  `;
+}
+
+window.guardarNotasReceta = function(id) {
+  const textarea = document.getElementById('notas-receta-' + id);
+  if (textarea) setNotasReceta(id, textarea.value);
+};
+
+window.borrarNotasYActualizar = function(id) {
+  borrarNotasReceta(id);
+  if (document.getElementById('notas-receta-' + id)) {
+    document.getElementById('notas-receta-' + id).value = "";
+  }
+  // Actualiza en ampliada si está abierta
+  if (notasAmpliada) {
+    document.getElementById('notas-ampliada-textarea').value = "";
+  }
+};
+
+window.copiarNotas = function(id) {
+  const texto = getNotasReceta(id);
+  if (navigator.clipboard) {
+    navigator.clipboard.writeText(texto);
+    alert('Notas copiadas al portapapeles');
+  } else {
+    alert('Tu navegador no permite copiar automáticamente. Hazlo manualmente.');
+  }
+};
+
+window.ampliarNotas = function(id) {
+  notasAmpliada = true;
+  const texto = getNotasReceta(id);
+  const html = `
+    <div class="notas-ampliada" id="notas-ampliada-panel">
+      <label for="notas-ampliada-textarea">📝 Notas y observaciones</label>
+      <textarea id="notas-ampliada-textarea">${texto}</textarea>
+      <div class="notas-btns">
+        <button class="notas-btn notas-btn-atras" onclick="cerrarAmpliarNotas('${id}')">← Atrás</button>
+        <button class="notas-btn notas-btn-borrar" onclick="borrarNotasYActualizar('${id}')">Borrar</button>
+        <button class="notas-btn notas-btn-copiar" onclick="copiarNotas('${id}')">Copiar</button>
+        <button class="notas-btn notas-btn-ampliar" onclick="guardarNotasAmpliada('${id}')">Guardar</button>
+      </div>
+    </div>
+  `;
+  const panel = document.getElementById('panel-notas-ampliada');
+  panel.innerHTML = html;
+  panel.style.display = '';
+  document.body.style.overflow = "hidden"; // Evita scroll por detrás
+};
+
+window.cerrarAmpliarNotas = function(id) {
+  notasAmpliada = false;
+  document.getElementById('panel-notas-ampliada').style.display = 'none';
+  document.body.style.overflow = "";
+  // Actualiza en receta normal
+  if (document.getElementById('notas-receta-' + id)) {
+    document.getElementById('notas-receta-' + id).value = getNotasReceta(id);
+  }
+};
+
+window.guardarNotasAmpliada = function(id) {
+  const valor = document.getElementById('notas-ampliada-textarea').value;
+  setNotasReceta(id, valor);
+  alert('Notas guardadas');
+  // Actualiza en receta normal
+  if (document.getElementById('notas-receta-' + id)) {
+    document.getElementById('notas-receta-' + id).value = valor;
+  }
+};
+
+function mostrarUltimaRecetaBoton() {
+  const id = localStorage.getItem('ultimaRecetaId');
+  document.getElementById('btn-ultima-receta').style.display = id ? '' : 'none';
+}
+
+document.getElementById('btn-ultima-receta').onclick = function() {
+  const id = localStorage.getItem('ultimaRecetaId');
+  if (id) window.mostrarReceta(id, true); // true: no apilar navegación
+};
+
+// --- Botón atrás mejorado ---
+document.getElementById('btn-atras').onclick = function() {
+  if (notasAmpliada) {
+    // Si está ampliada, cierra ampliación en vez de navegar
+    window.cerrarAmpliarNotas(recetaActual.id);
+    return;
+  }
+  if (navegacion.length > 1) {
+    navegacion.pop();
+    const anterior = navegacion[navegacion.length - 1];
+    if (!anterior || anterior.tipo === 'bienvenida') {
+      mostrarBienvenida();
       navegacion = [];
-    };
-
-    window.mostrarCategoria = function(categoria) {
-      categoriaActual = categoria;
-      navegacion = [{ tipo: 'categorias' }];
-      document.getElementById('menu-categorias').classList.remove('visible');
-      document.getElementById('btn-atras').style.display = '';
-      const recetasCat = recetas.filter(r => r.categoria === categoria);
-      let html = `<h2 class="categoria-nombre">${categoria}</h2><ul>`;
-      recetasCat.forEach(r => {
-        html += `<li><a href="#" class="receta-nombre" onclick="mostrarReceta('${r.id}');return false;">${r.nombre}</a></li>`;
-      });
-      html += '</ul>';
-      document.getElementById('receta-detalle').innerHTML = html;
-      navegacion.push({ tipo: 'recetas', categoria });
-    };
-
-    window.mostrarReceta = function(id) {
-      recetaActual = recetas.find(r => r.id === id);
-      if (!recetaActual) return;
-      localStorage.setItem('ultimaRecetaId', id);
-      navegacion.push({ tipo: 'receta', id: recetaActual.id, categoria: recetaActual.categoria });
-
-      let html = `<h2 class="receta-nombre">${recetaActual.nombre}</h2><div class="info-extra"><b>Categoría:</b> <span class="categoria-nombre">${recetaActual.categoria}</span></div>`;
-      html += `<div class="section"><h4>Ingredientes</h4><ul>`;
-      recetaActual.ingredientes.forEach(ing => {
-        html += `<li>${ing.nombre}: <b>${ing.cantidad} ${ing.unidad || ''}</b></li>`;
-      });
-      html += `</ul></div>`;
-
-      html += `<div class="section"><h4>Elaboración</h4><ol>`;
-      recetaActual.elaboracion.forEach((paso, i) => {
-        html += `<li>${paso}`;
-        if (recetaActual.tiempo && recetaActual.temperatura && i === recetaActual.elaboracion.length - 1) {
-          html += ` <button class="btn-timer" onclick="iniciarTemporizador('${recetaActual.nombre}', ${recetaActual.tiempo})">⏲️ ${recetaActual.tiempo} min</button>`;
-        }
-        html += `</li>`;
-      });
-      html += `</ol></div>`;
-      if (recetaActual.temperatura)
-        html += `<div class="info-extra"><i class="fas fa-temperature-high"></i> Horno: <b>${recetaActual.temperatura}°C</b></div>`;
-      document.getElementById('receta-detalle').innerHTML = html;
-      document.getElementById('btn-atras').style.display = '';
-      mostrarUltimaRecetaBoton();
-    };
-
-    function mostrarUltimaRecetaBoton() {
-      const id = localStorage.getItem('ultimaRecetaId');
-      document.getElementById('btn-ultima-receta').style.display = id ? '' : 'none';
+      document.getElementById('btn-atras').style.display = 'none';
+    } else if (anterior.tipo === 'recetas') {
+      mostrarCategoria(anterior.categoria);
+    } else if (anterior.tipo === 'categorias') {
+      mostrarBienvenida();
+      navegacion = [];
+      document.getElementById('btn-atras').style.display = 'none';
     }
+  } else {
+    mostrarBienvenida();
+    navegacion = [];
+    document.getElementById('btn-atras').style.display = 'none';
+  }
+};
 
-    document.getElementById('btn-ultima-receta').onclick = function() {
-      const id = localStorage.getItem('ultimaRecetaId');
-      if (id) mostrarReceta(id);
-    };
+function mostrarBienvenida() {
+  document.getElementById('receta-detalle').innerHTML =
+    `<h2 class="categoria-nombre">¡Hola, Reposter@s! 👨‍🍳👩‍🍳</h2>
+      <p>Toca <strong>“Menú”</strong> arriba para explorar las recetas.</p>
+      <div class="section">
+        <h4><i class="fas fa-star"></i> Categorías destacadas</h4>
+        <ul>
+          <li class="categoria-nombre">Tartas del Ayer</li>
+          <li class="categoria-nombre">Bizcochos, Magdalenas & Muffins</li>
+          <li class="categoria-nombre">Dulces & Confites</li>
+        </ul>
+      </div>`;
+  mostrarUltimaRecetaBoton();
+}
 
-    // --- Botón atrás mejorado ---
-    document.getElementById('btn-atras').onclick = function() {
-      if (navegacion.length > 1) {
-        navegacion.pop();
-        const anterior = navegacion[navegacion.length - 1];
-        if (!anterior || anterior.tipo === 'bienvenida') {
-          mostrarBienvenida();
-          navegacion = [];
-          document.getElementById('btn-atras').style.display = 'none';
-        } else if (anterior.tipo === 'recetas') {
-          mostrarCategoria(anterior.categoria);
-        } else if (anterior.tipo === 'categorias') {
-          mostrarBienvenida();
-          navegacion = [];
-          document.getElementById('btn-atras').style.display = 'none';
-        }
-      } else {
-        mostrarBienvenida();
-        navegacion = [];
-        document.getElementById('btn-atras').style.display = 'none';
+document.getElementById('btn-oscuro').onclick = function() {
+  document.body.classList.toggle('modo-oscuro');
+  localStorage.setItem('modoOscuro', document.body.classList.contains('modo-oscuro') ? '1' : '');
+};
+if (localStorage.getItem('modoOscuro') === '1') {
+  document.body.classList.add('modo-oscuro');
+}
+
+document.getElementById('buscador').addEventListener('input', function(e) {
+  const q = e.target.value.trim().toLowerCase();
+  if (!q) {
+    mostrarBienvenida();
+    document.getElementById('btn-atras').style.display = 'none';
+    navegacion = [];
+    return;
+  }
+  const resultados = recetas.filter(r =>
+    r.nombre.toLowerCase().includes(q) ||
+    r.categoria.toLowerCase().includes(q) ||
+    r.ingredientes.some(ing => ing.nombre.toLowerCase().includes(q))
+  );
+  let html = `<h2>Resultados:</h2><ul>`;
+  resultados.forEach(r => {
+    html += `<li><a href="#" class="receta-nombre" onclick="mostrarReceta('${r.id}');return false;">${r.nombre} <span style="color:gray;font-size:0.9em">(${r.categoria})</span></a></li>`;
+  });
+  html += '</ul>';
+  document.getElementById('receta-detalle').innerHTML = html;
+  document.getElementById('btn-atras').style.display = '';
+  navegacion = [{ tipo: 'buscador' }];
+  mostrarUltimaRecetaBoton();
+});
+
+// --- Calculadora de porciones funcional ---
+document.getElementById('selector-personas').addEventListener('change', function(e) {
+  const personas = parseInt(e.target.value, 10);
+  if (!recetaActual) return;
+  let html = `<h2 class="receta-nombre">${recetaActual.nombre}</h2>
+    <div class="info-extra"><b>Categoría:</b> <span class="categoria-nombre">${recetaActual.categoria}</span></div>
+    <div class="section"><h4>Ingredientes para <b>${personas}</b> personas</h4><ul>`;
+  recetaActual.ingredientes.forEach(ing => {
+    let cantidad = ing.cantidad * (personas / 4); // suponiendo 4 personas por defecto
+    cantidad = (Math.round(cantidad * 100) / 100);
+    html += `<li>${ing.nombre}: <b>${cantidad} ${ing.unidad || ''}</b></li>`;
+  });
+  html += `</ul></div>`;
+
+  html += `<div class="section"><h4>Elaboración</h4><ol>`;
+  recetaActual.elaboracion.forEach((paso, i) => {
+    html += `<li>${paso}`;
+    if (recetaActual.tiempo && recetaActual.temperatura && i === recetaActual.elaboracion.length - 1) {
+      html += ` <button class="btn-timer" onclick="iniciarTemporizador('${recetaActual.nombre}', ${recetaActual.tiempo})">⏲️ ${recetaActual.tiempo} min</button>`;
+    }
+    html += `</li>`;
+  });
+  html += `</ol></div>`;
+  if (recetaActual.temperatura)
+    html += `<div class="info-extra"><i class="fas fa-temperature-high"></i> Horno: <b>${recetaActual.temperatura}°C</b></div>`;
+  html += mostrarNotasRecetaHtml(recetaActual.id);
+  document.getElementById('receta-detalle').innerHTML = html;
+  document.getElementById('btn-atras').style.display = '';
+});
+
+// --- Temporizador robusto ---
+function playBeep() {
+  try {
+    const ctx = new (window.AudioContext || window.webkitAudioContext)();
+    const osc = ctx.createOscillator();
+    const gain = ctx.createGain();
+    osc.type = 'sine';
+    osc.frequency.value = 1000;
+    gain.gain.value = 0.2;
+    osc.connect(gain);
+    gain.connect(ctx.destination);
+    osc.start();
+    setTimeout(() => {
+      osc.stop();
+      ctx.close();
+    }, 500);
+  } catch (e) {}
+}
+
+function iniciarTemporizador(nombre, minutos) {
+  const ahora = Date.now();
+  temporizadorDatos = {
+    nombre,
+    minutos,
+    inicio: ahora,
+    fin: ahora + minutos * 60000,
+    activo: true
+  };
+  localStorage.setItem('temporizadorDatos', JSON.stringify(temporizadorDatos));
+  mostrarTemporizador(temporizadorDatos);
+  iniciarTemporizadorInterval();
+}
+
+function mostrarTemporizador(datos) {
+  const panel = document.getElementById('panel-temporizadores');
+  panel.style.display = '';
+  let restante = Math.max(0, Math.round((datos.fin - Date.now()) / 1000));
+  let m = Math.floor(restante / 60);
+  let s = restante % 60;
+  panel.innerHTML = `<b>⏲️ Temporizador:</b> <span id="temporizador-nombre">${datos.nombre}</span>
+    <span id="temporizador-restante">${m}:${s.toString().padStart(2, '0')}</span>
+    <button onclick="cancelarTemporizador()">Cancelar</button>`;
+}
+
+function iniciarTemporizadorInterval() {
+  if (window._timerInterval) clearInterval(window._timerInterval);
+  window._timerInterval = setInterval(() => {
+    if (!temporizadorDatos || !temporizadorDatos.activo) return;
+    let restante = Math.max(0, Math.round((temporizadorDatos.fin - Date.now()) / 1000));
+    if (restante <= 0) {
+      clearInterval(window._timerInterval);
+      temporizadorDatos.activo = false;
+      localStorage.removeItem('temporizadorDatos');
+      document.getElementById('panel-temporizadores').innerHTML =
+        `<b style="color:var(--receta-bold); font-size:1.3em;">¡Tiempo terminado para ${temporizadorDatos.nombre}!</b>
+        <button onclick="cancelarTemporizador()">Cerrar aviso</button>`;
+      playBeep();
+      if (window.navigator.vibrate) navigator.vibrate([300, 100, 300]);
+      if (window.Notification && Notification.permission === 'granted') {
+        new Notification('¡Temporizador terminado!', { body: temporizadorDatos.nombre });
+      } else if (window.Notification && Notification.permission !== 'denied') {
+        Notification.requestPermission().then(function(permission) {
+          if (permission === 'granted') new Notification('¡Temporizador terminado!', { body: temporizadorDatos.nombre });
+        });
       }
-    };
-
-    function mostrarBienvenida() {
-      document.getElementById('receta-detalle').innerHTML =
-        `<h2 class="categoria-nombre">¡Hola, Reposter@s! 👨‍🍳👩‍🍳</h2>
-          <p>Toca <strong>“Menú”</strong> arriba para explorar las recetas.</p>
-          <div class="section">
-            <h4><i class="fas fa-star"></i> Categorías destacadas</h4>
-            <ul>
-              <li class="categoria-nombre">Tartas del Ayer</li>
-              <li class="categoria-nombre">Bizcochos, Magdalenas & Muffins</li>
-              <li class="categoria-nombre">Dulces & Confites</li>
-            </ul>
-          </div>`;
-      mostrarUltimaRecetaBoton();
+      return;
     }
+    mostrarTemporizador(temporizadorDatos);
+  }, 1000);
+}
 
-    document.getElementById('btn-oscuro').onclick = function() {
-      document.body.classList.toggle('modo-oscuro');
-      localStorage.setItem('modoOscuro', document.body.classList.contains('modo-oscuro') ? '1' : '');
-    };
-    if (localStorage.getItem('modoOscuro') === '1') {
-      document.body.classList.add('modo-oscuro');
-    }
+window.cancelarTemporizador = function() {
+  clearInterval(window._timerInterval);
+  temporizadorDatos = null;
+  localStorage.removeItem('temporizadorDatos');
+  document.getElementById('panel-temporizadores').style.display = 'none';
+};
 
-    document.getElementById('buscador').addEventListener('input', function(e) {
-      const q = e.target.value.trim().toLowerCase();
-      if (!q) {
-        mostrarBienvenida();
-        document.getElementById('btn-atras').style.display = 'none';
-        navegacion = [];
-        return;
-      }
-      const resultados = recetas.filter(r =>
-        r.nombre.toLowerCase().includes(q) ||
-        r.categoria.toLowerCase().includes(q) ||
-        r.ingredientes.some(ing => ing.nombre.toLowerCase().includes(q))
-      );
-      let html = `<h2>Resultados:</h2><ul>`;
-      resultados.forEach(r => {
-        html += `<li><a href="#" class="receta-nombre" onclick="mostrarReceta('${r.id}');return false;">${r.nombre} <span style="color:gray;font-size:0.9em">(${r.categoria})</span></a></li>`;
-      });
-      html += '</ul>';
-      document.getElementById('receta-detalle').innerHTML = html;
-      document.getElementById('btn-atras').style.display = '';
-      navegacion = [{ tipo: 'buscador' }];
-      mostrarUltimaRecetaBoton();
-    });
+document.getElementById('btn-temp-personalizado').onclick = () => {
+  const minutos = prompt('¿Cuántos minutos necesitas?');
+  const mins = parseInt(minutos, 10);
+  if (!mins || mins <= 0) return;
+  iniciarTemporizador('Personalizado', mins);
+};
 
-    // --- Calculadora de porciones funcional ---
-    document.getElementById('selector-personas').addEventListener('change', function(e) {
-      const personas = parseInt(e.target.value, 10);
-      if (!recetaActual) return;
-      let html = `<h2 class="receta-nombre">${recetaActual.nombre}</h2><div class="info-extra"><b>Categoría:</b> <span class="categoria-nombre">${recetaActual.categoria}</span></div>`;
-      html += `<div class="section"><h4>Ingredientes para <b>${personas}</b> personas</h4><ul>`;
-      recetaActual.ingredientes.forEach(ing => {
-        let cantidad = ing.cantidad * (personas / 4); // suponiendo 4 personas por defecto
-        cantidad = (Math.round(cantidad * 100) / 100);
-        html += `<li>${ing.nombre}: <b>${cantidad} ${ing.unidad || ''}</b></li>`;
-      });
-      html += `</ul></div>`;
-
-      html += `<div class="section"><h4>Elaboración</h4><ol>`;
-      recetaActual.elaboracion.forEach((paso, i) => {
-        html += `<li>${paso}`;
-        if (recetaActual.tiempo && recetaActual.temperatura && i === recetaActual.elaboracion.length - 1) {
-          html += ` <button class="btn-timer" onclick="iniciarTemporizador('${recetaActual.nombre}', ${recetaActual.tiempo})">⏲️ ${recetaActual.tiempo} min</button>`;
-        }
-        html += `</li>`;
-      });
-      html += `</ol></div>`;
-      if (recetaActual.temperatura)
-        html += `<div class="info-extra"><i class="fas fa-temperature-high"></i> Horno: <b>${recetaActual.temperatura}°C</b></div>`;
-      document.getElementById('receta-detalle').innerHTML = html;
-      document.getElementById('btn-atras').style.display = '';
-    });
-
-    // --- Temporizador robusto ---
-    function playBeep() {
-      try {
-        const ctx = new (window.AudioContext || window.webkitAudioContext)();
-        const osc = ctx.createOscillator();
-        const gain = ctx.createGain();
-        osc.type = 'sine';
-        osc.frequency.value = 1000;
-        gain.gain.value = 0.2;
-        osc.connect(gain);
-        gain.connect(ctx.destination);
-        osc.start();
-        setTimeout(() => {
-          osc.stop();
-          ctx.close();
-        }, 500);
-      } catch (e) {}
-    }
-
-    function iniciarTemporizador(nombre, minutos) {
-      const ahora = Date.now();
-      temporizadorDatos = {
-        nombre,
-        minutos,
-        inicio: ahora,
-        fin: ahora + minutos * 60000,
-        activo: true
-      };
-      localStorage.setItem('temporizadorDatos', JSON.stringify(temporizadorDatos));
+// --- Recuperar temporizador y bienvenida al iniciar ---
+window.addEventListener('DOMContentLoaded', () => {
+  mostrarBienvenida();
+  // Restaurar temporizador si está activo . . .
+  const almacenado = localStorage.getItem('temporizadorDatos');
+  if (almacenado) {
+    temporizadorDatos = JSON.parse(almacenado);
+    if (temporizadorDatos && temporizadorDatos.activo && Date.now() < temporizadorDatos.fin) {
       mostrarTemporizador(temporizadorDatos);
       iniciarTemporizadorInterval();
-    }
-
-    function mostrarTemporizador(datos) {
-      const panel = document.getElementById('panel-temporizadores');
-      panel.style.display = '';
-      let restante = Math.max(0, Math.round((datos.fin - Date.now()) / 1000));
-      let m = Math.floor(restante / 60);
-      let s = restante % 60;
-      panel.innerHTML = `<b>⏲️ Temporizador:</b> <span id="temporizador-nombre">${datos.nombre}</span>
-        <span id="temporizador-restante">${m}:${s.toString().padStart(2, '0')}</span>
-        <button onclick="cancelarTemporizador()">Cancelar</button>`;
-    }
-
-    function iniciarTemporizadorInterval() {
-      if (window._timerInterval) clearInterval(window._timerInterval);
-      window._timerInterval = setInterval(() => {
-        if (!temporizadorDatos || !temporizadorDatos.activo) return;
-        let restante = Math.max(0, Math.round((temporizadorDatos.fin - Date.now()) / 1000));
-        if (restante <= 0) {
-          clearInterval(window._timerInterval);
-          temporizadorDatos.activo = false;
-          localStorage.removeItem('temporizadorDatos');
-          document.getElementById('panel-temporizadores').innerHTML =
-            `<b style="color:var(--receta-bold); font-size:1.3em;">¡Tiempo terminado para ${temporizadorDatos.nombre}!</b>
-            <button onclick="cancelarTemporizador()">Cerrar aviso</button>`;
-          playBeep();
-          if (window.navigator.vibrate) navigator.vibrate([300, 100, 300]);
-          if (window.Notification && Notification.permission === 'granted') {
-            new Notification('¡Temporizador terminado!', { body: temporizadorDatos.nombre });
-          } else if (window.Notification && Notification.permission !== 'denied') {
-            Notification.requestPermission().then(function(permission) {
-              if (permission === 'granted') new Notification('¡Temporizador terminado!', { body: temporizadorDatos.nombre });
-            });
-          }
-          return;
-        }
-        mostrarTemporizador(temporizadorDatos);
-      }, 1000);
-    }
-
-    window.cancelarTemporizador = function() {
-      clearInterval(window._timerInterval);
-      temporizadorDatos = null;
+    } else {
       localStorage.removeItem('temporizadorDatos');
-      document.getElementById('panel-temporizadores').style.display = 'none';
-    };
-
-    document.getElementById('btn-temp-personalizado').onclick = () => {
-      const minutos = prompt('¿Cuántos minutos necesitas?');
-      const mins = parseInt(minutos, 10);
-      if (!mins || mins <= 0) return;
-      iniciarTemporizador('Personalizado', mins);
-    };
-
-    // --- Recuperar temporizador y bienvenida al iniciar ---
-    window.addEventListener('DOMContentLoaded', () => {
-      mostrarBienvenida();
-      // Restaurar temporizador si está activo
-      const almacenado = localStorage.getItem('temporizadorDatos');
-      if (almacenado) {
-        temporizadorDatos = JSON.parse(almacenado);
-        if (temporizadorDatos && temporizadorDatos.activo && Date.now() < temporizadorDatos.fin) {
-          mostrarTemporizador(temporizadorDatos);
-          iniciarTemporizadorInterval();
-        } else {
-          localStorage.removeItem('temporizadorDatos');
-        }
-      }
-      mostrarUltimaRecetaBoton();
-    });
-  </script>
+    }
+  }
+  mostrarUltimaRecetaBoton();
+});
+ </script>
 </body>
 </html>
+
+
 
