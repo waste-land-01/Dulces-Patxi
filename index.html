@@ -17,6 +17,8 @@
       --byyahya-shadow: #b2d6ff;
       --buscador-bg: #fff;
       --buscador-border: #7C4D9F;
+      --buscador-txt: #222;
+      --buscador-txt-dark: #fff;
       --modo-bg: #3498db;
       --modo-txt: #fff;
       --inteligente-bg: #f7b563;
@@ -41,7 +43,9 @@
       --elaboracion-txt: #3cb36f;
       --fav-bg: #fffbe5;
       --fav-txt: #b36f3c;
-      --transition-view: opacity .32s, transform .32s;
+      --overlay-bg: #fff;
+      --overlay-txt: #222;
+      --overlay-shadow: 0 8px 32px #0006;
     }
     .modo-oscuro {
       --fondo: #22202e;
@@ -51,6 +55,8 @@
       --byyahya-shadow: #3777ff;
       --buscador-bg: #292542;
       --buscador-border: #b36f3c;
+      --buscador-txt: #fff;
+      --buscador-txt-dark: #fff;
       --modo-bg: #69bfff;
       --modo-txt: #22202e;
       --inteligente-bg: #c47e43;
@@ -71,13 +77,15 @@
       --elaboracion-txt: #3cb36f;
       --fav-bg: #292542;
       --fav-txt: #f7b563;
+      --overlay-bg: #292542;
+      --overlay-txt: #fffbe5;
+      --overlay-shadow: 0 8px 32px #000d;
     }
     body {
       background: var(--fondo);
       color: var(--bienvenida);
       font-family: 'Segoe UI', 'Arial', sans-serif;
-      padding: 0;
-      margin: 0;
+      padding: 0; margin: 0;
       min-height: 100vh;
       font-size: 1.08em;
       transition: background var(--transition), color var(--transition);
@@ -101,7 +109,6 @@
       margin-bottom: 0.35em;
       letter-spacing: 0.04em;
       color: var(--titulo);
-      transition: color var(--transition);
     }
     .bienvenida {
       text-align: center;
@@ -126,6 +133,7 @@
       align-items: center;
       justify-content: center;
       gap: 0.5em;
+      position: relative;
     }
     #buscador {
       width: 100%;
@@ -134,13 +142,20 @@
       border: 2px solid var(--buscador-border);
       font-size: 1.09em;
       background: var(--buscador-bg);
-      color: #222;
+      color: var(--buscador-txt);
       box-shadow: var(--shadow);
-      transition: background var(--transition), border var(--transition);
+      transition: background var(--transition), border var(--transition), color var(--transition);
+      outline: none;
+    }
+    .modo-oscuro #buscador {
+      color: var(--buscador-txt-dark);
+      background: var(--buscador-bg);
     }
     .icon-search {
       font-size: 1.18em;
-      margin-left: -2.3em;
+      position: absolute;
+      right: 17px;
+      top: 16px;
       color: #aaa;
       pointer-events: none;
     }
@@ -151,33 +166,7 @@
       align-items: center;
       justify-content: center;
     }
-    #btn-modo {
-      background: var(--modo-bg);
-      color: var(--modo-txt);
-      border: none;
-      font-weight: 900;
-      font-size: 1.12em;
-      border-radius: var(--radius);
-      padding: 13px 0;
-      width: 135px;
-      box-shadow: var(--shadow);
-      cursor: pointer;
-      transition: background var(--transition), color var(--transition);
-    }
-    #btn-buscador-inteligente {
-      background: var(--inteligente-bg);
-      color: var(--inteligente-txt);
-      border: none;
-      font-weight: 900;
-      font-size: 1.13em;
-      border-radius: var(--radius);
-      padding: 13px 0;
-      width: 100%;
-      box-shadow: var(--shadow);
-      cursor: pointer;
-      transition: background var(--transition), color var(--transition);
-    }
-    .menu-row button, .estrella-row button, .notas-row button {
+    .main-btn {
       border: none;
       border-radius: var(--radius);
       font-weight: 900;
@@ -188,11 +177,72 @@
       transition: background var(--transition), color var(--transition);
       margin-bottom: 2px;
       padding: 18px 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      letter-spacing: 0.01em;
     }
+    #btn-modo { background: var(--modo-bg); color: var(--modo-txt);}
+    #btn-buscador-inteligente { background: var(--inteligente-bg); color: var(--inteligente-txt);}
     #btn-menu { background: var(--menu-bg); color: var(--menu-txt);}
     #btn-estrella { background: var(--estrella-bg); color: var(--estrella-txt;}
     #btn-notas { background: var(--notas-bg); color: var(--notas-txt;}
     .estrella-ico { color: #FFE066; font-size: 1.25em; margin-left: 10px; }
+    /* Overlay modal */
+    .modal {
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      z-index: 10000;
+      background: rgba(0,0,0,0.25);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      animation: fadeIn .25s;
+    }
+    .modal-content {
+      background: var(--overlay-bg);
+      color: var(--overlay-txt);
+      box-shadow: var(--overlay-shadow);
+      border-radius: 28px;
+      padding: 30px 22px;
+      min-width: 260px;
+      max-width: 95vw;
+      min-height: 120px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 22px;
+      font-size: 1.13em;
+    }
+    .modal-content h3 {
+      margin: 0 0 16px 0;
+      font-size: 1.19em;
+      font-weight: 900;
+      text-align: center;
+      color: var(--titulo);
+    }
+    .modal-content .modal-btn {
+      margin: 8px 0;
+      min-width: 175px;
+      font-size: 1.07em;
+      padding: 17px 0;
+      border-radius: 15px;
+      border: none;
+      font-weight: 900;
+      background: var(--inteligente-bg);
+      color: var(--inteligente-txt);
+      box-shadow: var(--shadow);
+      cursor: pointer;
+      transition: background var(--transition);
+    }
+    .modal-content .modal-btn:last-child {
+      background: #e2e2e2;
+      color: #222;
+      margin-top: 18px;
+    }
+    .modal-content .modal-btn:active {
+      background: #e9a23d;
+    }
     /* Views */
     .view {
       animation: fadeIn .35s;
@@ -270,27 +320,40 @@
       font-size: 1.09em;
       box-shadow: var(--shadow);
     }
-    .filtros-row {
-      width: 100%;
-      min-height: 44px;
-      margin-bottom: var(--margin-v);
+    .notas-toolbar {
       display: flex;
-      align-items: center;
+      gap: 14px;
       justify-content: center;
-      gap: 15px;
-      flex-wrap: wrap;
+      margin-top: 22px;
+      margin-bottom: 5px;
     }
-    .filtro-btn {
-      background: #eee;
-      color: #444;
-      border-radius: 13px;
-      padding: 13px 24px;
-      font-weight: 900;
-      font-size: 1.07em;
+    .notas-btn {
+      font-size: 1.05em;
+      padding: 13px 0;
+      min-width: 130px;
+      border-radius: 14px;
       border: none;
+      font-weight: 900;
+      background: var(--inteligente-bg);
+      color: var(--inteligente-txt);
       box-shadow: var(--shadow);
       cursor: pointer;
-      transition: background var(--transition), color var(--transition);
+      transition: background var(--transition);
+    }
+    .notas-btn:last-child {
+      background: #e2e2e2;
+      color: #222;
+    }
+    .notas-btn:active { background: #e9a23d; }
+    .notas-ampliada {
+      min-height: 70vh;
+      font-size: 1.18em;
+      border-radius: 18px;
+      padding: 22px 11px;
+      box-shadow: 0 8px 32px #0005;
+      margin-bottom: 22px;
+      background: var(--overlay-bg);
+      color: var(--overlay-txt);
     }
     @keyframes fadeIn {
       from { opacity:0; }
@@ -300,10 +363,12 @@
       .pantalla, .view { max-width: 100vw; padding: 0 2vw;}
       .titulo-app {font-size:1.13em;}
       .bienvenida, .by-yahya {font-size:1em;}
-      #btn-menu, #btn-estrella, #btn-notas {font-size:1em;padding:15px 0;}
+      .main-btn {font-size:1em;padding:15px 0;}
       #btn-buscador-inteligente, #btn-modo {font-size:1em;}
       .view-title {font-size:1.09em;}
       .view-back {padding:9px 0;}
+      .modal-content {padding:20px 8px;}
+      .modal-content .modal-btn {font-size:0.97em;min-width:120px;}
     }
   </style>
 </head>
@@ -317,20 +382,19 @@
       <span class="icon-search"><i class="fas fa-search"></i></span>
     </div>
     <div class="modo-row">
-      <button id="btn-modo">MODO</button>
+      <button id="btn-modo" class="main-btn">MODO</button>
     </div>
     <div class="inteligente-row">
-      <button id="btn-buscador-inteligente">BUSCADOR INTELIGENTE</button>
+      <button id="btn-buscador-inteligente" class="main-btn">BUSCADOR INTELIGENTE</button>
     </div>
-    <div style="min-height:44px;" id="filtros-space"></div>
     <div class="menu-row">
-      <button id="btn-menu">MENÚ</button>
+      <button id="btn-menu" class="main-btn">MENÚ</button>
     </div>
     <div class="estrella-row">
-      <button id="btn-estrella">RECETAS ESTRELLA <span class="estrella-ico">★</span></button>
+      <button id="btn-estrella" class="main-btn">RECETAS ESTRELLA <span class="estrella-ico">★</span></button>
     </div>
     <div class="notas-row">
-      <button id="btn-notas">NOTAS PERSONALES <span class="estrella-ico">★</span></button>
+      <button id="btn-notas" class="main-btn">NOTAS PERSONALES <span class="estrella-ico">★</span></button>
     </div>
   </div>
   
@@ -1590,10 +1654,14 @@
     let recetaActual = null;
     let historial = [];
     let fuente = 1.17;
+    let notasAmpliada = false;
+
+    function clearViews() {
+      document.querySelectorAll('.view, .modal').forEach(v => v.remove());
+    }
 
     function setView(view, data={}) {
-      // Cierra cualquier .view abierta con transición suave
-      document.querySelectorAll('.view').forEach(v => { v.classList.add('hide'); setTimeout(()=>v.remove(),300); });
+      clearViews();
       historial.push({view, data});
       const main = document.body;
       let v = document.createElement('div');
@@ -1639,11 +1707,23 @@
         let nota = notas[data.id] || "";
         html = `<button class="view-back" onclick="goBack()">← Atrás</button>
           <div class="view-title">Notas personales</div>
-          <textarea id="nota-txt" style="width:96vw;min-height:130px;border-radius:15px;font-size:${fuente}em;">${nota}</textarea>
-          <div style="display:flex;gap:13px;justify-content:center;margin-top:15px;">
-            <button class="filtro-btn" onclick="guardarNota('${data.id}')">Guardar</button>
-            <button class="filtro-btn" onclick="compartirNota('${data.id}')">Compartir</button>
-            <button class="filtro-btn" onclick="goBack()">Atrás</button>
+          <textarea id="nota-txt" style="width:96vw;min-height:${notasAmpliada? '300px' : '130px'};border-radius:15px;font-size:${fuente}em;">${nota}</textarea>
+          <div class="notas-toolbar">
+            <button class="notas-btn" onclick="ampliarNota()">Ampliar</button>
+            <button class="notas-btn" onclick="guardarNota('${data.id}')">Guardar</button>
+            <button class="notas-btn" onclick="compartirNota('${data.id}')">Compartir</button>
+            <button class="notas-btn" onclick="goBack()">Atrás</button>
+          </div>`;
+      }
+      if(view==='notas-ampliada') {
+        let nota = notas[data.id] || "";
+        html = `<button class="view-back" onclick="goBackNotas()">← Atrás</button>
+          <div class="view-title">Notas personales (Ampliado)</div>
+          <textarea id="nota-txt" class="notas-ampliada" style="font-size:${fuente}em;">${nota}</textarea>
+          <div class="notas-toolbar">
+            <button class="notas-btn" onclick="guardarNota('${data.id}')">Guardar</button>
+            <button class="notas-btn" onclick="compartirNota('${data.id}')">Compartir</button>
+            <button class="notas-btn" onclick="goBackNotas()">Atrás</button>
           </div>`;
       }
       if(view==='favoritos') {
@@ -1658,29 +1738,29 @@
           <div class="section">${data.result.map(r=>
             `<button class="filtro-btn" onclick="setView('receta',{id:'${r.id}'})">${r.nombre}</button>`).join('') || '<div>No hay resultados.</div>'}</div>`;
       }
-      // Buscador inteligente
       if(view==='filtros') {
-        html = `<button class="view-back" onclick="goBack()">← Atrás</button>
-          <div class="view-title">Buscador Inteligente</div>
-          <div class="filtros-row">
-            <button class="filtro-btn" onclick="filtroIngrediente()">Ingrediente</button>
-            <button class="filtro-btn" onclick="filtroTiempo()">Tiempo</button>
-            <button class="filtro-btn" onclick="filtroDificultad()">Dificultad</button>
-            <button class="filtro-btn" onclick="setView('favoritos')">Favoritos</button>
-          </div>`;
+        showModalBuscadorInteligente();
+        return; // El overlay se gestiona aparte
       }
       v.innerHTML = html;
       main.appendChild(v);
     }
     function goBack() {
-      document.querySelectorAll('.view').forEach(v => { v.classList.add('hide'); setTimeout(()=>v.remove(),300); });
+      clearViews();
       historial.pop();
       if(historial.length) {
         let {view,data} = historial.pop();
         setView(view,data);
       }
     }
-    // Favorito toggle
+    function goBackNotas() {
+      notasAmpliada = false;
+      setView('notas',{id: recetaActual?.id || Object.keys(notas)[0]});
+    }
+    function ampliarNota() {
+      notasAmpliada = true;
+      setView('notas-ampliada',{id: recetaActual?.id || Object.keys(notas)[0]});
+    }
     function toggleFavorito(id) {
       if (favoritos.includes(id)) {
         favoritos = favoritos.filter(f => f !== id);
@@ -1728,45 +1808,83 @@
         r.ingredientes?.some(i=>i.nombre.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,"").includes(q))
       );
       if(filtradas.length)
-        setView('busqueda',{result:filtradas});
+        showModalBusqueda(filtradas);
     };
-    // Buscador inteligente
+    // Buscador inteligente (overlay modal)
     document.getElementById('btn-buscador-inteligente').onclick = function() {
       setView('filtros');
     }
+    function showModalBuscadorInteligente() {
+      clearViews();
+      let m = document.createElement('div');
+      m.className = "modal";
+      m.innerHTML = `<div class="modal-content">
+        <h3>Buscador Inteligente</h3>
+        <button class="modal-btn" onclick="filtroIngrediente()">Filtrar por Ingrediente</button>
+        <button class="modal-btn" onclick="filtroTiempo()">Filtrar por Tiempo</button>
+        <button class="modal-btn" onclick="filtroDificultad()">Filtrar por Dificultad</button>
+        <button class="modal-btn" onclick="setView('favoritos')">Favoritos</button>
+        <button class="modal-btn" onclick="closeModal()">Cerrar</button>
+      </div>`;
+      document.body.appendChild(m);
+    }
+    function closeModal() {
+      document.querySelectorAll('.modal').forEach(m=>m.remove());
+    }
+    function showModalBusqueda(filtradas) {
+      closeModal();
+      let m = document.createElement('div');
+      m.className = "modal";
+      m.innerHTML = `<div class="modal-content" style="max-height:82vh;overflow-y:auto;">
+        <h3>Resultados de búsqueda</h3>
+        <div style="width:100%;display:flex;flex-wrap:wrap;gap:10px;justify-content:center;">
+          ${filtradas.map(r=>
+            `<button class="modal-btn" onclick="closeModal();setView('receta',{id:'${r.id}'})">${r.nombre}</button>`).join('') || '<div>No hay resultados.</div>'}
+        </div>
+        <button class="modal-btn" onclick="closeModal()">Cerrar</button>
+      </div>`;
+      document.body.appendChild(m);
+    }
     window.filtroIngrediente = function(){
+      closeModal();
       let q = prompt("Filtrar por ingrediente:");
       if(!q) return;
       let filtradas = recetas.filter(r=>r.ingredientes && r.ingredientes.some(i => (i.nombre||"").toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,"").includes((q||"").toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,""))));
-      setView('busqueda',{result:filtradas});
+      showModalBusqueda(filtradas);
     }
     window.filtroTiempo = function(){
+      closeModal();
       let q = prompt("Filtrar por tiempo máximo (min):");
       if(!q) return;
       let filtradas = recetas.filter(r=>(r.tiempo||0) <= parseInt(q));
-      setView('busqueda',{result:filtradas});
+      showModalBusqueda(filtradas);
     }
     window.filtroDificultad = function(){
+      closeModal();
       let q = prompt("Filtrar por dificultad:");
       if(!q) return;
       let filtradas = recetas.filter(r=>(r.dificultad||"").toLowerCase().includes((q||"").toLowerCase()));
-      setView('busqueda',{result:filtradas});
+      showModalBusqueda(filtradas);
     }
     // Pantalla principal
     window.onload = function() {
       document.body.classList.remove('modo-oscuro');
-      document.querySelectorAll('.view').forEach(v => v.remove());
+      clearViews();
       historial = [];
     };
     // Modo oscuro
     document.getElementById('btn-modo').onclick = function() {
       document.body.classList.toggle('modo-oscuro');
+      // Actualiza contraste del buscador
+      document.getElementById('buscador').style.color = document.body.classList.contains('modo-oscuro')
+        ? getComputedStyle(document.body).getPropertyValue('--buscador-txt-dark')
+        : getComputedStyle(document.body).getPropertyValue('--buscador-txt');
     };
     // Menú principal
     document.getElementById('btn-menu').onclick = () => setView('categorias');
     document.getElementById('btn-estrella').onclick = () => setView('favoritos');
     document.getElementById('btn-notas').onclick = () => {
-      let id = recetaActual?.id || recetas?.[0]?.id;
+      let id = recetaActual?.id || Object.keys(notas)[0];
       if(id) setView('notas',{id});
     };
   </script>
