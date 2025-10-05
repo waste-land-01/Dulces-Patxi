@@ -14,7 +14,7 @@
       --texto: #2E1A14;
       --titulo: #5C3B28;
       --bienvenida: #7D5D49;
-      --byyahya: #3A7BD5;
+      --byyahya: #3285ed;
       --categoria: #5C3B28;
       --categoria-bg: #f3e2d0;
       --cat-bold: #8B5A3E;
@@ -31,13 +31,13 @@
       --calc-bg: #e9dccf;
       --calc-bold: #8B5A3E;
       --input-bg: #fff;
-      --font-main: 'Segoe UI', 'Arial', sans-serif;
-      --transition: all 0.3s cubic-bezier(.68,-0.55,.27,1.55);
       --nota-bg: #FFFBE5;
       --nota-txt: #5C3B28;
       --nota-border: #B8860B;
       --nota-shadow: 0 3px 24px 0 #0005;
-      --byyahya-shadow: #3A7BD5;
+      --font-main: 'Segoe UI', 'Arial', sans-serif;
+      --transition: all 0.3s cubic-bezier(.68,-0.55,.27,1.55);
+      --byyahya-shadow: #3285ed;
     }
     .modo-oscuro {
       --fondo: #20150F;
@@ -72,6 +72,7 @@
       color: var(--texto);
       font-family: var(--font-main);
       transition: var(--transition);
+      font-size: 1.17em;
     }
     header {
       background: var(--fondo);
@@ -85,7 +86,7 @@
       transition: var(--transition);
     }
     .titulo-app {
-      font-size: 2.2em;
+      font-size: 2em;
       font-family: var(--font-main);
       font-weight: 900;
       color: var(--titulo);
@@ -99,11 +100,11 @@
       text-shadow: 0 2px 8px #0002;
     }
     .bienvenida {
-      font-size: 1.15em;
+      font-size: 1.05em;
       font-family: var(--font-main);
       font-weight: 700;
       color: var(--bienvenida);
-      margin-bottom: 4px;
+      margin-bottom: 0;
       letter-spacing: 0.01em;
       border-radius: 6px;
       padding: 2px 14px;
@@ -112,46 +113,48 @@
       text-shadow: 0 2px 8px #0002;
     }
     .by-yahya {
-      font-size: 1.13em;
+      font-size: 1.05em;
       font-weight: bold;
       color: var(--byyahya);
       margin-bottom: 7px;
       letter-spacing: 0.09em;
       border-radius: 6px;
-      padding: 2px 11px;
+      padding: 1px 8px 2px 8px;
       display: inline-block;
       transition: var(--transition);
-      text-shadow: 0 2px 8px var(--byyahya-shadow);
+      text-shadow: 0 1px 6px var(--byyahya-shadow);
     }
     #buscador {
-      width: 80%;
+      width: 96vw;
+      max-width: 99vw;
       margin: 10px auto 7px auto;
       display: block;
-      padding: 10px;
-      border: 1.5px solid var(--borde);
-      border-radius: 8px;
-      font-size: 1.09em;
+      padding: 12px;
+      border: 2px solid var(--borde);
+      border-radius: 13px;
+      font-size: 1.19em;
       background: var(--input-bg);
       color: var(--texto);
-      box-shadow: 0 0 4px #0002;
+      box-shadow: 0 0 7px #0002;
       font-family: var(--font-main);
+      margin-bottom: 10px;
     }
     #btn-buscador-inteligente {
       display:block;
-      margin: 0 auto 10px auto;
-      font-size: 0.8em;
-      font-weight: 700;
+      margin: 0 auto 16px auto;
+      font-size: 1.07em;
+      font-weight: 900;
       background: var(--cat-bold);
       color: var(--btn-text);
-      border-radius: 8px;
+      border-radius: 12px;
       border: none;
-      padding: 7px 12px;
-      width: 27%;
-      max-width: 180px;
-      min-width: 80px;
+      padding: 13px 0;
+      width: 96vw;
+      max-width: 99vw;
       box-shadow: 0 1px 6px #00000012;
       cursor: pointer;
       transition: var(--transition);
+      margin-bottom: 20px;
     }
     .modo-oscuro #btn-buscador-inteligente {
       background: #312015;
@@ -160,26 +163,43 @@
     .menu-filtros-inteligente {
       background: var(--categoria-bg);
       box-shadow: 0 3px 8px #0002;
-      margin: 0 auto 14px auto;
-      border-radius: 12px;
-      padding: 13px 0;
-      width: 80%;
-      max-width: 370px;
+      margin: 0 auto 8px auto;
+      border-radius: 13px;
+      padding: 18px 4px;
+      width: 96vw;
+      max-width: 99vw;
       animation: fadeIn 0.3s;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 17px;
+    }
+    .menu-filtros-inteligente-title {
+      font-size: 1.16em;
+      font-weight:900;
+      color:var(--cat-bold);
+      text-align:center;
+      margin-bottom:7px;
+    }
+    .menu-filtros-inteligente-buttons {
+      display:flex;
+      gap: 23px;
+      flex-wrap: wrap;
+      justify-content: center;
+      margin-bottom: 10px;
     }
     .menu-filtros-inteligente button {
-      display:block;
-      width:90%;
-      margin:8px auto;
-      font-size:1.1em;
-      font-weight:700;
+      font-size:1.07em;
+      font-weight:900;
       background: var(--btn-bg);
       color: var(--btn-text);
-      border-radius: 8px;
+      border-radius: 11px;
       border:none;
-      padding: 10px 0;
+      padding: 14px 24px;
       cursor:pointer;
       transition: var(--transition);
+      min-width: 120px;
+      box-shadow: 0 2px 7px #0002;
     }
     .menu-filtros-inteligente button:hover {
       background: var(--hover);
@@ -188,12 +208,412 @@
     .modo-oscuro .menu-filtros-inteligente {
       background: var(--receta-list-bg);
     }
-    /* ...el resto de estilos se mantienen igual que la versión anterior... */
+    .modo-oscuro .menu-filtros-inteligente button {
+      background: #312015;
+      color: #FFD6B0;
+    }
+    .toolbar {
+      display: flex;
+      gap: 20px;
+      justify-content: center;
+      margin-bottom: 14px;
+      margin-top: 2px;
+      flex-wrap: wrap;
+    }
+    .toolbar > button {
+      font-size: 1.07em;
+      min-width: 120px;
+      padding: 11px 0;
+      border: 2px solid var(--borde);
+      border-radius: 11px;
+      font-weight: 900;
+      cursor: pointer;
+      font-family: var(--font-main);
+      transition: var(--transition);
+      background: #f8f8f8;
+      color: var(--cat-bold);
+      box-shadow: 0 2px 8px #00000014;
+      margin-bottom: 4px;
+    }
+    .modo-oscuro .toolbar > button {
+      background: #312015;
+      color: #FFD6B0;
+      border: 2px solid #C47E43;
+    }
+    #btn-ultima-receta {
+      min-width: 180px;
+      font-size: 1.07em;
+      margin-top: 3px;
+      margin-bottom: 3px;
+    }
+    .main-content {
+      padding: 20px 16px 0 16px;
+      min-height: 40vh;
+      max-width: 700px;
+      margin: 0 auto;
+      transition: var(--transition);
+    }
+    .categoria-nombre {
+      font-size: 1.35em;
+      font-weight: 900;
+      color: var(--categoria);
+      background: var(--categoria-bg);
+      padding: 12px 22px;
+      border-radius: 10px;
+      margin-bottom: 12px;
+      letter-spacing: 0.04em;
+      box-shadow: 0 2px 10px #00000010;
+      display: inline-block;
+      border: 2.5px solid var(--cat-bold);
+      transition: var(--transition);
+    }
+    .modo-oscuro .categoria-nombre {
+      color: var(--categoria);
+      background: var(--categoria-bg);
+      border-color: var(--cat-bold);
+    }
+    .recetas-lista {
+      background: var(--receta-list-bg);
+      border-radius: 10px;
+      margin-bottom: 18px;
+      padding: 16px 18px;
+      box-shadow: 0 1px 9px #00000012;
+      border: 2px solid var(--cat-bold);
+      transition: var(--transition);
+    }
+    .recetas-lista ul {
+      margin: 0 0 0 12px;
+      padding: 0;
+    }
+    .recetas-lista li {
+      color: var(--receta-list);
+      font-weight: 900;
+      font-size: 1.21em;
+      margin: 10px 0;
+      cursor: pointer;
+      transition: color 0.18s, background 0.18s;
+      border-radius: 8px;
+      padding: 8px 8px;
+      font-family: var(--font-main);
+      background: #f8f8f8;
+      box-shadow: 0 1px 8px #0002;
+    }
+    .recetas-lista li:hover {
+      background: var(--hover);
+      color: var(--cat-bold);
+    }
+    .modo-oscuro .recetas-lista {
+      background: var(--receta-list-bg);
+      border-color: var(--cat-bold);
+    }
+    .modo-oscuro .recetas-lista li {
+      color: var(--receta-list);
+      background: #312015;
+    }
+    .receta-nombre {
+      font-size: 1.38em;
+      font-weight: 900;
+      color: var(--receta-final);
+      background: var(--receta-final-bg);
+      padding: 13px 20px;
+      border-radius: 12px;
+      margin-bottom: 13px;
+      letter-spacing: 0.04em;
+      box-shadow: 0 2px 10px #00000011;
+      display: inline-block;
+      border: 2.5px solid var(--receta-final);
+      transition: var(--transition);
+    }
+    .modo-oscuro .receta-nombre {
+      color: var(--receta-final);
+      background: var(--receta-final-bg);
+      border-color: var(--receta-final);
+    }
+    .info-extra {
+      font-size: 1.11em;
+      font-weight: 700;
+      color: var(--cat-bold);
+      background: var(--categoria-bg);
+      border-radius: 8px;
+      margin: 9px 0 8px 0;
+      padding: 9px 14px;
+      display: inline-block;
+      border: 2.5px solid var(--cat-bold);
+      box-shadow: 0 1px 8px #00000010;
+      transition: var(--transition);
+    }
+    .modo-oscuro .info-extra {
+      color: var(--cat-bold);
+      background: var(--categoria-bg);
+      border-color: var(--cat-bold);
+    }
+    #panel-temporizadores {
+      margin: 0 0 18px 0;
+      background: #392A1F;
+      color: #FFD6B0;
+      padding: 11px 10px;
+      border-radius: 10px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.13);
+      z-index: 2000;
+      font-size: 1.14em;
+      display: none;
+      max-width: 700px;
+      border: 2px solid var(--cat-bold);
+      transition: var(--transition);
+    }
+    .modo-oscuro #panel-temporizadores {
+      background: #312015;
+      color: #FFD6B0;
+      border-color: #C47E43;
+    }
+    .panel-temporizador-item {
+      background: #FFD6B0;
+      color: #392A1F;
+      padding: 12px 9px;
+      margin: 6px 0;
+      border-radius: 8px;
+      border: 1.5px solid #C47E43;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 1.11em;
+      gap: 8px;
+      transition: var(--transition);
+      font-weight: 900;
+    }
+    .modo-oscuro .panel-temporizador-item {
+      background: #C7B299;
+      color: #392A1F;
+      border: 1.5px solid #C47E43;
+    }
+    .panel-temporizador-btns button {
+      margin-left: 8px;
+      font-size: 1.01em;
+      background: #8B5A3E;
+      color: #FFD6B0;
+      border: 0;
+      border-radius: 5px;
+      padding: 8px 13px;
+      cursor: pointer;
+      transition: var(--transition);
+      font-weight: 900;
+    }
+    .modo-oscuro .panel-temporizador-btns button {
+      background: #312015;
+      color: #FFD6B0;
+    }
+    .controls {
+      background: var(--calc-bg);
+      padding: 17px 20px;
+      border-radius: 14px;
+      box-shadow: 0 6px 20px rgba(0,0,0,0.12);
+      margin: 24px auto 16px auto;
+      max-width: 500px;
+      border: 2px solid var(--borde);
+      text-align: center;
+      font-weight: 900;
+      font-family: var(--font-main);
+      margin-bottom: 18px;
+      transition: var(--transition);
+    }
+    .modo-oscuro .controls {
+      background: var(--calc-bg);
+      border: 2px solid #C47E43;
+      color: #FFD6B0;
+    }
+    .btn-temp-personalizado {
+      margin-top: 20px;
+      padding: 15px 11px;
+      background: #FFD6B0;
+      color: #392A1F;
+      border: 2px solid #C47E43;
+      border-radius: 11px;
+      font-weight: 900;
+      font-size: 1.07em;
+      cursor: pointer;
+      transition: background-color 0.2s;
+      width: 96vw;
+      max-width: 99vw;
+      display: block;
+      margin-left: auto;
+      margin-right: auto;
+      box-shadow: 0 1px 8px #00000010;
+      font-family: var(--font-main);
+      margin-bottom: 23px;
+    }
+    .modo-oscuro .btn-temp-personalizado {
+      background: #FFD6B0;
+      color: #392A1F;
+      border: 2px solid #C47E43;
+    }
+    .btn-temp-personalizado:hover {
+      background: #E9DCCF;
+    }
+    .modo-oscuro .btn-temp-personalizado:hover {
+      background: #C7B299;
+    }
+    .btn-timer {
+      margin-left: 8px;
+      padding: 10px 18px;
+      background: #8B5A3E;
+      color: #FFD6B0;
+      border: none;
+      border-radius: 9px;
+      font-size: 1.09em;
+      cursor: pointer;
+      font-weight: 900;
+      transition: var(--transition);
+      margin-bottom: 9px;
+      margin-top: 9px;
+      min-width: 160px;
+      box-shadow: 0 1px 8px #0002;
+    }
+    .modo-oscuro .btn-timer {
+      background: #312015;
+      color: #FFD6B0;
+    }
+    select {
+      font-size: 1.09em;
+      font-family: var(--font-main);
+      padding: 7px 14px;
+      border-radius: 9px;
+      border: 2px solid var(--borde);
+      font-weight: 900;
+      margin-left: 9px;
+    }
+    .nota-seccion, .nota-ampliada {
+      background: var(--nota-bg);
+      color: var(--nota-txt);
+      border-radius: 14px;
+      box-shadow: var(--nota-shadow);
+      padding: 19px 17px 16px 17px;
+      margin: 25px 0 22px 0;
+      border: 2px solid var(--nota-border);
+      position: relative;
+      transition: var(--transition);
+      font-size: 1.18em;
+      font-family: var(--font-main);
+      font-weight: 900;
+      max-width: 98vw;
+    }
+    .modo-oscuro .nota-seccion, .modo-oscuro .nota-ampliada {
+      background: var(--nota-bg);
+      color: var(--nota-txt);
+      border-color: var(--nota-border);
+    }
+    .nota-seccion textarea, .nota-ampliada textarea {
+      width: 100%;
+      min-height: 70px;
+      max-height: 280px;
+      font-size: 1.14em;
+      font-family: inherit;
+      border-radius: 12px;
+      border: 2px solid var(--nota-border);
+      padding: 13px;
+      background: #fff;
+      color: var(--nota-txt);
+      font-weight: bold;
+      resize: vertical;
+      transition: box-shadow 0.2s;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.07);
+    }
+    .modo-oscuro .nota-seccion textarea, .modo-oscuro .nota-ampliada textarea {
+      background: #312015;
+      border: 2px solid #C47E43;
+      color: #FFD6B0;
+    }
+    .nota-btns {
+      margin-top: 14px;
+      display: flex;
+      gap: 17px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+    .nota-btn {
+      font-size: 1.07em;
+      font-weight: bold;
+      padding: 14px 24px;
+      border-radius: 10px;
+      border: 2px solid var(--nota-border);
+      background: var(--btn-bg);
+      color: var(--btn-text);
+      cursor: pointer;
+      transition: background 0.2s;
+      font-family: var(--font-main);
+      min-width: 120px;
+      margin-bottom: 4px;
+    }
+    .nota-btn:hover {
+      background: #FFD6B0;
+      color: #392A1F;
+    }
+    .modo-oscuro .nota-btn {
+      background: #312015;
+      color: #FFD6B0;
+      border: 2px solid #C47E43;
+    }
+    .nota-btn-ampliar {
+      background: #3285ed;
+      color: #FFFBE5;
+      border: 2px solid #FFD6B0;
+    }
+    .modo-oscuro .nota-btn-ampliar {
+      background: #69AAFF;
+      color: #312015;
+      border: 2px solid #C47E43;
+    }
+    .nota-ampliada {
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      min-height: 100vh;
+      min-width: 100vw;
+      padding: 38px 11px 36px 11px;
+      z-index: 4000;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+      animation: fadeIn 0.30s ease;
+    }
+    @keyframes fadeIn {
+      from { opacity:0; }
+      to { opacity:1; }
+    }
+    .nota-ampliada label {
+      font-size: 1.3em;
+      margin-bottom: 18px;
+      margin-top: 8px;
+      color: var(--nota-txt);
+      font-weight: bold;
+    }
+    .favorito-btn {
+      background: none;
+      border: none;
+      color: #C47E43;
+      font-size: 2.1em;
+      cursor: pointer;
+      margin-left: 22px;
+      vertical-align: middle;
+      transition: color 0.2s;
+    }
+    .favorito-btn.fav {
+      color: #FFD700;
+      text-shadow: 0 2px 8px #C47E43;
+    }
+    .modo-oscuro .favorito-btn {
+      color: #FFD6B0;
+    }
+    .modo-oscuro .favorito-btn.fav {
+      color: #FFD700;
+      text-shadow: 0 2px 8px #C47E43;
+    }
     /* Responsive */
     @media (max-width: 600px) {
-      .main-content, #panel-temporizadores { max-width: 98vw;}
-      #buscador, #btn-buscador-inteligente, .menu-filtros-inteligente { width: 98vw; max-width:98vw;}
-      .titulo-app, .bienvenida, .by-yahya {font-size:1.15em;}
+      .main-content, #panel-temporizadores, .controls, .nota-seccion, .nota-ampliada { max-width: 99vw;}
+      #buscador, #btn-buscador-inteligente, .menu-filtros-inteligente { width: 99vw; max-width:99vw;}
+      .titulo-app, .bienvenida, .by-yahya {font-size:1.13em;}
+      .receta-nombre, .categoria-nombre {font-size:1.09em;}
+      .btn-timer, .toolbar > button, .btn-temp-personalizado, .nota-btn {font-size:1.03em;min-width:110px;}
+      .menu-filtros-inteligente button {font-size:1.03em;min-width:110px;}
     }
   </style>
   <script>
@@ -1489,41 +1909,45 @@
       }
     ];
 
-    // ====== ESTADO GLOBAL ======
+
+
+    // ==== Estado Global ====
     let historialNavegacion = [];
     let ultimaRecetaId = null;
     let temporizadores = [];
     let recetaActual = null;
     let favoritos = JSON.parse(localStorage.getItem('favoritos') || "[]");
     let notas = JSON.parse(localStorage.getItem('notas') || "{}");
-    let fuente = 1.15; // accesibilidad
+    let fuente = 1.17;
     let pitidoActivo = false;
 
-    // ====== BUSCADOR INTELIGENTE ======
+    // ==== Buscador inteligente ====
     document.getElementById('btn-buscador-inteligente').onclick = function() {
       const menu = document.getElementById('menu-filtros-inteligente');
       menu.style.display = menu.style.display === 'none' ? '' : 'none';
       menu.innerHTML = `
-        <div style="font-size:1.16em;font-weight:900;margin-bottom:10px;color:var(--cat-bold);text-align:center;">Filtrar por:</div>
-        <button onclick="filtrarInteligente('ingrediente')">Ingrediente</button>
-        <button onclick="filtrarInteligente('tiempo')">Tiempo</button>
-        <button onclick="filtrarInteligente('dificultad')">Dificultad</button>
-        <button onclick="filtrarInteligente('favoritos')">Favoritos</button>
+        <div class="menu-filtros-inteligente-title">Filtrar por:</div>
+        <div class="menu-filtros-inteligente-buttons">
+          <button onclick="filtrarInteligente('ingrediente')">Ingrediente</button>
+          <button onclick="filtrarInteligente('tiempo')">Tiempo</button>
+          <button onclick="filtrarInteligente('dificultad')">Dificultad</button>
+          <button onclick="filtrarInteligente('favoritos')">Favoritos</button>
+        </div>
       `;
     }
     window.filtrarInteligente = function(tipo){
       document.getElementById('menu-filtros-inteligente').style.display='none';
-      let q = prompt('Filtrar por '+tipo+':');
-      if (!q && tipo!=='favoritos') return;
+      let q = tipo==='favoritos' ? undefined : prompt('Filtrar por '+tipo+':');
       let filtradas = recetas;
-      if (tipo=='ingrediente')
-        filtradas = recetas.filter(r=>r.ingredientes?.some(i=>i.nombre.toLowerCase().includes(q.toLowerCase())));
-      else if (tipo=='tiempo')
+      if (tipo=='ingrediente') {
+        filtradas = recetas.filter(r=>r.ingredientes && r.ingredientes.some(i => (i.nombre||"").toLowerCase().includes((q||"").toLowerCase())));
+      } else if (tipo=='tiempo') {
         filtradas = recetas.filter(r=>(r.tiempo||'') <= parseInt(q));
-      else if (tipo=='dificultad')
-        filtradas = recetas.filter(r=>(r.dificultad||'').toLowerCase().includes(q.toLowerCase()));
-      else if (tipo=='favoritos')
+      } else if (tipo=='dificultad') {
+        filtradas = recetas.filter(r=>(r.dificultad||'').toLowerCase().includes((q||"").toLowerCase()));
+      } else if (tipo=='favoritos') {
         filtradas = recetas.filter(r=>favoritos.includes(r.id));
+      }
       renderBusqueda(filtradas);
     }
     function renderBusqueda(filtradas){
@@ -1533,8 +1957,18 @@
           ${filtradas.map(r=>`<li onclick="navegarA('receta','${r.id}')">${r.nombre} <span style="font-size:0.9em;color:var(--cat-bold);">(${r.categoria})</span></li>`).join('')}
         </ul></div>`;
     }
+    document.getElementById('buscador').oninput = function(e) {
+      const q = (e.target.value || '').toLowerCase();
+      if (!q) return renderVista('categorias');
+      const filtradas = recetas.filter(r =>
+        r.nombre.toLowerCase().includes(q) ||
+        r.categoria.toLowerCase().includes(q) ||
+        r.ingredientes?.some(i=>i.nombre.toLowerCase().includes(q))
+      );
+      renderBusqueda(filtradas);
+    };
 
-    // ====== FAVORITOS Y NOTAS ======
+    // ==== Favoritos y notas ====
     function toggleFavorito(id) {
       if (favoritos.includes(id)) {
         favoritos = favoritos.filter(f => f !== id);
@@ -1557,8 +1991,8 @@
       renderFavoritos();
     };
 
-    // ====== NOTAS Y OBSERVACIONES ======
-    function renderNotas(recetaId, ampliado=false, volverRecetaDirecto=false) {
+    // ==== Notas y Observaciones ====
+    function renderNotas(recetaId, ampliado=false, paso='normal') {
       const main = document.getElementById('receta-detalle');
       let nota = document.getElementById('nota-txt')?.value || notas[recetaId] || "";
       let cont = document.createElement('div');
@@ -1571,7 +2005,7 @@
           <button class="nota-btn nota-btn-copiar" onclick="copiarNota('${recetaId}',${ampliado})">Copiar</button>
           <button class="nota-btn nota-btn-borrar" onclick="borrarNota('${recetaId}',${ampliado})">Borrar</button>
           <button class="nota-btn nota-btn-ampliar" ${ampliado?'style="display:none;"':''} onclick="renderNotas('${recetaId}',true)">Ampliar</button>
-          <button class="nota-btn nota-btn-atras" onclick="renderNotas('${recetaId}',${!ampliado})">Atrás</button>
+          <button class="nota-btn nota-btn-atras" onclick="renderNotas('${recetaId}',${!ampliado},'atras')">Atrás</button>
           <button class="nota-btn nota-btn-compartir" onclick="compartirNota('${recetaId}')">Compartir</button>
         </div>
         <div style="margin-top:9px;display:flex;align-items:center;gap:12px;">
@@ -1583,7 +2017,7 @@
       main.innerHTML = '';
       main.appendChild(cont);
       document.getElementById('nota-txt').focus();
-      if (volverRecetaDirecto) setTimeout(()=>renderVista('receta', recetaId), 600);
+      if (paso==='atras' && !ampliado) setTimeout(()=>renderVista('receta', recetaId), 600);
     }
     window.guardarNota = function(id,ampliado){
       notas[id] = document.getElementById('nota-txt').value;
@@ -1635,7 +2069,9 @@
       setTimeout(()=>m.remove(),600);
     }
 
-    // ====== TEMPORIZADORES MULTIPLES Y PITIDO ======
+    // ==== Temporizadores ====
+    // (idéntico al anterior, con pitido y manejo de panel)
+
     function mostrarPanelTemporizadores() {
       const panel = document.getElementById('panel-temporizadores');
       panel.innerHTML = '';
@@ -1661,7 +2097,7 @@
       if (pitidoActivo) {
         let btn = document.createElement('button');
         btn.innerText = "Detener pitido";
-        btn.style = "margin-top:3px;font-size:1em;padding:7px 14px;background:#3A7BD5;color:white;border-radius:8px;border:none;";
+        btn.style = "margin-top:8px;font-size:1.07em;padding:12px 24px;background:#3285ed;color:white;border-radius:12px;border:none;font-weight:900;box-shadow:0 1px 8px #0002;";
         btn.onclick = detenerPitido;
         panel.appendChild(btn);
       }
@@ -1775,7 +2211,7 @@
       mostrarPanelTemporizadores();
     }
 
-    // ====== TEMPORIZADOR PERSONALIZADO (DESPLEGABLE) ======
+    // ==== Temporizador personalizado ====
     function mostrarDesplegableTemporizador(recetaId) {
       let div = document.createElement('div');
       div.style.position = "fixed";
@@ -1811,7 +2247,7 @@
       mostrarDesplegableTemporizador(null);
     };
 
-    // ====== RENDER PRINCIPAL Y RECETA ======
+    // ==== Render principal, receta, etc ====
     function renderVista(pagina, id = null) {
       historialNavegacion.push({pagina, id});
       const main = document.getElementById('receta-detalle');
@@ -1826,7 +2262,7 @@
             <button class="favorito-btn ${favoritos.includes(id)?'fav':''}" onclick="toggleFavorito('${id}')">${favoritos.includes(id)?'★':'☆'}</button>
           </div>
           <div class="info-extra">${recetaActual.categoria}</div>
-          <div style="margin:8px 0 10px 0;">
+          <div style="margin:8px 0 10px 0;display:flex;gap:16px;flex-wrap:wrap;">
             <button class="btn-timer" onclick="mostrarDesplegableTemporizador('${recetaActual.id}')">Temporizador de receta</button>
             <button class="btn-timer" onclick="compartirNota('${recetaActual.id}')">Compartir</button>
           </div>
@@ -1862,15 +2298,15 @@
         mostrarPanelTemporizadores();
       } else {
         main.innerHTML = `<h2 style="color:var(--titulo);font-weight:900;">Dulces Patxi</h2>
-          <p class="bienvenida">Bienvenido. Selecciona una categoría para comenzar.</p>
+          <p class="bienvenida">Bienvenidos a Dulces de Bachir Krai</p>
           <div class="by-yahya">By Yahya</div>`;
         mostrarPanelTemporizadores();
       }
       actualizarBotones();
     }
-    window.navegarA = renderVista; // Para onclicks
+    window.navegarA = renderVista;
 
-    // ====== ATRÁS, ULTIMA RECETA, MENU, ACCESIBILIDAD ======
+    // ==== Navegación atrás, última receta, menú ====
     document.getElementById('btn-menu').onclick = function() {
       renderVista('categorias');
     };
@@ -1895,14 +2331,14 @@
       document.getElementById('btn-ultima-receta').style.display = ultimaRecetaId ? '' : 'none';
     }
 
-    // ====== INICIO ======
+    // ==== INICIO ====
     window.onload = function() {
       cargarTemporizadores();
       renderVista('categorias');
       actualizarBotones();
     };
 
-    // ====== ACCESIBILIDAD: Fuente ajustable, modo alto contraste, teclado ======
+    // ==== Accesibilidad ====
     document.addEventListener('keydown',function(e){
       if (e.ctrlKey && e.key==='=') { fuente = Math.min(2.5, fuente+0.1); if(recetaActual) renderVista('receta', recetaActual.id);}
       if (e.ctrlKey && e.key==='-') { fuente = Math.max(1.05, fuente-0.1); if(recetaActual) renderVista('receta', recetaActual.id);}
