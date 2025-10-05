@@ -5,7 +5,1767 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Dulces Patxi</title>
   <meta name="theme-color" content="#6c3b8e">
+  <link rel="manifest" href="manifest.json"><!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Dulces Patxi</title>
+  <meta name="theme-color" content="#6c3b8e">
   <link rel="manifest" href="manifest.json">
+  <link rel="icon" type="image/png" href="icon-192.png">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+  <style>
+    html, body { height: 100%; }
+    :root {
+      --fondo: #f6f4ff;
+      --titulo: #2d5b2f;
+      --bienvenida: #574b36;
+      --byyahya: #2b7be4;
+      --byyahya-shadow: #b2d6ff;
+      --buscador-bg: #fff;
+      --buscador-border: #7C4D9F;
+      --buscador-txt: #222;
+      --modo-bg: #3498db;
+      --modo-txt: #fff;
+      --inteligente-bg: #f7b563;
+      --inteligente-txt: #fff;
+      --menu-bg: #6c3b8e;
+      --menu-txt: #fff;
+      --estrella-bg: #b36f3c;
+      --estrella-txt: #fff;
+      --notas-bg: #3cb36f;
+      --notas-txt: #fff;
+      --back-bg: #2d5b2f;
+      --back-txt: #fff;
+      --view-bg: #fff;
+      --view-txt: #2d5b2f;
+      --input-bg: #fff;
+      --input-txt: #222;
+      --input-border: #7C4D9F;
+      --overlay-bg: #fff;
+      --overlay-txt: #222;
+      --overlay-shadow: 0 8px 32px #0006;
+      --margin-v: 22px;
+      --radius: 21px;
+      --shadow: 0 4px 24px #0002;
+      --transition: 0.25s cubic-bezier(.68,-0.55,.27,1.55);
+    }
+    .modo-oscuro {
+      --fondo: #181621;
+      --titulo: #aee869;
+      --bienvenida: #ffe0a3;
+      --byyahya: #69bfff;
+      --byyahya-shadow: #3777ff;
+      --buscador-bg: #262241;
+      --buscador-border: #f7b563;
+      --buscador-txt: #fff;
+      --modo-bg: #69bfff;
+      --modo-txt: #181621;
+      --inteligente-bg: #c47e43;
+      --inteligente-txt: #fff;
+      --menu-bg: #b36f3c;
+      --menu-txt: #fff;
+      --estrella-bg: #6c3b8e;
+      --estrella-txt: #fff;
+      --notas-bg: #3cb36f;
+      --notas-txt: #fff;
+      --back-bg: #6c3b8e;
+      --back-txt: #fff;
+      --view-bg: #181621;
+      --view-txt: #fffbe5;
+      --input-bg: #292542;
+      --input-txt: #fff;
+      --input-border: #f7b563;
+      --overlay-bg: #292542;
+      --overlay-txt: #fffbe5;
+      --overlay-shadow: 0 8px 32px #000d;
+    }
+    body {
+      background: var(--fondo);
+      color: var(--bienvenida);
+      font-family: 'Segoe UI', 'Arial', sans-serif;
+      padding: 0;
+      margin: 0;
+      min-height: 100vh;
+      font-size: 1.08em;
+      transition: background var(--transition), color var(--transition);
+    }
+    .pantalla, .view {
+      max-width: 450px;
+      margin: 0 auto;
+      min-height: 100vh;
+      box-sizing: border-box;
+      display: flex;
+      flex-direction: column;
+      align-items: stretch;
+      justify-content: flex-start;
+      padding: 0 5vw;
+      background: var(--fondo);
+      color: var(--view-txt);
+      position: relative;
+    }
+    .titulo-app { text-align: center; font-size:2.25em; font-weight:900; margin-top:var(--margin-v); margin-bottom:0.35em; letter-spacing:0.04em; color:var(--titulo);}
+    .bienvenida { text-align: center; font-size:1.14em; margin-bottom:0.1em; color:var(--bienvenida); font-weight:700;}
+    .by-yahya { text-align: center; font-size:1.07em; margin-bottom:var(--margin-v); color:var(--byyahya); font-weight:bold; text-shadow:0 1px 6px var(--byyahya-shadow); letter-spacing:0.09em;}
+    .buscador-row { width: 100%; margin-bottom: var(--margin-v); display: flex; align-items: center; justify-content: center; gap: 0.5em; position: relative;}
+    #buscador { width:100%; padding:15px 14px; border-radius:var(--radius); border:2px solid var(--buscador-border); font-size:1.09em; background:var(--buscador-bg); color:var(--buscador-txt); box-shadow:var(--shadow); transition:background var(--transition), border var(--transition), color var(--transition); outline:none;}
+    .modo-oscuro #buscador { color:var(--buscador-txt); background:var(--buscador-bg);}
+    .icon-search { font-size:1.18em; position:absolute; right:17px; top:16px; color:#aaa; pointer-events:none;}
+    .main-btn { border:none; border-radius:var(--radius); font-weight:900; font-size:1.19em; width:100%; box-shadow:var(--shadow); cursor:pointer; transition:background var(--transition), color var(--transition); margin-bottom:2px; padding:18px 0; display:flex; align-items:center; justify-content:center; letter-spacing:0.01em;}
+    #btn-modo { background:var(--modo-bg); color:var(--modo-txt);}
+    #btn-buscador-inteligente { background:var(--inteligente-bg); color:var(--inteligente-txt);}
+    #btn-menu { background:var(--menu-bg); color:var(--menu-txt);}
+    #btn-estrella { background:var(--estrella-bg); color:var(--estrella-txt;}
+    #btn-notas { background:var(--notas-bg); color:var(--notas-txt;}
+    .estrella-ico { color: #FFE066; font-size: 1.25em; margin-left: 10px; }
+    .modal { position: fixed; top: 0; left: 0; right: 0; bottom: 0; z-index: 10000; background: rgba(0,0,0,0.25); display: flex; align-items: center; justify-content: center; animation: fadeIn .25s;}
+    .modal-content { background: var(--overlay-bg); color: var(--overlay-txt); box-shadow: var(--overlay-shadow); border-radius: 28px; padding: 30px 22px; min-width: 260px; max-width: 95vw; min-height: 120px; display: flex; flex-direction: column; align-items: center; gap: 22px; font-size: 1.13em;}
+    .modal-content h3 { margin:0 0 16px 0; font-size:1.19em; font-weight:900; text-align:center; color:var(--titulo);}
+    .modal-content .modal-btn { margin:8px 0; min-width:175px; font-size:1.07em; padding:17px 0; border-radius:15px; border:none; font-weight:900; background:var(--inteligente-bg); color:var(--inteligente-txt); box-shadow:var(--shadow); cursor:pointer; transition:background var(--transition);}
+    .modal-content .modal-btn:last-child { background:#e2e2e2; color:#222; margin-top:18px;}
+    .modal-content .modal-btn:active { background:#e9a23d;}
+    .view { animation: fadeIn .35s; width:100vw; min-height:100vh; background:var(--view-bg); color:var(--view-txt); position:fixed; top:0; left:0; z-index:9999; overflow-y:auto; box-sizing:border-box; padding:var(--margin-v); display:flex; flex-direction:column; align-items:stretch; opacity:1; transform:translateY(0); transition:opacity .3s, transform .3s;}
+    .view.hide { opacity:0; transform:translateY(30px); pointer-events:none;}
+    .view-title { font-size:1.28em; font-weight:900; color:var(--titulo); margin-bottom:1.2em; text-align:center; letter-spacing:0.03em; background:none;}
+    .view-back { margin-bottom:1em; font-size:1.09em; width:110px; align-self:flex-start; background:var(--back-bg); color:var(--back-txt); border:none; border-radius:15px; padding:11px 0; font-weight:900; box-shadow:var(--shadow); cursor:pointer; transition:background var(--transition), color var(--transition);}
+    .section { width:100%; margin-bottom:1.5em;}
+    .ingredientes-lista { background:#f9e3e3; color:#b36f3c; border-radius:14px; padding:13px 10px; margin-bottom:1.2em; font-size:1.09em; box-shadow:var(--shadow);}
+    .modo-oscuro .ingredientes-lista { background:#37323e; color:#f7b563;}
+    .elaboracion-lista { background:#e3f9f4; color:#3cb36f; border-radius:14px; padding:13px 10px; margin-bottom:1em; font-size:1.09em; box-shadow:var(--shadow);}
+    .modo-oscuro .elaboracion-lista { background:#22202e; color:#3cb36f;}
+    .fav-lista { background:#fffbe5; color:#b36f3c; border-radius:14px; padding:13px 10px; margin-bottom:1.2em; font-size:1.09em; box-shadow:var(--shadow);}
+    .modo-oscuro .fav-lista { background:#292542; color:#f7b563;}
+    .notas-toolbar { display:flex; gap:14px; justify-content:center; margin-top:22px; margin-bottom:5px;}
+    .notas-btn { font-size:1.05em; padding:13px 0; min-width:130px; border-radius:14px; border:none; font-weight:900; background:var(--inteligente-bg); color:var(--inteligente-txt); box-shadow:var(--shadow); cursor:pointer; transition:background var(--transition);}
+    .notas-btn:last-child { background:#e2e2e2; color:#222;}
+    .notas-btn:active { background:#e9a23d; }
+    .notas-ampliada { min-height:70vh; font-size:1.18em; border-radius:18px; padding:22px 11px; box-shadow:0 8px 32px #0005; margin-bottom:22px; background:var(--overlay-bg); color:var(--overlay-txt;}
+    .temporizador-panel { display:flex; flex-direction:column; align-items:center; gap:18px; margin:25px 0; background:#f4f8ff; border-radius:16px; padding:14px 0; box-shadow:var(--shadow);}
+    .modo-oscuro .temporizador-panel { background:#282844; color:#fffbe5;}
+    .temporizador-time { font-size:2.3em; font-weight:900; margin-bottom:6px; letter-spacing:0.07em;}
+    .temporizador-btns { display:flex; gap:14px; flex-wrap:wrap; justify-content:center; margin-bottom:8px;}
+    .temporizador-btn { font-size:1.05em; padding:11px 0; min-width:90px; border-radius:13px; border:none; font-weight:900; background:var(--menu-bg); color:var(--menu-txt); box-shadow:var(--shadow); cursor:pointer; transition:background var(--transition);}
+    .temporizador-btn:active { background:#6c3b8e; }
+    .calc-row { width:100%; display:flex; align-items:center; justify-content:flex-start; gap:18px; margin-bottom:18px; margin-top:8px;}
+    .calc-label { font-weight:900; font-size:1.13em; letter-spacing:0.01em; margin-right:4px;}
+    .calc-input { font-size:1.09em; padding:9px 12px; border-radius:13px; border:2px solid var(--input-border); background:var(--input-bg); color:var(--input-txt); font-weight:900; width:70px;}
+    @keyframes fadeIn { from { opacity:0; } to { opacity:1; } }
+    @media (max-width:600px) {
+      .pantalla, .view { max-width: 100vw; padding: 0 2vw;}
+      .titulo-app {font-size:1.13em;}
+      .bienvenida, .by-yahya {font-size:1em;}
+      .main-btn {font-size:1em;padding:15px 0;}
+      #btn-buscador-inteligente, #btn-modo {font-size:1em;}
+      .view-title {font-size:1.09em;}
+      .view-back {padding:9px 0;}
+      .modal-content {padding:20px 8px;}
+      .modal-content .modal-btn {font-size:0.97em;min-width:120px;}
+      .temporizador-time {font-size: 1.6em;}
+      .temporizador-btn {font-size:1em;min-width:90px;}
+    }
+  </style>
+
+
+
+ <script>
+    // === DATOS DE LAS RECETAS ===
+    const recetas = [
+           // === TARTAS DEL AYER ===
+      {
+        "id": "VARIOS 142",
+        "nombre": "Tarta de Manzana",
+        "categoria": "Tartas del Ayer",
+        "ingredientes": [
+          { "nombre": "Pasta sableaux o hojaldre", "cantidad": 1, "unidad": "masa" },
+          { "nombre": "Crema pastelera", "cantidad": 250, "unidad": "gr" },
+          { "nombre": "Manzanas reinetas", "cantidad": 4, "unidad": "unidades" },
+          { "nombre": "Azúcar grano", "cantidad": 50, "unidad": "gr" },
+          { "nombre": "Gelatina de manzana", "cantidad": 1, "unidad": "sobre" }
+        ],
+        "elaboracion": [
+          "Rellenar un molde con pasta sableux y cocer en blanco con alubias.",
+          "Retirar las alubias y rellenar con crema pastelera.",
+          "Colocar manzana pelada y fileteada de forma decorativa.",
+          "Espolvorear con azúcar y hornear a 190°C durante 35 minutos.",
+          "Una vez fría, abrillantar con gelatina de manzana."
+        ],
+        "temperatura": 190,
+        "tiempo": 35
+      },
+      {
+        "id": "VARIOS 143",
+        "nombre": "Tarta San Marcos",
+        "categoria": "Tartas del Ayer",
+        "ingredientes": [
+          { "nombre": "Bizcocho corriente", "cantidad": 1, "unidad": "plancha" },
+          { "nombre": "Almíbar para emborrachar", "cantidad": 200, "unidad": "ml" },
+          { "nombre": "Nata montada", "cantidad": 300, "unidad": "gr" },
+          { "nombre": "Yema pastelera", "cantidad": 200, "unidad": "gr" },
+          { "nombre": "Azúcar en grano", "cantidad": 50, "unidad": "gr" },
+          { "nombre": "Gelatina de manzana", "cantidad": 1, "unidad": "sobre" }
+        ],
+        "elaboracion": [
+          "Montar la tarta: disco de bizcocho emborrachado.",
+          "Capa de yema pastelera.",
+          "Disco de bizcocho emborrachado.",
+          "Capa de nata montada.",
+          "Disco de bizcocho emborrachado.",
+          "Extender yema pastelera, rociar con azúcar y quemar con soplete.",
+          "Decorar laterales con nata y almendra granillo tostada.",
+          "Abrillantar con gelatina de manzana."
+        ]
+      },
+      {
+        "id": "VARIOS 144",
+        "nombre": "Tarta Tatin",
+        "categoria": "Tartas del Ayer",
+        "ingredientes": [
+          { "nombre": "Azúcar", "cantidad": 200, "unidad": "gr" },
+          { "nombre": "Agua", "cantidad": 100, "unidad": "ml" },
+          { "nombre": "Manzanas reinetas", "cantidad": 1, "unidad": "kg" },
+          { "nombre": "Recortes de hojaldre", "cantidad": 1, "unidad": "cantidad suficiente" }
+        ],
+        "elaboracion": [
+          "Baño de caramelo en molde: derretir azúcar con agua.",
+          "Pelar, descorazonar y cortar manzanas por la mitad.",
+          "Colocarlas en el molde con parte convexa hacia abajo.",
+          "Cubrir con lámina de hojaldre, pinchar y hornear a 180°C."
+        ],
+        "temperatura": 180,
+        "tiempo": 40
+      },
+      {
+        "id": "VARIOS 146",
+        "nombre": "Tarta de Queso",
+        "categoria": "Tartas del Ayer",
+        "ingredientes": [
+          { "nombre": "Queso tipo Philadelphia", "cantidad": 500, "unidad": "gr" },
+          { "nombre": "Azúcar", "cantidad": 150, "unidad": "gr" },
+          { "nombre": "Huevos", "cantidad": 4, "unidad": "unidades" },
+          { "nombre": "Nata líquida", "cantidad": 200, "unidad": "ml" },
+          { "nombre": "Galletas trituradas", "cantidad": 200, "unidad": "gr" },
+          { "nombre": "Mantequilla", "cantidad": 100, "unidad": "gr" }
+        ],
+        "elaboracion": [
+          "Mezclar galletas con mantequilla derretida y formar base.",
+          "Batir queso con azúcar, añadir huevos uno a uno.",
+          "Incorporar nata y verter sobre la base.",
+          "Hornear a baño María a 160°C durante 50 minutos.",
+          "Enfriar y refrigerar toda la noche."
+        ],
+        "temperatura": 160,
+        "tiempo": 50
+      },
+      {
+        "id": "VARIOS 147",
+        "nombre": "Tarta de Yema Quemada",
+        "categoria": "Tartas del Ayer",
+        "ingredientes": [
+          { "nombre": "Pasta sableaux", "cantidad": 1, "unidad": "masa" },
+          { "nombre": "Yemas de huevo", "cantidad": 20, "unidad": "unidades" },
+          { "nombre": "Azúcar", "cantidad": 600, "unidad": "gr" },
+          { "nombre": "Agua", "cantidad": 250, "unidad": "ml" }
+        ],
+        "elaboracion": [
+          "Preparar almíbar con azúcar y agua hasta punto de hebra fina.",
+          "Incorporar yemas poco a poco sin dejar de remover.",
+          "Verter sobre la masa sableaux previamente cocida.",
+          "Cocer al horno suave hasta dorar ligeramente."
+        ],
+        "temperatura": 170,
+        "tiempo": 25
+      },
+      {
+        "id": "VARIOS 150",
+        "nombre": "Tarta Sagarroz",
+        "categoria": "Tartas del Ayer",
+        "ingredientes": [
+          { "nombre": "Bizcocho corriente", "cantidad": 1, "unidad": "plancha" },
+          { "nombre": "Almíbar aromatizado con sidra", "cantidad": 200, "unidad": "ml" },
+          { "nombre": "Nata montada", "cantidad": 400, "unidad": "gr" },
+          { "nombre": "Compota de manzana", "cantidad": 300, "unidad": "gr" },
+          { "nombre": "Sidra", "cantidad": 100, "unidad": "ml" },
+          { "nombre": "Gelatina de manzana", "cantidad": 1, "unidad": "sobre" }
+        ],
+        "elaboracion": [
+          "Emborrar el bizcocho con almíbar de sidra.",
+          "Rellenar con capas alternas de nata y compota.",
+          "Cubrir con nata y abrillantar con gelatina."
+        ]
+      },
+      {
+        "id": "VARIOS 161",
+        "nombre": "Tarta de Almendra",
+        "categoria": "Tartas del Ayer",
+        "ingredientes": [
+          { "nombre": "Pasta quebrada", "cantidad": 1, "unidad": "masa" },
+          { "nombre": "Azúcar", "cantidad": 250, "unidad": "gr" },
+          { "nombre": "Almendra molida", "cantidad": 250, "unidad": "gr" },
+          { "nombre": "Ralladura de limón", "cantidad": 1, "unidad": "unidad" },
+          { "nombre": "Huevos", "cantidad": 3, "unidad": "unidades" },
+          { "nombre": "Mantequilla", "cantidad": 250, "unidad": "gr" }
+        ],
+        "elaboracion": [
+          "Forrar molde con pasta quebrada.",
+          "Mezclar almendra, azúcar, ralladura, huevos y mantequilla.",
+          "Verter sobre la base y hornear a 180°C durante 45 minutos."
+        ],
+        "temperatura": 180,
+        "tiempo": 45
+      },
+      {
+        "id": "VARIOS 158",
+        "nombre": "Tarta de Frutas",
+        "categoria": "Tartas del Ayer",
+        "ingredientes": [
+          { "nombre": "Dos discos de bizcocho", "cantidad": 2, "unidad": "unidades" },
+          { "nombre": "Almíbar de emborrachar", "cantidad": 200, "unidad": "ml" },
+          { "nombre": "Nata montada", "cantidad": 500, "unidad": "gr" },
+          { "nombre": "Yema de naranja", "cantidad": 200, "unidad": "gr" },
+          { "nombre": "Frutas variadas", "cantidad": 500, "unidad": "gr" }
+        ],
+        "elaboracion": [
+          "Colocar un disco de bizcocho en molde de aro.",
+          "Emborrarlo mínimamente.",
+          "Rellenar abundantemente de nata.",
+          "Colocar encima el otro disco de bizcocho y emborracharlo.",
+          "Extender yema de naranja, rociar con azúcar y quemar.",
+          "Abrillantar con gelatina de manzana.",
+          "Colocar frutas decorativamente y abrillantar."
+        ]
+      },
+      // === TARTAS PREMIUM ===
+      {
+        "id": "VARIOS 148",
+        "nombre": "Tronco Navideño",
+        "categoria": "Tartas Premium",
+        "ingredientes": [
+          { "nombre": "Bizcocho plancha", "cantidad": 1, "unidad": "unidad" },
+          { "nombre": "Trufa", "cantidad": 300, "unidad": "gr" },
+          { "nombre": "Almíbar", "cantidad": 150, "unidad": "ml" },
+          { "nombre": "Cobertura", "cantidad": 200, "unidad": "gr" },
+          { "nombre": "Mantequilla", "cantidad": 50, "unidad": "gr" },
+          { "nombre": "Hojas de chocolate", "cantidad": 1, "unidad": "cantidad" },
+          { "nombre": "Azúcar glass", "cantidad": 30, "unidad": "gr" },
+          { "nombre": "Canela en polvo", "cantidad": 5, "unidad": "gr" }
+        ],
+        "elaboracion": [
+          "Empapar el bizcocho con almíbar.",
+          "Untar con trufa y enrollar con ayuda de papel sulfurizado.",
+          "Abrillantar con cobertura mezclada con mantequilla.",
+          "Crear textura de corteza con tenedor.",
+          "Decorar con hojas de chocolate y canela."
+        ]
+      },
+      {
+        "id": "VARIOS 149",
+        "nombre": "Tarta Selva Negra",
+        "categoria": "Tartas Premium",
+        "ingredientes": [
+          { "nombre": "Bizcocho de chocolate", "cantidad": 1, "unidad": "plancha" },
+          { "nombre": "Cherovia", "cantidad": 500, "unidad": "gr" },
+          { "nombre": "Kirsch", "cantidad": 200, "unidad": "ml" },
+          { "nombre": "Nata montada", "cantidad": 500, "unidad": "gr" },
+          { "nombre": "Cacao en polvo", "cantidad": 50, "unidad": "gr" },
+          { "nombre": "Cerezas en almíbar", "cantidad": 1, "unidad": "lata" }
+        ],
+        "elaboracion": [
+          "Cortar el bizcocho en tres discos.",
+          "Emborrar cada disco con Kirsch.",
+          "Alternar capas de cherovia, nata y cerezas.",
+          "Cubrir exterior con nata y espolvorear cacao.",
+          "Decorar con cerezas y virutas de chocolate."
+        ]
+      },
+      {
+        "id": "VARIOS 151",
+        "nombre": "Tarta Martínica",
+        "categoria": "Tartas Premium",
+        "ingredientes": [
+          { "nombre": "Pasta sableaux", "cantidad": 1, "unidad": "masa" },
+          { "nombre": "Crema pastelera", "cantidad": 300, "unidad": "gr" },
+          { "nombre": "Piña natural", "cantidad": 1, "unidad": "unidad" },
+          { "nombre": "Ron", "cantidad": 50, "unidad": "ml" },
+          { "nombre": "Nata montada", "cantidad": 200, "unidad": "gr" }
+        ],
+        "elaboracion": [
+          "Forrar molde con pasta sableaux y cocer en blanco.",
+          "Rellenar con crema pastelera y piña macerada en ron.",
+          "Cubrir con nata y decorar con trozos de piña."
+        ]
+      },
+      {
+        "id": "VARIOS 152",
+        "nombre": "Tarta de Moka",
+        "categoria": "Tartas Premium",
+        "ingredientes": [
+          { "nombre": "Bizcocho genovés", "cantidad": 1, "unidad": "plancha" },
+          { "nombre": "Café expreso", "cantidad": 200, "unidad": "ml" },
+          { "nombre": "Mascarpone", "cantidad": 500, "unidad": "gr" },
+          { "nombre": "Azúcar glass", "cantidad": 100, "unidad": "gr" },
+          { "nombre": "Chocolate negro", "cantidad": 100, "unidad": "gr" }
+        ],
+        "elaboracion": [
+          "Emborrar el bizcocho con café.",
+          "Mezclar mascarpone con azúcar y cubrir el bizcocho.",
+          "Rallar chocolate y espolvorear por encima."
+        ]
+      },
+      {
+        "id": "VARIOS 153",
+        "nombre": "Tarta Ópera",
+        "categoria": "Tartas Premium",
+        "ingredientes": [
+          { "nombre": "Bizcocho joconde", "cantidad": 3, "unidad": "discos" },
+          { "nombre": "Café concentrado", "cantidad": 150, "unidad": "ml" },
+          { "nombre": "Crema de moka", "cantidad": 300, "unidad": "gr" },
+          { "nombre": "Cobertura de chocolate", "cantidad": 200, "unidad": "gr" }
+        ],
+        "elaboracion": [
+          "Alternar capas de bizcocho empapado en café y crema de moka.",
+          "Cubrir con cobertura de chocolate brillante."
+        ]
+      },
+      {
+        "id": "VARIOS 154",
+        "nombre": "Tarta Ponche Genovés",
+        "categoria": "Tartas Premium",
+        "ingredientes": [
+          { "nombre": "Bizcocho genovés", "cantidad": 1, "unidad": "plancha" },
+          { "nombre": "Almíbar de vino de Málaga", "cantidad": 200, "unidad": "ml" },
+          { "nombre": "Crema pastelera", "cantidad": 300, "unidad": "gr" },
+          { "nombre": "Nata montada", "cantidad": 300, "unidad": "gr" },
+          { "nombre": "Chantilly", "cantidad": 200, "unidad": "gr" }
+        ],
+        "elaboracion": [
+          "Cortar el bizcocho en dos capas.",
+          "Emborrar con almíbar de vino de Málaga.",
+          "Rellenar con crema pastelera y nata.",
+          "Cubrir con chantilly y decorar con guindas."
+        ]
+      },
+      {
+        "id": "VARIOS 155",
+        "nombre": "Tarta Mascota",
+        "categoria": "Tartas Premium",
+        "ingredientes": [
+          { "nombre": "Bizcocho molde", "cantidad": 1, "unidad": "unidad" },
+          { "nombre": "Almíbar de emborrachar", "cantidad": 200, "unidad": "ml" },
+          { "nombre": "Crema de mantequilla", "cantidad": 500, "unidad": "gr" },
+          { "nombre": "Almendra fileteada", "cantidad": 100, "unidad": "gr" }
+        ],
+        "elaboracion": [
+          "Partimos de un bizcocho relleno de crema de mantequilla.",
+          "Cubrimos la superficie y los laterales con crema de mantequilla.",
+          "Aplanamos con espátula.",
+          "Decoramos con almendra fileteada."
+        ]
+      },
+      {
+        "id": "VARIOS 156",
+        "nombre": "Terrina de Frutas",
+        "categoria": "Tartas Premium",
+        "ingredientes": [
+          { "nombre": "Plancha de bizcocho", "cantidad": 1, "unidad": "unidad" },
+          { "nombre": "Mantequilla", "cantidad": 300, "unidad": "gr" },
+          { "nombre": "Azúcar lustre", "cantidad": 300, "unidad": "gr" },
+          { "nombre": "Almendra molida", "cantidad": 300, "unidad": "gr" },
+          { "nombre": "Nata líquida", "cantidad": 300, "unidad": "ml" },
+          { "nombre": "Kiwi", "cantidad": 3, "unidad": "unidades" },
+          { "nombre": "Fresas", "cantidad": 300, "unidad": "gr" },
+          { "nombre": "Melocotón en almíbar", "cantidad": 200, "unidad": "gr" }
+        ],
+        "elaboracion": [
+          "Forrar molde con film transparente.",
+          "Colocar capa de bizcocho.",
+          "Rellenar con mezcla de mantequilla, azúcar, almendra y nata.",
+          "Añadir frutas cortadas.",
+          "Congelar y desmoldar."
+        ]
+      },
+      {
+        "id": "VARIOS 157",
+        "nombre": "Tarta de Enrejado",
+        "categoria": "Tartas Premium",
+        "ingredientes": [
+          { "nombre": "Recortes de hojaldre", "cantidad": 1, "unidad": "masa" },
+          { "nombre": "Crema pastelera", "cantidad": 300, "unidad": "gr" },
+          { "nombre": "Frambuesas", "cantidad": 200, "unidad": "gr" },
+          { "nombre": "Gelatina de manzana", "cantidad": 1, "unidad": "sobre" }
+        ],
+        "elaboracion": [
+          "Forrar molde con hojaldre.",
+          "Rellenar con crema pastelera.",
+          "Colocar frambuesas.",
+          "Hacer rejilla con tiras de hojaldre.",
+          "Hornear a 180°C.",
+          "Abrillantar con gelatina."
+        ],
+        "temperatura": 180,
+        "tiempo": 35
+      },
+      {
+        "id": "VARIOS 159",
+        "nombre": "Tarta de Chocolatina",
+        "categoria": "Tartas Premium",
+        "ingredientes": [
+          { "nombre": "Bizcocho genovés", "cantidad": 1, "unidad": "plancha" },
+          { "nombre": "Almíbar de café", "cantidad": 200, "unidad": "ml" },
+          { "nombre": "Trufa negra", "cantidad": 400, "unidad": "gr" },
+          { "nombre": "Virutas de chocolate", "cantidad": 100, "unidad": "gr" }
+        ],
+        "elaboracion": [
+          "Cortar bizcocho en dos capas.",
+          "Emborrar con almíbar de café.",
+          "Rellenar con trufa negra.",
+          "Cubrir con trufa y decorar con virutas."
+        ]
+      },
+      // === BIZCOCHOS, MAGDALENAS & MUFFINS ===
+      {
+        "id": "VARIOS 67",
+        "nombre": "Sobao Pasiego",
+        "categoria": "Bizcochos, Magdalenas & Muffins",
+        "ingredientes": [
+          { "nombre": "Mantequilla", "cantidad": 1000, "unidad": "gr" },
+          { "nombre": "Azúcar glasé", "cantidad": 1000, "unidad": "gr" },
+          { "nombre": "Huevos", "cantidad": 15, "unidad": "unidades" },
+          { "nombre": "Ron", "cantidad": 50, "unidad": "ml" },
+          { "nombre": "Harina floja", "cantidad": 1000, "unidad": "gr" },
+          { "nombre": "Impulsor", "cantidad": 10, "unidad": "gr" }
+        ],
+        "elaboracion": [
+          "Batir mantequilla con azúcar, añadir huevos uno a uno.",
+          "Incorporar harina con impulsor, ron y mezclar delicadamente.",
+          "Hornear a 180°C."
+        ],
+        "temperatura": 180,
+        "tiempo": 30
+      },
+      {
+        "id": "VARIOS 202",
+        "nombre": "San Blas",
+        "categoria": "Bizcochos, Magdalenas & Muffins",
+        "ingredientes": [
+          { "nombre": "Harina", "cantidad": 500, "unidad": "gr" },
+          { "nombre": "Azúcar", "cantidad": 250, "unidad": "gr" },
+          { "nombre": "Huevos", "cantidad": 5, "unidad": "unidades" },
+          { "nombre": "Mantequilla", "cantidad": 150, "unidad": "gr" },
+          { "nombre": "Leche", "cantidad": 100, "unidad": "ml" },
+          { "nombre": "Impulsor", "cantidad": 10, "unidad": "gr" }
+        ],
+        "elaboracion": [
+          "Batir mantequilla con azúcar, añadir huevos uno a uno.",
+          "Incorporar harina con impulsor y leche.",
+          "Hornear a 180°C durante 25 minutos."
+        ],
+        "temperatura": 180,
+        "tiempo": 25
+      },
+      {
+        "id": "VARIOS 58",
+        "nombre": "Bizcocho de Chocolate",
+        "categoria": "Bizcochos, Magdalenas & Muffins",
+        "ingredientes": [
+          { "nombre": "Huevos", "cantidad": 4, "unidad": "unidades" },
+          { "nombre": "Azúcar", "cantidad": 200, "unidad": "gr" },
+          { "nombre": "Harina", "cantidad": 200, "unidad": "gr" },
+          { "nombre": "Cacao en polvo", "cantidad": 50, "unidad": "gr" },
+          { "nombre": "Mantequilla", "cantidad": 100, "unidad": "gr" },
+          { "nombre": "Leche", "cantidad": 100, "unidad": "ml" },
+          { "nombre": "Impulsor", "cantidad": 10, "unidad": "gr" }
+        ],
+        "elaboracion": [
+          "Batir huevos con azúcar hasta doblar volumen.",
+          "Añadir harina, cacao, mantequilla derretida, leche e impulsor.",
+          "Hornear a 180°C durante 30 minutos."
+        ],
+        "temperatura": 180,
+        "tiempo": 30
+      },
+      {
+        "id": "VARIOS 59",
+        "nombre": "Bizcocho de Naranja",
+        "categoria": "Bizcochos, Magdalenas & Muffins",
+        "ingredientes": [
+          { "nombre": "Huevos", "cantidad": 4, "unidad": "unidades" },
+          { "nombre": "Azúcar", "cantidad": 200, "unidad": "gr" },
+          { "nombre": "Harina", "cantidad": 200, "unidad": "gr" },
+          { "nombre": "Zumo de naranja", "cantidad": 100, "unidad": "ml" },
+          { "nombre": "Ralladura de naranja", "cantidad": 1, "unidad": "unidad" },
+          { "nombre": "Mantequilla", "cantidad": 100, "unidad": "gr" },
+          { "nombre": "Impulsor", "cantidad": 10, "unidad": "gr" }
+        ],
+        "elaboracion": [
+          "Batir huevos con azúcar hasta doblar volumen.",
+          "Añadir harina, zumo, ralladura, mantequilla derretida e impulsor.",
+          "Hornear a 180°C durante 30 minutos."
+        ],
+        "temperatura": 180,
+        "tiempo": 30
+      },
+      {
+        "id": "VARIOS 68",
+        "nombre": "Magdalenas",
+        "categoria": "Bizcochos, Magdalenas & Muffins",
+        "ingredientes": [
+          { "nombre": "Huevos", "cantidad": 10, "unidad": "unidades" },
+          { "nombre": "Azúcar", "cantidad": 500, "unidad": "gr" },
+          { "nombre": "Harina", "cantidad": 500, "unidad": "gr" },
+          { "nombre": "Mantequilla", "cantidad": 250, "unidad": "gr" },
+          { "nombre": "Leche", "cantidad": 100, "unidad": "ml" },
+          { "nombre": "Impulsor", "cantidad": 10, "unidad": "gr" }
+        ],
+        "elaboracion": [
+          "Batir huevos con azúcar hasta doblar volumen.",
+          "Incorporar harina, mantequilla derretida, leche e impulsor.",
+          "Escudillar en moldes y hornear a 180°C durante 20 minutos."
+        ],
+        "temperatura": 180,
+        "tiempo": 20
+      },
+      {
+        "id": "VARIOS 61",
+        "nombre": "Bizcocho de Manzana",
+        "categoria": "Bizcochos, Magdalenas & Muffins",
+        "ingredientes": [
+          { "nombre": "Huevos", "cantidad": 4, "unidad": "unidades" },
+          { "nombre": "Azúcar", "cantidad": 200, "unidad": "gr" },
+          { "nombre": "Harina", "cantidad": 200, "unidad": "gr" },
+          { "nombre": "Manzanas", "cantidad": 2, "unidad": "unidades" },
+          { "nombre": "Mantequilla", "cantidad": 100, "unidad": "gr" },
+          { "nombre": "Impulsor", "cantidad": 10, "unidad": "gr" }
+        ],
+        "elaboracion": [
+          "Batir huevos con azúcar hasta doblar volumen.",
+          "Añadir harina, manzana rallada, mantequilla derretida e impulsor.",
+          "Hornear a 180°C durante 30 minutos."
+        ],
+        "temperatura": 180,
+        "tiempo": 30
+      },
+      {
+        "id": "VARIOS 60",
+        "nombre": "Bizcocho de Coco",
+        "categoria": "Bizcochos, Magdalenas & Muffins",
+        "ingredientes": [
+          { "nombre": "Huevos", "cantidad": 4, "unidad": "unidades" },
+          { "nombre": "Azúcar", "cantidad": 400, "unidad": "gr" },
+          { "nombre": "Agua", "cantidad": 200, "unidad": "cc" },
+          { "nombre": "Harina", "cantidad": 300, "unidad": "gr" },
+          { "nombre": "Levadura royal", "cantidad": 1, "unidad": "sobre" },
+          { "nombre": "Coco rallado", "cantidad": 50, "unidad": "gr" }
+        ],
+        "elaboracion": [
+          "Batir huevos con azúcar, agregar agua hirviendo, harina, levadura y coco.",
+          "Verter en molde engrasado y enharinado.",
+          "Hornear a fuego lento los primeros 10 minutos, luego aumentar temperatura."
+        ],
+        "tiempo": 50
+      },
+      {
+        "id": "VARIOS 195",
+        "nombre": "Coquitos",
+        "categoria": "Bizcochos, Magdalenas & Muffins",
+        "ingredientes": [
+          { "nombre": "Huevos", "cantidad": 3, "unidad": "unidades" },
+          { "nombre": "Azúcar", "cantidad": 150, "unidad": "gr" },
+          { "nombre": "Coco rallado", "cantidad": 250, "unidad": "gr" }
+        ],
+        "elaboracion": [
+          "Mezclar ingredientes y dejar reposar en frigorífico.",
+          "Formar bolas pequeñas y hornear a horno fuerte 20 minutos."
+        ],
+        "temperatura": 190,
+        "tiempo": 20
+      },
+      {
+        "id": "VARIOS 196",
+        "nombre": "Macarrón de Almendra",
+        "categoria": "Bizcochos, Magdalenas & Muffins",
+        "ingredientes": [
+          { "nombre": "Almendra molida", "cantidad": 480, "unidad": "gr" },
+          { "nombre": "Azúcar grano", "cantidad": 400, "unidad": "gr" },
+          { "nombre": "Claritas", "cantidad": 180, "unidad": "gr" }
+        ],
+        "elaboracion": [
+          "Mezclar todos los ingredientes hasta formar una masa homogénea.",
+          "Escudillar con manga sobre placa.",
+          "Secar a 40-50°C durante varias horas.",
+          "Cocer a 140°C cuando estén secos."
+        ],
+        "temperatura": 140,
+        "tiempo": 15
+      },
+      {
+        "id": "VARIOS 199",
+        "nombre": "Empiñonadas",
+        "categoria": "Bizcochos, Magdalenas & Muffins",
+        "ingredientes": [
+          { "nombre": "Almendra molida", "cantidad": 250, "unidad": "gr" },
+          { "nombre": "Azúcar lustre", "cantidad": 225, "unidad": "gr" },
+          { "nombre": "Claras de huevo", "cantidad": 1, "unidad": "cantidad" },
+          { "nombre": "Piñones", "cantidad": 100, "unidad": "gr" }
+        ],
+        "elaboracion": [
+          "Mezclar almendra, azúcar y claras.",
+          "Formar bolas, rebozar con piñones.",
+          "Cocer a horno a 180-200°C."
+        ],
+        "temperatura": 190,
+        "tiempo": 18
+      },
+      // === DULCES & CONFITES ===
+      {
+        "id": "VARIOS 173",
+        "nombre": "Trufa Negra",
+        "categoria": "Dulces & Confites",
+        "ingredientes": [
+          { "nombre": "Nata", "cantidad": 350, "unidad": "gr" },
+          { "nombre": "Cobertura negra", "cantidad": 650, "unidad": "gr" },
+          { "nombre": "Cognac", "cantidad": 2, "unidad": "cda" }
+        ],
+        "elaboracion": [
+          "Calentar la nata y verter sobre la cobertura.",
+          "Disolver con espátula, añadir cognac.",
+          "Dejar enfriar, hacer bolas y bañar en cobertura o cacao."
+        ]
+      },
+      {
+        "id": "VARIOS 48",
+        "nombre": "Trufa Cocida",
+        "categoria": "Dulces & Confites",
+        "ingredientes": [
+          { "nombre": "Nata líquida", "cantidad": 1000, "unidad": "ml" },
+          { "nombre": "Cobertura negra", "cantidad": 140, "unidad": "gr" },
+          { "nombre": "Azúcar", "cantidad": 150, "unidad": "gr" }
+        ],
+        "elaboracion": [
+          "Mezclar todos los ingredientes y llevar al fuego hasta disolver la cobertura.",
+          "Enfriar en cámara toda la noche.",
+          "Al día siguiente, montar con varilla hasta obtener textura cremosa.",
+          "Formar bolas y rodar en cacao en polvo."
+        ]
+      },
+      {
+        "id": "VARIOS 49",
+        "nombre": "Trufa Cocida Blanca",
+        "categoria": "Dulces & Confites",
+        "ingredientes": [
+          { "nombre": "Nata líquida", "cantidad": 1000, "unidad": "ml" },
+          { "nombre": "Cobertura blanca", "cantidad": 400, "unidad": "gr" }
+        ],
+        "elaboracion": [
+          "Cocer de víspera la nata con la cobertura.",
+          "Enfriar en cámara y al día siguiente proceder a montarla."
+        ]
+      },
+      {
+        "id": "VARIOS 50",
+        "nombre": "Toffe",
+        "categoria": "Dulces & Confites",
+        "ingredientes": [
+          { "nombre": "Nata líquida", "cantidad": 1000, "unidad": "ml" },
+          { "nombre": "Azúcar", "cantidad": 250, "unidad": "gr" }
+        ],
+        "elaboracion": [
+          "Hacer caramelo rubio con azúcar.",
+          "Añadir nata caliente con cuidado.",
+          "Hervir hasta disolución completa.",
+          "Usar como salsa o montar al día siguiente."
+        ]
+      },
+      {
+        "id": "VARIOS 178",
+        "nombre": "Mazapán",
+        "categoria": "Dulces & Confites",
+        "ingredientes": [
+          { "nombre": "Almendra molida", "cantidad": 1000, "unidad": "gr" },
+          { "nombre": "Azúcar", "cantidad": 1000, "unidad": "gr" },
+          { "nombre": "Agua", "cantidad": 200, "unidad": "ml" },
+          { "nombre": "Glucosa", "cantidad": 100, "unidad": "gr" }
+        ],
+        "elaboracion": [
+          "Mezclar todos los ingredientes hasta formar una masa homogénea.",
+          "Amasar y moldear como se desee.",
+          "Secar al aire o en horno muy bajo."
+        ]
+      },
+      {
+        "id": "VARIOS 180",
+        "nombre": "Turrón de Yema",
+        "categoria": "Dulces & Confites",
+        "ingredientes": [
+          { "nombre": "Nata", "cantidad": 125, "unidad": "gr" },
+          { "nombre": "Azúcar", "cantidad": 125, "unidad": "gr" },
+          { "nombre": "Yemas", "cantidad": 9, "unidad": "unidades" },
+          { "nombre": "Almíbar", "cantidad": 1, "unidad": "kilo" },
+          { "nombre": "Almendra molida", "cantidad": 1, "unidad": "kilo" },
+          { "nombre": "Glucosa", "cantidad": 50, "unidad": "gr" },
+          { "nombre": "Vainillina", "cantidad": 1, "unidad": "cda" }
+        ],
+        "elaboracion": [
+          "Elaborar almíbar a punto de bola floja.",
+          "Mezclar con yemas, nata, almendra y glucosa.",
+          "Moldear y enfriar."
+        ]
+      },
+      {
+        "id": "VARIOS 182",
+        "nombre": "Turrón de Coco",
+        "categoria": "Dulces & Confites",
+        "ingredientes": [
+          { "nombre": "Almíbar", "cantidad": 1, "unidad": "kilo" },
+          { "nombre": "Agua", "cantidad": 350, "unidad": "gr" },
+          { "nombre": "Coco rallado", "cantidad": 500, "unidad": "gr" },
+          { "nombre": "Almendra molida", "cantidad": 500, "unidad": "gr" },
+          { "nombre": "Glucosa", "cantidad": 125, "unidad": "gr" }
+        ],
+        "elaboracion": [
+          "Hacer almíbar con azúcar, agua y glucosa.",
+          "Añadir coco y almendra.",
+          "Verter en molde, enfriar y cortar."
+        ]
+      },
+      {
+        "id": "VARIOS 183",
+        "nombre": "Turrón de Pistachos",
+        "categoria": "Dulces & Confites",
+        "ingredientes": [
+          { "nombre": "Almíbar", "cantidad": 1, "unidad": "kilo" },
+          { "nombre": "Agua", "cantidad": 330, "unidad": "gr" },
+          { "nombre": "Pistachos molidos", "cantidad": 500, "unidad": "gr" },
+          { "nombre": "Almendra molida", "cantidad": 500, "unidad": "gr" }
+        ],
+        "elaboracion": [
+          "Hacer almíbar a punto de hebra floja.",
+          "Mezclar con pistachos y almendra.",
+          "Moldear, prensar y reposar."
+        ]
+      },
+      {
+        "id": "VARIOS 184",
+        "nombre": "Guirlache",
+        "categoria": "Dulces & Confites",
+        "ingredientes": [
+          { "nombre": "Azúcar", "cantidad": 500, "unidad": "gr" },
+          { "nombre": "Manteca de cerdo", "cantidad": 10, "unidad": "gr" },
+          { "nombre": "Canela", "cantidad": 5, "unidad": "gr" },
+          { "nombre": "Zumo de limón", "cantidad": 1, "unidad": "chorro" },
+          { "nombre": "Almendras marcona", "cantidad": 450, "unidad": "gr" }
+        ],
+        "elaboracion": [
+          "Hacer caramelo rubio con azúcar, manteca, canela y limón.",
+          "Añadir almendras tostadas.",
+          "Extender sobre mármol engrasado.",
+          "Cortar en barritas antes de enfriar."
+        ]
+      },
+      {
+        "id": "VARIOS 181",
+        "nombre": "Turrón de Nata Nuez",
+        "categoria": "Dulces & Confites",
+        "ingredientes": [
+          { "nombre": "Nata", "cantidad": 400, "unidad": "gr" },
+          { "nombre": "Azúcar", "cantidad": 1125, "unidad": "gr" },
+          { "nombre": "Almendra molida", "cantidad": 1000, "unidad": "gr" },
+          { "nombre": "Nueces", "cantidad": 750, "unidad": "gr" },
+          { "nombre": "Vainillina", "cantidad": 1, "unidad": "cda" }
+        ],
+        "elaboracion": [
+          "Hervir nata con azúcar, añadir almendra, nueces y vainillina.",
+          "Moldear, prensar y dejar reposar mínimo un día."
+        ]
+      },
+      // === MASAS & PASTELES ===
+      {
+        "id": "VARIOS 75",
+        "nombre": "Hojaldre (Fórmula Tradicional)",
+        "categoria": "Masas & Pasteles",
+        "ingredientes": [
+          { "nombre": "Harina fuerte", "cantidad": 1000, "unidad": "gr" },
+          { "nombre": "Agua", "cantidad": 600, "unidad": "gr" },
+          { "nombre": "Sal", "cantidad": 20, "unidad": "gr" },
+          { "nombre": "Manteca de cerdo o mantequilla", "cantidad": 600, "unidad": "gr" }
+        ],
+        "elaboracion": [
+          "Mezclar harina, agua y sal. Formar un plastón.",
+          "Enfriar 30 minutos.",
+          "Estirar y colocar la grasa en el centro. Doblar como libro.",
+          "Repetir 3-4 vueltas simples, refrigerando entre cada una."
+        ]
+      },
+      {
+        "id": "VARIOS 83",
+        "nombre": "Palmeras",
+        "categoria": "Masas & Pasteles",
+        "ingredientes": [
+          { "nombre": "Plastón de hojaldre", "cantidad": 1, "unidad": "masa" },
+          { "nombre": "Azúcar en grano", "cantidad": 200, "unidad": "gr" }
+        ],
+        "elaboracion": [
+          "Hacer una masa de hojaldre a la que se dan 6 pliegues sencillos.",
+          "En el último pliegue espolvorear con azúcar en grano y estirar.",
+          "Se monta la masa tres veces por cada lado, juntar y cortar en palmeras.",
+          "Hornear a 200-210°C hasta dorar."
+        ],
+        "temperatura": 205,
+        "tiempo": 22
+      },
+      {
+        "id": "VARIOS 187",
+        "nombre": "Cigarrillos Rusos",
+        "categoria": "Masas & Pasteles",
+        "ingredientes": [
+          { "nombre": "Hojaldre", "cantidad": 1, "unidad": "masa" },
+          { "nombre": "Azúcar glass", "cantidad": 100, "unidad": "gr" },
+          { "nombre": "Clara de huevo", "cantidad": 1, "unidad": "unidad" }
+        ],
+        "elaboracion": [
+          "Estirar el hojaldre muy fino y pintar con clara de huevo.",
+          "Espolvorear con azúcar glass.",
+          "Enrollar como si fuera un brazo de gitano y cortar en rodajas finas.",
+          "Hornear a 200°C hasta dorar."
+        ],
+        "temperatura": 200,
+        "tiempo": 15
+      },
+      {
+        "id": "VARIOS 190",
+        "nombre": "Lenguas de Gato",
+        "categoria": "Masas & Pasteles",
+        "ingredientes": [
+          { "nombre": "Mantequilla", "cantidad": 200, "unidad": "gr" },
+          { "nombre": "Azúcar glass", "cantidad": 200, "unidad": "gr" },
+          { "nombre": "Harina", "cantidad": 200, "unidad": "gr" }
+        ],
+        "elaboracion": [
+          "Batir mantequilla con azúcar glass.",
+          "Incorporar harina con espátula.",
+          "Escudillar en boquilla rizada.",
+          "Hornear a 180°C sin abrir el horno."
+        ],
+        "temperatura": 180,
+        "tiempo": 12
+      },
+      // === POSTRES FRÍOS ===
+      {
+        "id": "VARIOS 13",
+        "nombre": "Flan de Chocolate",
+        "categoria": "Postres Fríos",
+        "ingredientes": [
+          { "nombre": "Leche", "cantidad": 250, "unidad": "ml" },
+          { "nombre": "Nata líquida", "cantidad": 250, "unidad": "ml" },
+          { "nombre": "Azúcar", "cantidad": 150, "unidad": "gr" },
+          { "nombre": "Cobertura negra", "cantidad": 100, "unidad": "gr" },
+          { "nombre": "Huevos", "cantidad": 6, "unidad": "unidades" },
+          { "nombre": "Salsa de caramelo", "cantidad": 1, "unidad": "cantidad" }
+        ],
+        "elaboracion": [
+          "Mezclar leche, nata, azúcar y cobertura fundida.",
+          "Añadir huevos batidos.",
+          "Verter en moldes con caramelo.",
+          "Cocer al baño María a 160°C durante 45 minutos.",
+          "Enfriar y desmoldar."
+        ],
+        "temperatura": 160,
+        "tiempo": 45
+      },
+      {
+        "id": "VARIOS 25",
+        "nombre": "Compota de Manzana",
+        "categoria": "Postres Fríos",
+        "ingredientes": [
+          { "nombre": "Manzanas", "cantidad": 1000, "unidad": "gr" },
+          { "nombre": "Azúcar", "cantidad": 150, "unidad": "gr" },
+          { "nombre": "Vino blanco", "cantidad": 250, "unidad": "ml" },
+          { "nombre": "Orejones", "cantidad": 50, "unidad": "gr" },
+          { "nombre": "Pasas", "cantidad": 30, "unidad": "gr" }
+        ],
+        "elaboracion": [
+          "Pelar y cortar manzanas.",
+          "Cocer con azúcar, vino y frutas secas.",
+          "Dejar enfriar antes de servir."
+        ]
+      },
+      {
+        "id": "VARIOS 26",
+        "nombre": "Peras en Almíbar",
+        "categoria": "Postres Fríos",
+        "ingredientes": [
+          { "nombre": "Peras", "cantidad": 1000, "unidad": "gr" },
+          { "nombre": "Vino blanco", "cantidad": 500, "unidad": "ml" },
+          { "nombre": "Azúcar", "cantidad": 300, "unidad": "gr" },
+          { "nombre": "Agua", "cantidad": 500, "unidad": "ml" },
+          { "nombre": "Canela en rama", "cantidad": 1, "unidad": "unidad" },
+          { "nombre": "Cáscara de limón", "cantidad": 1, "unidad": "unidad" }
+        ],
+        "elaboracion": [
+          "Pelar peras y mantener en agua con limón.",
+          "Hervir agua, vino, azúcar, canela y limón.",
+          "Añadir peras y cocer a fuego lento 20-30 min.",
+          "Dejar enfriar en el almíbar."
+        ],
+        "tiempo": 25
+      },
+      {
+        "id": "VARIOS 27",
+        "nombre": "Arroz con Leche",
+        "categoria": "Postres Fríos",
+        "ingredientes": [
+          { "nombre": "Arroz", "cantidad": 200, "unidad": "gr" },
+          { "nombre": "Leche", "cantidad": 1000, "unidad": "ml" },
+          { "nombre": "Azúcar", "cantidad": 150, "unidad": "gr" },
+          { "nombre": "Canela en rama", "cantidad": 1, "unidad": "unidad" },
+          { "nombre": "Cáscara de limón", "cantidad": 1, "unidad": "unidad" },
+          { "nombre": "Vainilla", "cantidad": 1, "unidad": "unidad" }
+        ],
+        "elaboracion": [
+          "Cocer el arroz en leche con azúcar, canela, limón y vainilla.",
+          "Dejar enfriar y servir frío con canela por encima."
+        ]
+      },
+      {
+        "id": "VARIOS 28",
+        "nombre": "Leche Frita",
+        "categoria": "Postres Fríos",
+        "ingredientes": [
+          { "nombre": "Leche", "cantidad": 1000, "unidad": "ml" },
+          { "nombre": "Harina", "cantidad": 100, "unidad": "gr" },
+          { "nombre": "Azúcar", "cantidad": 150, "unidad": "gr" },
+          { "nombre": "Canela", "cantidad": 10, "unidad": "gr" },
+          { "nombre": "Aceite para freír", "cantidad": 500, "unidad": "ml" }
+        ],
+        "elaboracion": [
+          "Cocer leche con azúcar, canela y harina hasta espesar.",
+          "Enfriar, cortar en dados y freír.",
+          "Espolvorear con azúcar y canela."
+        ]
+      },
+      {
+        "id": "VARIOS 29",
+        "nombre": "Torrijas",
+        "categoria": "Postres Fríos",
+        "ingredientes": [
+          { "nombre": "Pan de brioche", "cantidad": 500, "unidad": "gr" },
+          { "nombre": "Leche", "cantidad": 500, "unidad": "ml" },
+          { "nombre": "Huevos", "cantidad": 3, "unidad": "unidades" },
+          { "nombre": "Azúcar", "cantidad": 100, "unidad": "gr" },
+          { "nombre": "Canela", "cantidad": 10, "unidad": "gr" },
+          { "nombre": "Aceite", "cantidad": 300, "unidad": "ml" }
+        ],
+        "elaboracion": [
+          "Remojar pan en leche con canela y azúcar.",
+          "Pasar por huevo y freír.",
+          "Espolvorear con azúcar y canela."
+        ]
+      },
+      {
+        "id": "VARIOS 30",
+        "nombre": "Goxua",
+        "categoria": "Postres Fríos",
+        "ingredientes": [
+          { "nombre": "Bizcocho corriente", "cantidad": 1, "unidad": "plancha" },
+          { "nombre": "Crema pastelera", "cantidad": 300, "unidad": "gr" },
+          { "nombre": "Nata montada", "cantidad": 300, "unidad": "gr" },
+          { "nombre": "Caramelo", "cantidad": 100, "unidad": "gr" }
+        ],
+        "elaboracion": [
+          "Cortar el bizcocho en cuadrados.",
+          "Rellenar con crema y nata.",
+          "Baño de caramelo por encima."
+        ]
+      },
+      {
+        "id": "VARIOS 31",
+        "nombre": "Pastel Vasco",
+        "categoria": "Postres Fríos",
+        "ingredientes": [
+          { "nombre": "Harina", "cantidad": 500, "unidad": "gr" },
+          { "nombre": "Azúcar", "cantidad": 300, "unidad": "gr" },
+          { "nombre": "Mantequilla", "cantidad": 200, "unidad": "gr" },
+          { "nombre": "Huevos", "cantidad": 4, "unidad": "unidades" },
+          { "nombre": "Crema pastelera", "cantidad": 400, "unidad": "gr" }
+        ],
+        "elaboracion": [
+          "Mezclar harina, azúcar, mantequilla y huevos hasta formar masa.",
+          "Forrar molde y rellenar con crema pastelera.",
+          "Hornear a 180°C durante 40 minutos."
+        ],
+        "temperatura": 180,
+        "tiempo": 40
+      },
+      // === HELADOS & SORBETES ===
+      {
+        "id": "VARIOS 100",
+        "nombre": "Sorbete de Limón al Champán",
+        "categoria": "Helados & Sorbetes",
+        "ingredientes": [
+          { "nombre": "Almíbar a 28°Brix", "cantidad": 1, "unidad": "litro" },
+          { "nombre": "Zumo de limón", "cantidad": 1, "unidad": "litro" }
+        ],
+        "elaboracion": [
+          "Mezclar ambos ingredientes y enfriar bien.",
+          "Introducir en heladora y dejar congelar."
+        ]
+      },
+      {
+        "id": "VARIOS 105",
+        "nombre": "Sorbete de Limón",
+        "categoria": "Helados & Sorbetes",
+        "ingredientes": [
+          { "nombre": "Zumo de limón", "cantidad": 200, "unidad": "gr" },
+          { "nombre": "Azúcar", "cantidad": 200, "unidad": "gr" },
+          { "nombre": "Glucosa", "cantidad": 100, "unidad": "gr" },
+          { "nombre": "Maicena", "cantidad": 20, "unidad": "gr" },
+          { "nombre": "Agua", "cantidad": 480, "unidad": "gr" }
+        ],
+        "elaboracion": [
+          "Mezclar sacarosa con maicena, añadir agua y cocer.",
+          "Enfriar, añadir zumo y helar."
+        ]
+      },
+      {
+        "id": "VARIOS 118",
+        "nombre": "Mousse de Cava",
+        "categoria": "Helados & Sorbetes",
+        "ingredientes": [
+          { "nombre": "Cava", "cantidad": 750, "unidad": "ml" },
+          { "nombre": "Azúcar", "cantidad": 360, "unidad": "gr" },
+          { "nombre": "Gelatina", "cantidad": 24, "unidad": "gr" },
+          { "nombre": "Yemas", "cantidad": 3, "unidad": "unidades" },
+          { "nombre": "Nata líquida", "cantidad": 400, "unidad": "ml" }
+        ],
+        "elaboracion": [
+          "Calentar cava con azúcar y gelatina.",
+          "Añadir yemas, enfriar y mezclar con nata montada.",
+          "Congelar."
+        ]
+      },
+      {
+        "id": "VARIOS 97",
+        "nombre": "Sorbete de Naranja",
+        "categoria": "Helados & Sorbetes",
+        "ingredientes": [
+          { "nombre": "Agua", "cantidad": 250, "unidad": "ml" },
+          { "nombre": "Azúcar", "cantidad": 150, "unidad": "gr" },
+          { "nombre": "Ralladura de naranja", "cantidad": 1, "unidad": "cantidad" },
+          { "nombre": "Zumo de naranja", "cantidad": 500, "unidad": "ml" },
+          { "nombre": "Clara de huevo", "cantidad": 1, "unidad": "unidad" }
+        ],
+        "elaboracion": [
+          "Hacer almíbar con agua y azúcar.",
+          "Añadir ralladura, zumo y clara batida.",
+          "Congelar en heladora."
+        ]
+      },
+      {
+        "id": "VARIOS 106",
+        "nombre": "Bavarois de Chocolate",
+        "categoria": "Helados & Sorbetes",
+        "ingredientes": [
+          { "nombre": "Chocolate negro", "cantidad": 200, "unidad": "gr" },
+          { "nombre": "Leche", "cantidad": 500, "unidad": "ml" },
+          { "nombre": "Azúcar", "cantidad": 100, "unidad": "gr" },
+          { "nombre": "Huevos", "cantidad": 4, "unidad": "unidades" },
+          { "nombre": "Gelatina", "cantidad": 10, "unidad": "gr" }
+        ],
+        "elaboracion": [
+          "Derretir chocolate con leche y azúcar.",
+          "Añadir yemas, gelatina reblandecida.",
+          "Montar claras y nata, incorporar.",
+          "Enmoldar y refrigerar."
+        ]
+      },
+      // === RELLENOS & COBERTURAS ===
+      {
+        "id": "VARIOS 221",
+        "nombre": "Coulis de Frutos Rojos",
+        "categoria": "Rellenos & Coberturas",
+        "ingredientes": [
+          { "nombre": "Fruta roja", "cantidad": 1000, "unidad": "gr" },
+          { "nombre": "Azúcar", "cantidad": 400, "unidad": "gr" },
+          { "nombre": "Agua", "cantidad": 250, "unidad": "ml" }
+        ],
+        "elaboracion": [
+          "Hervir todos los ingredientes hasta densidad media.",
+          "Triturar y colar por chino fino."
+        ]
+      },
+      {
+        "id": "VARIOS 215",
+        "nombre": "Glassa Antihumedad",
+        "categoria": "Decoración & Acabados",
+        "ingredientes": [
+          { "nombre": "Azúcar glass", "cantidad": 500, "unidad": "gr" },
+          { "nombre": "Clara de huevo deshidratada", "cantidad": 20, "unidad": "gr" },
+          { "nombre": "Agua", "cantidad": 100, "unidad": "ml" }
+        ],
+        "elaboracion": [
+          "Mezclar todos los ingredientes hasta homogeneidad.",
+          "Dejar reposar 12 horas tapado.",
+          "Ideal para decorar tartas sin que se humedezcan."
+        ]
+      },
+      {
+        "id": "VARIOS 223",
+        "nombre": "Coulis de Manzana",
+        "categoria": "Rellenos & Coberturas",
+        "ingredientes": [
+          { "nombre": "Manzanas", "cantidad": 500, "unidad": "gr" },
+          { "nombre": "Agua", "cantidad": 375, "unidad": "gr" },
+          { "nombre": "Azúcar", "cantidad": 75, "unidad": "gr" },
+          { "nombre": "Zumo de limón", "cantidad": 1, "unidad": "unidad" },
+          { "nombre": "Vainilla", "cantidad": 0.25, "unidad": "vaina" }
+        ],
+        "elaboracion": [
+          "Cocer manzanas con resto de ingredientes.",
+          "Triturar, colar y ajustar espesor."
+        ]
+      },
+      {
+        "id": "VARIOS 224",
+        "nombre": "Coulis de Kiwi",
+        "categoria": "Rellenos & Coberturas",
+        "ingredientes": [
+          { "nombre": "Kiwi", "cantidad": 500, "unidad": "gr" },
+          { "nombre": "Azúcar", "cantidad": 150, "unidad": "gr" },
+          { "nombre": "Agua", "cantidad": 100, "unidad": "ml" }
+        ],
+        "elaboracion": [
+          "Pelar y triturar kiwi.",
+          "Añadir azúcar y agua.",
+          "Cocer ligeramente y colar."
+        ]
+      },
+      {
+        "id": "VARIOS 216",
+        "nombre": "Baño de Cobertura",
+        "categoria": "Decoración & Acabados",
+        "ingredientes": [
+          { "nombre": "Cobertura negra", "cantidad": 1000, "unidad": "gr" },
+          { "nombre": "Mantequilla", "cantidad": 1000, "unidad": "gr" },
+          { "nombre": "Glucosa", "cantidad": 2, "unidad": "cda" }
+        ],
+        "elaboracion": [
+          "Derretir cobertura con mantequilla y glucosa.",
+          "Usar como baño para tartas y bombones."
+        ]
+      },
+      // === DECORACIÓN & ACABADOS ===
+      {
+        "id": "VARIOS 225",
+        "nombre": "Merengue Italiano",
+        "categoria": "Decoración & Acabados",
+        "ingredientes": [
+          { "nombre": "Claras de huevo", "cantidad": 100, "unidad": "gr" },
+          { "nombre": "Azúcar", "cantidad": 200, "unidad": "gr" },
+          { "nombre": "Agua", "cantidad": 50, "unidad": "ml" },
+          { "nombre": "Azúcar invertido", "cantidad": 10, "unidad": "gr" }
+        ],
+        "elaboracion": [
+          "Calentar azúcar, agua y azúcar invertido hasta 118°C.",
+          "Verter sobre claras batidas a punto de nieve.",
+          "Seguir batiendo hasta enfriar."
+        ]
+      },
+      {
+        "id": "VARIOS 226",
+        "nombre": "Salsa de Fresa",
+        "categoria": "Decoración & Acabados",
+        "ingredientes": [
+          { "nombre": "Fresas", "cantidad": 500, "unidad": "gr" },
+          { "nombre": "Azúcar", "cantidad": 150, "unidad": "gr" },
+          { "nombre": "Agua", "cantidad": 100, "unidad": "ml" },
+          { "nombre": "Glucosa", "cantidad": 50, "unidad": "gr" },
+          { "nombre": "Limón", "cantidad": 1, "unidad": "unidad" }
+        ],
+        "elaboracion": [
+          "Cocer fresas con azúcar, agua, glucosa y limón.",
+          "Triturar y colar."
+        ]
+      },
+      {
+        "id": "VARIOS 227",
+        "nombre": "Salsa de Módena",
+        "categoria": "Decoración & Acabados",
+        "ingredientes": [
+          { "nombre": "Vinagre de módena", "cantidad": 200, "unidad": "gr" },
+          { "nombre": "Azúcar", "cantidad": 400, "unidad": "gr" },
+          { "nombre": "Zumo de limón", "cantidad": 1, "unidad": "chorro" },
+          { "nombre": "Agua", "cantidad": 1, "unidad": "chorro" }
+        ],
+        "elaboracion": [
+          "Reducir vinagre. Hacer caramelo rubio con azúcar.",
+          "Mezclar ambas elaboraciones. Debe quedar meloso."
+        ]
+      },
+      // === NUEVAS RECETAS ADICIONALES PARA COMPLETAR 73 ===
+      {
+        "id": "VARIOS 174",
+        "nombre": "Trufa con Leche",
+        "categoria": "Dulces & Confites",
+        "ingredientes": [
+          { "nombre": "Nata", "cantidad": 300, "unidad": "gr" },
+          { "nombre": "Cobertura blanca", "cantidad": 500, "unidad": "gr" },
+          { "nombre": "Leche condensada", "cantidad": 100, "unidad": "gr" }
+        ],
+        "elaboracion": [
+          "Calentar nata, añadir cobertura blanca y leche condensada.",
+          "Dejar enfriar, hacer bolas y rodar en cacao."
+        ]
+      },
+      {
+        "id": "VARIOS 197",
+        "nombre": "Marquesas",
+        "categoria": "Bizcochos, Magdalenas & Muffins",
+        "ingredientes": [
+          { "nombre": "Huevos", "cantidad": 6, "unidad": "unidades" },
+          { "nombre": "Azúcar", "cantidad": 150, "unidad": "gr" },
+          { "nombre": "Harina", "cantidad": 150, "unidad": "gr" },
+          { "nombre": "Mantequilla", "cantidad": 50, "unidad": "gr" }
+        ],
+        "elaboracion": [
+          "Batir huevos con azúcar hasta triplicar volumen.",
+          "Incorporar harina y mantequilla derretida con cuidado.",
+          "Hornear a 180°C durante 25 minutos."
+        ],
+        "temperatura": 180,
+        "tiempo": 25
+      },
+      {
+        "id": "VARIOS 171",
+        "nombre": "San Honore",
+        "categoria": "Tartas Premium",
+        "ingredientes": [
+          { "nombre": "Pasta choux", "cantidad": 1, "unidad": "masa" },
+          { "nombre": "Pasta sable", "cantidad": 1, "unidad": "masa" },
+          { "nombre": "Crema San Honore", "cantidad": 500, "unidad": "gr" },
+          { "nombre": "Caramelo", "cantidad": 100, "unidad": "gr" }
+        ],
+        "elaboracion": [
+          "Elaborar profiteroles con pasta choux.",
+          "Montar base con pasta sable.",
+          "Rellenar con crema, colocar profiteroles y abrillantar con caramelo."
+        ]
+      },
+      {
+        "id": "VARIOS 122",
+        "nombre": "Tarta de Frambuesas",
+        "categoria": "Tartas del Ayer",
+        "ingredientes": [
+          { "nombre": "Base de galleta", "cantidad": 1, "unidad": "unidad" },
+          { "nombre": "Crema pastelera", "cantidad": 300, "unidad": "gr" },
+          { "nombre": "Frambuesas", "cantidad": 400, "unidad": "gr" },
+          { "nombre": "Gelatina de frambuesa", "cantidad": 1, "unidad": "sobre" }
+        ],
+        "elaboracion": [
+          "Rellenar base con crema pastelera.",
+          "Colocar frambuesas encima.",
+          "Abrillantar con gelatina."
+        ]
+      },
+      {
+        "id": "VARIOS 129",
+        "nombre": "Tarta de Queso (2ª Forma)",
+        "categoria": "Tartas del Ayer",
+        "ingredientes": [
+          { "nombre": "Queso crema", "cantidad": 500, "unidad": "gr" },
+          { "nombre": "Azúcar", "cantidad": 150, "unidad": "gr" },
+          { "nombre": "Huevos", "cantidad": 4, "unidad": "unidades" },
+          { "nombre": "Galletas", "cantidad": 200, "unidad": "gr" },
+          { "nombre": "Mantequilla", "cantidad": 100, "unidad": "gr" },
+          { "nombre": "Coulis de fruta", "cantidad": 200, "unidad": "gr" }
+        ],
+        "elaboracion": [
+          "Base con galletas y mantequilla.",
+          "Mezclar queso, azúcar y huevos.",
+          "Verter sobre base y hornear al baño María.",
+          "Desmoldar y cubrir con coulis."
+        ],
+        "temperatura": 160,
+        "tiempo": 50
+      },
+      {
+        "id": "VARIOS 46",
+        "nombre": "Nata Montada",
+        "categoria": "Rellenos & Coberturas",
+        "ingredientes": [
+          { "nombre": "Nata líquida", "cantidad": 1000, "unidad": "ml" },
+          { "nombre": "Azúcar", "cantidad": 125, "unidad": "gr" }
+        ],
+        "elaboracion": [
+          "Batir nata fría con azúcar hasta punto firme."
+        ]
+      },
+      {
+        "id": "VARIOS 45",
+        "nombre": "Merengue Rápido",
+        "categoria": "Decoración & Acabados",
+        "ingredientes": [
+          { "nombre": "Claritas", "cantidad": 400, "unidad": "gr" },
+          { "nombre": "Azúcar", "cantidad": 600, "unidad": "gr" }
+        ],
+        "elaboracion": [
+          "Mezclar y calentar al baño María hasta disolver azúcar.",
+          "Batir hasta enfriar y tener cuerpo firme."
+        ]
+      }
+    ];
+
+
+
+    let favoritos = JSON.parse(localStorage.getItem('favoritos') || "[]");
+    let notas = JSON.parse(localStorage.getItem('notas') || "{}");
+    let recetaActual = null;
+    let historial = [];
+    let fuente = 1.17;
+    let notasAmpliada = false;
+    let temporizador = {active:false, time:0, timer:null, pitido:false, recetaId:null, originalTime:0};
+
+    function clearViews() {
+      document.querySelectorAll('.view, .modal').forEach(v => v.remove());
+      document.getElementById('pantalla-principal').style.display='none';
+    }
+    function showPrincipal() {
+      clearViews();
+      document.getElementById('pantalla-principal').style.display='flex';
+      historial=[];
+    }
+    function setView(view, data={}) {
+      clearViews();
+      historial.push({view, data});
+      const main = document.body;
+      let v = document.createElement('div');
+      v.className = 'view';
+      let html = "";
+      if(view==='menu') {
+        html = `<button class="view-back" onclick="goBack()">← Atrás</button>
+          <div class="view-title">Menú</div>
+          <div class="section" style="display:flex;flex-direction:column;gap:18px;">
+            <button class="main-btn" onclick="setView('categorias')">Categorías</button>
+            <button class="main-btn" onclick="setView('favoritos')">Recetas estrella</button>
+            <button class="main-btn" onclick="setView('ultima')">Última receta</button>
+          </div>`;
+      }
+      if(view==='categorias') {
+        html = `<button class="view-back" onclick="goBack()">← Atrás</button>
+          <div class="view-title">Categorías</div>
+          <div class="section">${[...new Set(recetas.map(r=>r.categoria))].map(c=>
+            `<button class="main-btn" onclick="setView('recetas',{categoria:'${c}'})">${c}</button>`).join('')}</div>`;
+      }
+      if(view==='recetas') {
+        html = `<button class="view-back" onclick="goBack()">← Atrás</button>
+          <div class="view-title">${data.categoria}</div>
+          <div class="section">${recetas.filter(r=>r.categoria===data.categoria).map(r=>
+            `<button class="main-btn" onclick="setView('receta',{id:'${r.id}'})">${r.nombre}</button>`).join('')}</div>`;
+      }
+      if(view==='receta') {
+        recetaActual = recetas.find(r=>r.id===data.id);
+        if(!recetaActual) { v.innerHTML = "<h2>Receta no encontrada</h2>"; main.appendChild(v); return;}
+        let personas = recetaActual.porciones || 4;
+        html = `<button class="view-back" onclick="goBack()">← Atrás</button>
+          <div class="view-title">${recetaActual.nombre}
+          <button class="favorito-btn ${favoritos.includes(recetaActual.id)?'fav':''}" style="margin-left:18px;" onclick="toggleFavorito('${recetaActual.id}')">${favoritos.includes(recetaActual.id)?'★':'☆'}</button></div>
+          <div class="calc-row">
+            <span class="calc-label">Porciones:</span>
+            <input type="number" min="1" max="32" value="${personas}" id="calc-input" class="calc-input" onchange="actualizaPorciones('${recetaActual.id}')"/>
+          </div>
+          <div class="section" style="margin-bottom:1em;"><b>Categoría:</b> ${recetaActual.categoria}</div>
+          <div class="ingredientes-lista"><b>Ingredientes:</b>
+            <ul id="ingredientes-list">${recetaActual.ingredientes.map(i=>{
+              let por = personas/(recetaActual.porciones||4);
+              let cantidad = Math.round(i.cantidad*por*100)/100;
+              return `<li>${i.nombre} <b>(${cantidad} ${i.unidad||''})</b></li>`;
+            }).join('')}</ul>
+          </div>
+          <div class="elaboracion-lista"><b>Elaboración:</b>
+            <ol>${recetaActual.elaboracion.map(e=>`<li>${e}</li>`).join('')}</ol>
+          </div>
+          <div id="temporizador-panel" class="temporizador-panel"></div>
+          <div style="margin:1em 0;">
+            <button class="main-btn" onclick="compartirReceta('${recetaActual.id}')">Compartir</button>
+            <button class="main-btn" onclick="setView('notas',{id:'${recetaActual.id}'})">Notas personales</button>
+          </div>`;
+        temporizador.time = recetaActual.tiempo ? recetaActual.tiempo*60 : 0;
+        temporizador.originalTime = temporizador.time;
+        temporizador.recetaId = recetaActual.id;
+        updateTemporizadorPanel();
+      }
+      if(view==='favoritos') {
+        html = `<button class="view-back" onclick="goBack()">← Atrás</button>
+          <div class="view-title">Recetas estrella</div>
+          <div class="fav-lista">${recetas.filter(r=>favoritos.includes(r.id)).map(r=>
+            `<button class="main-btn" onclick="setView('receta',{id:'${r.id}'})">${r.nombre}</button>`).join('') || '<div>No tienes recetas favoritas.</div>'}</div>`;
+      }
+      if(view==='ultima') {
+        let lastId = historial.findLast(h => h.view==='receta')?.data?.id;
+        if(lastId) { setView('receta',{id:lastId}); return;}
+        else html = `<button class="view-back" onclick="goBack()">← Atrás</button>
+          <div class="view-title">Última receta</div><div>No hay última receta.</div>`;
+      }
+      if(view==='notas') {
+        let nota = notas[data.id] || "";
+        html = `<button class="view-back" onclick="goBack()">← Atrás</button>
+          <div class="view-title">Notas personales</div>
+          <textarea id="nota-txt" style="width:96vw;min-height:${notasAmpliada? '300px' : '130px'};border-radius:15px;font-size:${fuente}em;">${nota}</textarea>
+          <div class="notas-toolbar">
+            <button class="notas-btn" onclick="ampliarNota()">Ampliar</button>
+            <button class="notas-btn" onclick="guardarNota('${data.id}')">Guardar</button>
+            <button class="notas-btn" onclick="compartirNota('${data.id}')">Compartir</button>
+            <button class="notas-btn" onclick="goBack()">Atrás</button>
+          </div>`;
+      }
+      if(view==='notas-ampliada') {
+        let nota = notas[data.id] || "";
+        html = `<button class="view-back" onclick="goBackNotas()">← Atrás</button>
+          <div class="view-title">Notas personales (Ampliado)</div>
+          <textarea id="nota-txt" class="notas-ampliada" style="font-size:${fuente}em;">${nota}</textarea>
+          <div class="notas-toolbar">
+            <button class="notas-btn" onclick="guardarNota('${data.id}')">Guardar</button>
+            <button class="notas-btn" onclick="compartirNota('${data.id}')">Compartir</button>
+            <button class="notas-btn" onclick="goBackNotas()">Atrás</button>
+          </div>`;
+      }
+      if(view==='busqueda') {
+        html = `<button class="view-back" onclick="goBack()">← Atrás</button>
+          <div class="view-title">Resultados de búsqueda</div>
+          <div class="section">${data.result.map(r=>
+            `<button class="main-btn" onclick="setView('receta',{id:'${r.id}'})">${r.nombre}</button>`).join('') || '<div>No hay resultados.</div>'}</div>`;
+      }
+      if(view==='filtros') {
+        showModalBuscadorInteligente();
+        return;
+      }
+      v.innerHTML = html;
+      document.body.appendChild(v);
+    }
+    function goBack() {
+      clearViews();
+      historial.pop();
+      if(historial.length) {
+        let {view,data} = historial.pop();
+        setView(view,data);
+      } else {
+        showPrincipal();
+      }
+    }
+    function goBackNotas() {
+      notasAmpliada = false;
+      setView('notas',{id: recetaActual?.id || Object.keys(notas)[0]});
+    }
+    function ampliarNota() {
+      notasAmpliada = true;
+      setView('notas-ampliada',{id: recetaActual?.id || Object.keys(notas)[0]});
+    }
+    function toggleFavorito(id) {
+      if (favoritos.includes(id)) {
+        favoritos = favoritos.filter(f => f !== id);
+      } else {
+        favoritos.push(id);
+      }
+      localStorage.setItem('favoritos', JSON.stringify(favoritos));
+      setView('receta',{id});
+    }
+    function compartirReceta(id) {
+      const receta = recetas.find(r=>r.id===id);
+      if(!receta) return;
+      const txt = `Receta: ${receta.nombre}\nCategoría: ${receta.categoria}\nIngredientes:\n`+
+        receta.ingredientes?.map(i=>`${i.nombre}: ${i.cantidad} ${i.unidad||''}`).join('\n')+"\n"+
+        'Elaboración:\n'+receta.elaboracion?.map((e,i)=>`${i+1}. ${e}`).join('\n');
+      if (navigator.share){
+        navigator.share({title:receta.nombre,text:txt});
+      } else {
+        alert('Tu dispositivo no soporta compartir nativo. Copiando texto al portapapeles.');
+        navigator.clipboard.writeText(txt);
+      }
+    }
+    function compartirNota(id){
+      const txt = notas[id]||"";
+      if (navigator.share){
+        navigator.share({title:'Nota de receta',text:txt});
+      } else {
+        alert('Tu dispositivo no soporta compartir nativo. Copiando texto al portapapeles.');
+        navigator.clipboard.writeText(txt);
+      }
+    }
+    function guardarNota(id){
+      notas[id] = document.getElementById('nota-txt').value;
+      localStorage.setItem('notas', JSON.stringify(notas));
+      alert('Nota guardada');
+      goBack();
+    }
+    function actualizaPorciones(id) {
+      let val = parseInt(document.getElementById('calc-input').value) || 1;
+      let receta = recetas.find(r=>r.id===id);
+      let ul = document.getElementById('ingredientes-list');
+      if(receta && ul) {
+        ul.innerHTML = receta.ingredientes.map(i=>{
+          let por = val/(receta.porciones||4);
+          let cantidad = Math.round(i.cantidad*por*100)/100;
+          return `<li>${i.nombre} <b>(${cantidad} ${i.unidad||''})</b></li>`;
+        }).join('');
+      }
+    }
+    function updateTemporizadorPanel() {
+      let el = document.getElementById('temporizador-panel');
+      if(!el) return;
+      el.innerHTML = `
+        <div class="temporizador-time">${formatTime(temporizador.time)}</div>
+        <div class="temporizador-btns">
+          <button class="temporizador-btn" onclick="startTemporizador()">Iniciar</button>
+          <button class="temporizador-btn" onclick="pauseTemporizador()">Pausar</button>
+          <button class="temporizador-btn" onclick="resetTemporizador()">Reset</button>
+          <button class="temporizador-btn" onclick="modificarTemporizador()">Modificar</button>
+          ${temporizador.pitido ? `<button class="temporizador-btn" onclick="detenerPitido()">Detener pitido</button>` : ""}
+        </div>
+      `;
+    }
+    function formatTime(seg) {
+      let m = Math.floor(seg/60), s = seg%60;
+      return `${m<10?'0':''}${m}:${s<10?'0':''}${s}`;
+    }
+    function startTemporizador() {
+      if(!temporizador.active && temporizador.time > 0) {
+        temporizador.active = true;
+        temporizador.timer = setInterval(()=>{
+          temporizador.time--;
+          updateTemporizadorPanel();
+          if(temporizador.time<=0 && temporizador.active) {
+            temporizador.active = false;
+            temporizador.pitido = true;
+            pitidoContinuo();
+            updateTemporizadorPanel();
+          }
+        },1000);
+      }
+    }
+    function pauseTemporizador() {
+      temporizador.active = false;
+      clearInterval(temporizador.timer);
+      updateTemporizadorPanel();
+    }
+    function resetTemporizador() {
+      temporizador.active = false;
+      clearInterval(temporizador.timer);
+      temporizador.time = temporizador.originalTime;
+      updateTemporizadorPanel();
+    }
+    function modificarTemporizador() {
+      let nuevo = prompt("Nuevo tiempo en minutos:", Math.ceil(temporizador.time/60));
+      if(nuevo && !isNaN(nuevo)) {
+        temporizador.time = parseInt(nuevo)*60;
+        temporizador.originalTime = temporizador.time;
+        updateTemporizadorPanel();
+      }
+    }
+    function pitidoContinuo(){
+      if (!temporizador.pitido) return;
+      try {
+        window._beepCtx = new (window.AudioContext || window.webkitAudioContext)();
+        window._beepOsc = window._beepCtx.createOscillator();
+        window._beepGain = window._beepCtx.createGain();
+        window._beepOsc.type = "sine";
+        window._beepOsc.frequency.value = 880;
+        window._beepGain.gain.value = 0.3;
+        window._beepOsc.connect(window._beepGain).connect(window._beepCtx.destination);
+        window._beepOsc.start();
+      } catch(e){}
+    }
+    function detenerPitido(){
+      temporizador.pitido = false;
+      try{
+        window._beepGain.gain.value = 0.0;
+        window._beepOsc.stop();
+        window._beepCtx.close();
+      }catch(e){}
+      updateTemporizadorPanel();
+    }
+    // ==== BUSCADOR ====
+    document.getElementById('buscador').oninput = function(e) {
+      let q = (e.target.value||"").toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,"");
+      if (!q) return;
+      let filtradas = recetas.filter(r =>
+        r.nombre.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,"").includes(q) ||
+        r.categoria.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,"").includes(q) ||
+        r.ingredientes?.some(i=>i.nombre.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,"").includes(q))
+      );
+      if(filtradas.length)
+        showModalBusqueda(filtradas);
+    };
+    function showModalBuscadorInteligente() {
+      clearViews();
+      let m = document.createElement('div');
+      m.className = "modal";
+      m.innerHTML = `<div class="modal-content">
+        <h3>Buscador Inteligente</h3>
+        <button class="modal-btn" onclick="filtroIngrediente()">Filtrar por Ingrediente</button>
+        <button class="modal-btn" onclick="filtroTiempo()">Filtrar por Tiempo</button>
+        <button class="modal-btn" onclick="filtroDificultad()">Filtrar por Dificultad</button>
+        <button class="modal-btn" onclick="setView('favoritos')">Favoritos</button>
+        <button class="modal-btn" onclick="closeModal();showPrincipal()">Cerrar</button>
+      </div>`;
+      document.body.appendChild(m);
+    }
+    function closeModal() {
+      document.querySelectorAll('.modal').forEach(m=>m.remove());
+    }
+    function showModalBusqueda(filtradas) {
+      closeModal();
+      let m = document.createElement('div');
+      m.className = "modal";
+      m.innerHTML = `<div class="modal-content" style="max-height:82vh;overflow-y:auto;">
+        <h3>Resultados de búsqueda</h3>
+        <div style="width:100%;display:flex;flex-wrap:wrap;gap:10px;justify-content:center;">
+          ${filtradas.map(r=>
+            `<button class="modal-btn" onclick="closeModal();setView('receta',{id:'${r.id}'})">${r.nombre}</button>`).join('') || '<div>No hay resultados.</div>'}
+        </div>
+        <button class="modal-btn" onclick="closeModal();showPrincipal()">Cerrar</button>
+      </div>`;
+      document.body.appendChild(m);
+    }
+    window.filtroIngrediente = function(){
+      closeModal();
+      let q = prompt("Filtrar por ingrediente:");
+      if(!q) return;
+      let filtradas = recetas.filter(r=>r.ingredientes && r.ingredientes.some(i => (i.nombre||"").toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,"").includes((q||"").toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,""))));
+      showModalBusqueda(filtradas);
+    }
+    window.filtroTiempo = function(){
+      closeModal();
+      let q = prompt("Filtrar por tiempo máximo (min):");
+      if(!q) return;
+      let filtradas = recetas.filter(r=>(r.tiempo||0) <= parseInt(q));
+      showModalBusqueda(filtradas);
+    }
+    window.filtroDificultad = function(){
+      closeModal();
+      let q = prompt("Filtrar por dificultad:");
+      if(!q) return;
+      let filtradas = recetas.filter(r=>(r.dificultad||"").toLowerCase().includes((q||"").toLowerCase()));
+      showModalBusqueda(filtradas);
+    }
+    // ==== BOTONES PRINCIPALES ====
+    document.getElementById('btn-modo').onclick = function() {
+      document.body.classList.toggle('modo-oscuro');
+    };
+    document.getElementById('btn-buscador-inteligente').onclick = () => setView('filtros');
+    document.getElementById('btn-menu').onclick = () => setView('menu');
+    document.getElementById('btn-estrella').onclick = () => setView('favoritos');
+    document.getElementById('btn-notas').onclick = () => {
+      let id = recetaActual?.id || Object.keys(notas)[0];
+      if(id) setView('notas',{id});
+    };
+    window.onload = function() {
+      showPrincipal();
+    };
+  </script>
+</body>
+</html>
+
+
+
   <link rel="icon" type="image/png" href="icon-192.png">
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
   <style>
@@ -1890,5 +3650,6 @@
   </script>
 </body>
 </html>
+
 
 
