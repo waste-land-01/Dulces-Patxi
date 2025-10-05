@@ -17,14 +17,16 @@
       --bienvenida-bold: #8B5A3E;
       --byyahya: #B8860B;
       --byyahya-bold: #5C3B28;
-      --categoria: #B8860B;
+      --categoria: #5C3B28;
       --categoria-bg: #f3e2d0;
       --cat-bold: #8B5A3E;
       --cat-text: #5C3B28;
-      --receta-list: #5C3B28;
+      --receta-list: #7D5D49;
       --receta-list-bg: #E9DCCF;
-      --receta-final: #D4AF37;
+      --receta-final: #8B5A3E;
       --receta-final-bg: #FFFBE5;
+      --receta-txt: #2E1A14;
+      --elaboracion-txt: #2E1A14;
       --hover: #E9DCCF;
       --borde: #D4C2B3;
       --btn-bg: #8B5A3E;
@@ -32,37 +34,41 @@
       --calc-bg: #e9dccf;
       --calc-bold: #8B5A3E;
       --input-bg: #fff;
+      --font-main: 'Segoe UI', 'Arial', sans-serif;
     }
     .modo-oscuro {
-      --fondo: #18100b;
-      --texto: #F5E9D9;
-      --titulo: #FFD700;
+      --fondo: #20150F;
+      --texto: #E9DCCF;
+      --titulo: #C7B299;
       --titulo-shadow: #5C3B28;
-      --bienvenida: #FFD700;
-      --bienvenida-bold: #FFD700;
-      --byyahya: #FFD700;
-      --byyahya-bold: #B8860B;
-      --categoria: #FFD700;
-      --categoria-bg: #2A241F;
-      --cat-bold: #FFD700;
-      --cat-text: #FFD700;
-      --receta-list: #B8860B;
-      --receta-list-bg: #3A2F28;
-      --receta-final: #FFD700;
-      --receta-final-bg: #241d10;
-      --hover: #3A2F28;
-      --borde: #4A3A2F;
-      --btn-bg: #5C3B28;
-      --btn-text: #FFD700;
-      --calc-bg: #3A2F28;
-      --calc-bold: #FFD700;
-      --input-bg: #2A241F;
+      --bienvenida: #E9DCCF;
+      --bienvenida-bold: #B8860B;
+      --byyahya: #C47E43;
+      --byyahya-bold: #C7B299;
+      --categoria: #C7B299;
+      --categoria-bg: #392A1F;
+      --cat-bold: #C47E43;
+      --cat-text: #C7B299;
+      --receta-list: #C7B299;
+      --receta-list-bg: #2D2119;
+      --receta-final: #C47E43;
+      --receta-final-bg: #392A1F;
+      --receta-txt: #E9DCCF;
+      --elaboracion-txt: #FFD6B0;
+      --hover: #4C3322;
+      --borde: #C47E43;
+      --btn-bg: #312015;
+      --btn-text: #FFD6B0;
+      --calc-bg: #2D2119;
+      --calc-bold: #FFD6B0;
+      --input-bg: #392A1F;
+      --font-main: 'Segoe UI', 'Arial', sans-serif;
     }
     body {
       background-color: var(--fondo);
       color: var(--texto);
       transition: background-color 0.3s, color 0.3s;
-      font-family: 'Segoe UI', sans-serif;
+      font-family: var(--font-main);
     }
     header {
       background: var(--fondo);
@@ -70,47 +76,59 @@
       position: sticky;
       top: 0;
       z-index: 100;
-      padding: 12px 0 0 0;
+      padding: 16px 0 0 0;
       text-align: center;
+      border-bottom: 1.5px solid var(--borde);
     }
     .titulo-app {
       font-size: 2.2em;
-      font-family: 'Segoe UI', sans-serif;
+      font-family: var(--font-main);
       font-weight: 900;
       color: var(--titulo);
       text-shadow: 0 1px 0 var(--titulo-shadow), 0 2px 12px #00000022;
+      margin-bottom: 2px;
       letter-spacing: 0.04em;
-      margin-bottom: 4px;
+      border-radius: 6px;
+      padding: 2px 16px;
+      border-bottom: 2.5px solid var(--cat-bold);
+      display: inline-block;
     }
     .bienvenida {
-      font-size: 1.25em;
-      font-family: 'Segoe UI', sans-serif;
+      font-size: 1.15em;
+      font-family: var(--font-main);
       font-weight: 700;
       color: var(--bienvenida);
-      text-shadow: 0 2px 8px var(--bienvenida-bold);
-      margin-bottom: 6px;
+      text-shadow: 0 1px 6px var(--bienvenida-bold);
+      margin-bottom: 4px;
       letter-spacing: 0.01em;
+      border-radius: 6px;
+      padding: 2px 14px;
+      display: inline-block;
     }
     .by-yahya {
-      font-size: 1.1em;
+      font-size: 1em;
       font-weight: bold;
       color: var(--byyahya);
       text-shadow: 0 2px 8px var(--byyahya-bold);
       margin-bottom: 7px;
-      letter-spacing: 0.09em;
+      letter-spacing: 0.08em;
+      border-radius: 6px;
+      padding: 2px 11px;
+      display: inline-block;
     }
     #buscador {
       width: 80%;
       margin: 10px auto 12px auto;
       display: block;
       padding: 10px;
-      border: 1px solid var(--borde);
+      border: 1.5px solid var(--borde);
       border-radius: 8px;
-      font-size: 1.07em;
+      font-size: 1.09em;
       background: var(--input-bg);
       color: var(--texto);
       box-shadow: 0 0 4px #0002;
       transition: background 0.2s, color 0.2s;
+      font-family: var(--font-main);
     }
     .toolbar {
       display: flex;
@@ -123,13 +141,14 @@
       flex: 1;
       min-width: 90px;
       padding: 10px;
-      border: 1px solid var(--borde);
+      border: 1.5px solid var(--borde);
       border-radius: 8px;
       font-weight: 700;
       cursor: pointer;
-      font-size: 1.1em;
+      font-size: 1.11em;
       box-shadow: 0 2px 8px #00000014;
-      transition: background 0.2s, color 0.2s;
+      transition: background 0.2s, color 0.2s, border 0.2s;
+      font-family: var(--font-main);
     }
     .btn-menu {
       background: var(--btn-bg);
@@ -140,20 +159,21 @@
     .btn-atras, .btn-oscuro, .btn-ultima-receta {
       background: #f0f0f0;
       color: var(--categoria);
+      border-color: var(--cat-bold);
     }
     .modo-oscuro .btn-atras, .modo-oscuro .btn-oscuro, .modo-oscuro .btn-ultima-receta {
-      background: #3A2F28;
-      color: #FFD700;
-      border: 1px solid #FFD700;
+      background: #312015;
+      color: #FFD6B0;
+      border: 1.5px solid #C47E43;
     }
     .main-content {
-      padding: 20px 16px;
+      padding: 20px 16px 0 16px;
       min-height: 40vh;
       max-width: 700px;
       margin: 0 auto;
     }
     .categoria-nombre {
-      font-size: 1.35em;
+      font-size: 1.3em;
       font-weight: 900;
       color: var(--categoria);
       background: var(--categoria-bg);
@@ -163,7 +183,7 @@
       letter-spacing: 0.04em;
       box-shadow: 0 2px 10px #00000010;
       display: inline-block;
-      border: 2px solid var(--cat-bold);
+      border: 2.5px solid var(--cat-bold);
     }
     .modo-oscuro .categoria-nombre {
       color: var(--categoria);
@@ -173,24 +193,25 @@
     .recetas-lista {
       background: var(--receta-list-bg);
       border-radius: 10px;
-      margin-bottom: 20px;
-      padding: 8px 12px;
+      margin-bottom: 18px;
+      padding: 10px 14px;
       box-shadow: 0 1px 9px #00000012;
-      border: 1.5px solid var(--cat-bold);
+      border: 2px solid var(--cat-bold);
     }
     .recetas-lista ul {
-      margin: 0 0 0 16px;
+      margin: 0 0 0 12px;
       padding: 0;
     }
     .recetas-lista li {
       color: var(--receta-list);
       font-weight: 700;
-      font-size: 1.17em;
+      font-size: 1.16em;
       margin: 7px 0;
       cursor: pointer;
       transition: color 0.18s, background 0.18s;
       border-radius: 5px;
       padding: 2px 8px;
+      font-family: var(--font-main);
     }
     .recetas-lista li:hover {
       background: var(--hover);
@@ -204,7 +225,7 @@
       color: var(--receta-list);
     }
     .receta-nombre {
-      font-size: 1.5em;
+      font-size: 1.46em;
       font-weight: 900;
       color: var(--receta-final);
       background: var(--receta-final-bg);
@@ -214,7 +235,7 @@
       letter-spacing: 0.04em;
       box-shadow: 0 2px 10px #00000011;
       display: inline-block;
-      border: 2px solid var(--receta-final);
+      border: 2.5px solid var(--receta-final);
     }
     .modo-oscuro .receta-nombre {
       color: var(--receta-final);
@@ -230,7 +251,7 @@
       margin: 9px 0 8px 0;
       padding: 6px 11px;
       display: inline-block;
-      border: 2px solid var(--cat-bold);
+      border: 2.5px solid var(--cat-bold);
       box-shadow: 0 1px 8px #00000010;
     }
     .modo-oscuro .info-extra {
@@ -240,27 +261,29 @@
     }
     #panel-temporizadores {
       margin: 0 0 18px 0;
-      background: #5C3B28;
-      color: white;
+      background: #392A1F;
+      color: #FFD6B0;
       padding: 7px 10px;
       border-radius: 10px;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.13);
       z-index: 2000;
-      font-size: 1em;
+      font-size: 1.06em;
       display: none;
       max-width: 700px;
+      border: 2px solid var(--cat-bold);
     }
     .modo-oscuro #panel-temporizadores {
-      background: #3A2F28;
-      color: #FFD700;
+      background: #312015;
+      color: #FFD6B0;
+      border-color: #C47E43;
     }
     .panel-temporizador-item {
-      background: #fffbe5;
-      color: #5C3B28;
+      background: #FFD6B0;
+      color: #392A1F;
       padding: 7px 9px;
       margin: 4px 0;
       border-radius: 6px;
-      border: 1px solid #d4c2b3;
+      border: 1.5px solid #C47E43;
       display: flex;
       align-items: center;
       justify-content: space-between;
@@ -268,23 +291,23 @@
       gap: 8px;
     }
     .modo-oscuro .panel-temporizador-item {
-      background: #241d10;
-      color: #FFD700;
-      border: 1px solid #FFD700;
+      background: #C7B299;
+      color: #392A1F;
+      border: 1.5px solid #C47E43;
     }
     .panel-temporizador-btns button {
       margin-left: 6px;
       font-size: 0.97em;
       background: #8B5A3E;
-      color: #fff;
+      color: #FFD6B0;
       border: 0;
       border-radius: 4px;
       padding: 4px 7px;
       cursor: pointer;
     }
     .modo-oscuro .panel-temporizador-btns button {
-      background: #3A2F28;
-      color: #FFD700;
+      background: #312015;
+      color: #FFD6B0;
     }
     .controls {
       background: var(--calc-bg);
@@ -293,26 +316,27 @@
       box-shadow: 0 6px 20px rgba(0,0,0,0.12);
       margin: 20px auto;
       max-width: 500px;
-      border: 1px solid var(--borde);
+      border: 1.5px solid var(--borde);
       text-align: center;
       font-weight: bold;
       color: var(--calc-bold);
+      font-family: var(--font-main);
       margin-bottom: 20px;
     }
     .modo-oscuro .controls {
       background: var(--calc-bg);
-      border: 1px solid #FFD700;
-      color: #FFD700;
+      border: 1.5px solid #C47E43;
+      color: #FFD6B0;
     }
     .btn-temp-personalizado {
       margin-top: 20px;
       padding: 10px 15px;
-      background: #e9dccf;
-      color: #5d4037;
-      border: 1px solid #d4c2b3;
+      background: #FFD6B0;
+      color: #392A1F;
+      border: 1.5px solid #C47E43;
       border-radius: 8px;
       font-weight: 700;
-      font-size: 1.05em;
+      font-size: 1.06em;
       cursor: pointer;
       transition: background-color 0.2s;
       width: 100%;
@@ -320,40 +344,60 @@
       display: block;
       margin-left: auto;
       margin-right: auto;
+      box-shadow: 0 1px 8px #00000010;
+      font-family: var(--font-main);
     }
     .modo-oscuro .btn-temp-personalizado {
-      background: #3a322a;
-      color: #FFD700;
-      border: 1px solid #FFD700;
+      background: #FFD6B0;
+      color: #392A1F;
+      border: 1.5px solid #C47E43;
     }
     .btn-temp-personalizado:hover {
-      background: #d4c2b3;
+      background: #E9DCCF;
     }
     .modo-oscuro .btn-temp-personalizado:hover {
-      background: #4a423a;
+      background: #C7B299;
     }
     .btn-timer {
       margin-left: 8px;
       padding: 2px 6px;
       background: #8B5A3E;
-      color: white;
+      color: #FFD6B0;
       border: none;
       border-radius: 4px;
-      font-size: 1em;
+      font-size: 1.08em;
       cursor: pointer;
       font-weight: bold;
     }
     .modo-oscuro .btn-timer {
-      background: #5C3B28;
-      color: #FFD700;
+      background: #312015;
+      color: #FFD6B0;
     }
     select {
-      font-size: 1.08em;
+      font-size: 1.09em;
+      font-family: var(--font-main);
+    }
+    /* ---------- RECETA ---------- */
+    .ingredientes-lista {
+      font-size: 1.17em;
+      color: var(--receta-txt);
+    }
+    .modo-oscuro .ingredientes-lista {
+      color: var(--receta-txt);
+    }
+    .elaboracion-lista {
+      font-size: 1.13em;
+      color: var(--elaboracion-txt);
+      margin-bottom: 25px;
+    }
+    .modo-oscuro .elaboracion-lista {
+      color: var(--elaboracion-txt);
     }
     /* Responsive */
     @media (max-width: 600px) {
       .main-content, #panel-temporizadores { max-width: 98vw;}
       #buscador { width: 98vw;}
+      .titulo-app, .bienvenida, .by-yahya {font-size:1.15em;}
     }
   </style>
 </head>
@@ -391,7 +435,8 @@
     </label>
   </div>
   <button class="btn-temp-personalizado" id="btn-temp-personalizado">⏲️ Temporizador personalizado</button>
-  <script>
+
+ <script>
     // === DATOS DE LAS RECETAS ===
     const recetas = [
            // === TARTAS DEL AYER ===
@@ -1639,14 +1684,12 @@
 
 
 
-    // === VARIABLES DE ESTADO ===
     let historialNavegacion = [];
     let ultimaRecetaId = null;
     let temporizadores = [];
     let recetaActual = null; // Para calcular porciones
 
-    // =================== TEMPORIZADOR MULTIPLE Y PERSISTENTE ===================
-    // Carga temporizadores desde localStorage
+    // ====== TEMPORIZADOR MULTIPLE Y PERSISTENTE ======
     function cargarTemporizadores() {
       temporizadores = JSON.parse(localStorage.getItem("temporizadores") || "[]");
       temporizadores.forEach((t,idx) => {
@@ -1663,7 +1706,7 @@
         tiempoRestante:t.tiempoRestante,
         recetaId:t.recetaId,
         aviso:t.aviso,
-        fin:t.fin // fecha/hora fin absoluta (milisegundos)
+        fin:t.fin
       }));
       localStorage.setItem("temporizadores", JSON.stringify(toSave));
     }
@@ -1699,7 +1742,7 @@
     function crearTemporizador(minutos, recetaId) {
       const nombre = recetaId ? (recetas.find(r=>r.id===recetaId)?.nombre || "Temporizador") : "Temporizador";
       const seg = minutos * 60;
-      const fin = Date.now() + seg*1000; // Guardamos la hora absoluta de fin
+      const fin = Date.now() + seg*1000;
       const idx = temporizadores.length;
       temporizadores.push({
         id: Date.now() + "_" + Math.random().toString(36).slice(2),
@@ -1752,9 +1795,7 @@
     window.cancelarTemporizador = cancelarTemporizador;
     window.cerrarAvisoTemporizador = cerrarAvisoTemporizador;
 
-    // Sonido beep al acabar temporizador
     function playBeep() {
-      // Web Audio API
       try {
         const ctx = new (window.AudioContext || window.webkitAudioContext)();
         const o = ctx.createOscillator();
@@ -1768,7 +1809,7 @@
       } catch(e) {}
     }
 
-    // =================== NAVEGACIÓN ORDENADA ===================
+    // ====== NAVEGACIÓN ORDENADA ======
     function navegarA(pagina, id = null) {
       historialNavegacion.push({pagina, id});
       renderVista(pagina, id);
@@ -1789,7 +1830,7 @@
       if (ultimaRecetaId) navegarA('receta', ultimaRecetaId);
     };
 
-    // =================== RENDER DE VISTAS PRINCIPALES ===================
+    // ====== RENDER DE VISTAS PRINCIPALES ======
     function renderVista(pagina, id = null) {
       const main = document.getElementById('receta-detalle');
       let html = "";
@@ -1802,21 +1843,20 @@
           <div class="receta-nombre">${recetaActual.nombre}</div>
           <div class="info-extra">${recetaActual.categoria}</div>
           <button class="btn-timer" onclick="mostrarDesplegableTemporizador('${recetaActual.id}')">Temporizador de receta</button>
-          <div style="margin:10px 0 2px 0;"><b>Ingredientes:</b></div>
-          <ul>
+          <div style="margin:14px 0 6px 0;font-weight:900;font-size:1.1em;">Ingredientes:</div>
+          <ul class="ingredientes-lista">
             ${recetaActual.ingredientes?.map(i=>{
               let cantidad = i.cantidad * (personas/(recetaActual.porciones || 4 || 1));
               let textoCantidad = (Math.round(cantidad*100)/100) + " " + (i.unidad||"");
-              return `<li>${i.nombre} (${textoCantidad})</li>`;
+              return `<li>${i.nombre} <span style="color:var(--cat-bold);font-weight:900;">(${textoCantidad})</span></li>`;
             }).join('')}
           </ul>
-          <div style="margin:10px 0 2px 0;"><b>Elaboración:</b></div>
-          <ol>${recetaActual.elaboracion?.map(e=>`<li>${e}</li>`).join('')}</ol>
+          <div style="margin:14px 0 6px 0;font-weight:900;font-size:1.1em;">Elaboración:</div>
+          <ol class="elaboracion-lista">${recetaActual.elaboracion?.map(e=>`<li>${e}</li>`).join('')}</ol>
         `;
         main.innerHTML = html;
         mostrarPanelTemporizadores();
       } else if (pagina === 'recetas') {
-        // id es la categoría seleccionada
         const lista = recetas.filter(r => r.categoria === id);
         html += `<div class="categoria-nombre">${id}</div>
           <div class="recetas-lista"><ul>
@@ -1825,7 +1865,6 @@
         main.innerHTML = html;
         mostrarPanelTemporizadores();
       } else if (pagina === 'categorias') {
-        // lista de categorías
         const categorias = [...new Set(recetas.map(r=>r.categoria))];
         html += `<h2 style="color:var(--titulo);font-weight:900;">Categorías</h2>
           <div class="recetas-lista"><ul>
@@ -1841,7 +1880,7 @@
     }
     window.navegarA = navegarA;
 
-    // =================== MENU, BUSCADOR, PORCIONES ===================
+    // ====== MENU, BUSCADOR, PORCIONES ======
     document.querySelector('.btn-menu').onclick = function() {
       navegarA('categorias');
     };
@@ -1856,19 +1895,19 @@
       const main = document.getElementById('receta-detalle');
       main.innerHTML = `<h2 style="color:var(--titulo);font-weight:900;">Búsqueda</h2>
         <div class="recetas-lista"><ul>
-          ${filtradas.map(r=>`<li onclick="navegarA('receta','${r.id}')">${r.nombre} <span style="font-size:0.9em;color:gray;">(${r.categoria})</span></li>`).join('')}
+          ${filtradas.map(r=>`<li onclick="navegarA('receta','${r.id}')">${r.nombre} <span style="font-size:0.9em;color:var(--cat-bold);">(${r.categoria})</span></li>`).join('')}
         </ul></div>`;
     };
     document.getElementById('selector-personas').onchange = function() {
       if (recetaActual) renderVista('receta', recetaActual.id);
     };
 
-    // =================== MODO OSCURO ===================
+    // ====== MODO OSCURO ======
     document.querySelector('.btn-oscuro').onclick = function() {
       document.body.classList.toggle('modo-oscuro');
     };
 
-    // =================== TEMPORIZADOR PERSONALIZADO (DESPLEGABLE) ===================
+    // ====== TEMPORIZADOR PERSONALIZADO (DESPLEGABLE) ======
     function mostrarDesplegableTemporizador(recetaId) {
       let div = document.createElement('div');
       div.style.position = "fixed";
@@ -1883,11 +1922,11 @@
       div.style.borderRadius = "12px";
       div.innerHTML = `
         <div style="font-weight:900;font-size:1.2em;color:var(--cat-bold);margin-bottom:12px;">¿Cuántos minutos quieres para el temporizador?</div>
-        <select id="minutos-temp" style="font-size:1.2em;width:100%;margin-bottom:14px;">
+        <select id="minutos-temp" style="font-size:1.15em;width:100%;margin-bottom:14px;">
           ${Array.from({length:90}, (_,i) => `<option value="${i+1}">${i+1} minutos</option>`).join('')}
         </select>
         <button onclick="crearTempDesdeDesplegable('${recetaId}')"
-          style="width:100%;font-size:1.15em;padding:8px;background:var(--btn-bg);color:var(--btn-text);border-radius:8px;font-weight:900;margin-bottom:8px;">Crear temporizador</button>
+          style="width:100%;font-size:1.12em;padding:8px;background:var(--btn-bg);color:var(--btn-text);border-radius:8px;font-weight:900;margin-bottom:8px;">Crear temporizador</button>
         <button onclick="this.parentElement.remove()" style="width:100%;font-size:1em;padding:5px;background:#eee;color:var(--cat-bold);border-radius:8px;">Cancelar</button>
       `;
       document.body.appendChild(div);
@@ -1901,11 +1940,9 @@
     window.crearTempDesdeDesplegable = crearTempDesdeDesplegable;
 
     document.getElementById('btn-temp-personalizado').onclick = function() {
-      // Ventana emergente con desplegable de minutos
       mostrarDesplegableTemporizador(null);
     };
 
-    // =================== INICIO Y CARGA DE TEMPORIZADORES ===================
     window.onload = function() {
       cargarTemporizadores();
       navegarA('categorias');
