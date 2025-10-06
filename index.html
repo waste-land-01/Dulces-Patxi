@@ -1,81 +1,66 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Dulces Patxi</title>
-  <meta name="theme-color" content="#6c3b8e">
-  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet"/>
   <style>
-    html, body { height: 100%; margin: 0; }
-    body {
-      background: #f6f4ff;
-      color: #574b36;
-      font-family: 'Segoe UI','Arial',sans-serif;
-      display: flex; flex-direction: column;
-      align-items: center; justify-content: flex-start;
-      min-height: 100vh; font-size: 1.08em;
-      transition: background 0.3s,color 0.3s;
+    :root{
+      --fondo:#f6f4ff; --texto:#574b36; --primario:#6c3b8e; --accent:#f7b563;
+      --input-bg:#fff; --input-txt:#222; --shadow:0 8px 30px rgba(0,0,0,.12);
     }
-    .modo-oscuro { background:#181621!important; color:#ffe0a3!important; }
-    .pantalla, .view {
-      max-width:430px; width:100vw; min-height:100vh;
-      display:flex; flex-direction:column; align-items:center;
-      justify-content:flex-start; background:inherit; color:inherit;
-      padding:0 5vw; box-sizing:border-box; position:relative;
+    .modo-oscuro{
+      --fondo:#181621; --texto:#fffbe5; --primario:#b36f3c; --accent:#c47e43;
+      --input-bg:#292542; --input-txt:#fff;
     }
-    .titulo-app { text-align:center; font-size:2.5em; font-weight:900; margin-top:32px; margin-bottom:0.35em; color:#2d5b2f;}
-    .bienvenida { text-align:center; font-size:1.25em; margin-bottom:0.2em; color:#574b36; font-weight:700; white-space:pre-line;}
-    .by-yahya { text-align:center; font-size:1.15em; margin-bottom:32px; color:#2b7be4; font-weight:bold; text-shadow:0 1px 6px #b2d6ff; letter-spacing:0.09em;}
-    .modo-oscuro .titulo-app { color:#aee869;}
-    .modo-oscuro .bienvenida { color:#ffe0a3;}
-    .modo-oscuro .by-yahya { color:#69bfff; text-shadow:0 1px 6px #3777ff;}
-    .buscador-row {
-      width:100%; margin-bottom:32px; display:flex; align-items:center;
-      justify-content:center; gap:0.5em; position:relative;
-    }
-    #buscador {
-      width:100%; padding:15px 14px; border-radius:21px;
-      border:2px solid #7C4D9F; font-size:1.15em; background:#fff; color:#222;
-      box-shadow:0 4px 24px #0002; outline:none;
-    }
-    .modo-oscuro #buscador { background:#262241; color:#fff; border-color:#f7b563;}
-    .main-btn {
-      border:none; border-radius:21px; font-weight:900; font-size:1.2em;
-      width:100%; box-shadow:0 4px 24px #0002; cursor:pointer;
-      margin-bottom:20px; padding:20px 0; display:flex; align-items:center; justify-content:center;
-      transition:background 0.3s,color 0.3s;
-    }
-    #btn-modo { background:#3498db; color:#fff;}
-    #btn-buscador-inteligente { background:#f7b563; color:#fff;}
-    #btn-menu { background:#6c3b8e; color:#fff;}
-    #btn-estrella { background:#b36f3c; color:#fff;}
-    #btn-notas { background:#3cb36f; color:#fff;}
-    .view { position:fixed; top:0; left:0; width:100vw; background:inherit; color:inherit; overflow-y:auto; padding:32px 5vw; }
-    .view-back { margin-bottom:1em; font-size:1.1em; width:110px; background:#2d5b2f; color:#fff; border:none; border-radius:15px; padding:11px 0; font-weight:900; cursor:pointer;}
-    .modo-oscuro .view-back { background:#6c3b8e; }
-    .view-title { font-size:1.35em; font-weight:900; margin-bottom:1.2em; text-align:center; }
-    .temporizador-personal { margin-left:auto; background:#6c3b8e; color:#fff; border:none; border-radius:10px; padding:6px 10px; font-weight:700; }
-    .notas-footer { margin-top:25px; width:100%; text-align:center; }
-    .notas-footer button { background:#3cb36f; color:#fff; border:none; border-radius:14px; padding:14px 20px; font-size:1.05em; font-weight:900; cursor:pointer; }
+    html,body{height:100%;margin:0;background:var(--fondo);color:var(--texto);font-family:Inter,Segoe UI,Arial,sans-serif;-webkit-font-smoothing:antialiased}
+    .pantalla,.view{max-width:520px;margin:0 auto;width:100%;min-height:100vh;box-sizing:border-box;padding:22px 18px;display:flex;flex-direction:column;align-items:stretch;gap:12px}
+    .titulo{font-weight:900;font-size:1.9rem;text-align:center;margin-top:8px;color:var(--primario)}
+    .bienvenida{white-space:pre-line;text-align:center;font-weight:700}
+    .buscador-row{position:relative;margin:6px 0}
+    #buscador{width:100%;padding:12px 44px 12px 14px;border-radius:14px;border:2px solid rgba(0,0,0,.06);background:var(--input-bg);color:var(--input-txt);box-shadow:var(--shadow);font-weight:700}
+    .icon-search{position:absolute;right:14px;top:12px;color:rgba(0,0,0,.35)}
+    .btn{width:100%;padding:14px;border-radius:12px;border:0;font-weight:900;cursor:pointer;box-shadow:var(--shadow);font-size:1.03rem}
+    .btn-prim{background:var(--primario);color:#fff}
+    .btn-accent{background:var(--accent);color:#fff}
+    .btn-mode{background:#3498db;color:#fff}
+    .modal{position:fixed;inset:0;background:rgba(0,0,0,.28);display:flex;align-items:center;justify-content:center;z-index:12000}
+    .card{background:var(--input-bg);color:var(--input-txt);border-radius:12px;padding:16px;max-width:92vw;box-shadow:0 14px 44px rgba(0,0,0,.25)}
+    .card h3{margin:0 0 10px}
+    .modal-list{display:flex;flex-direction:column;gap:10px;margin:8px 0}
+    .view{position:fixed;inset:0;overflow:auto;background:var(--fondo);padding:24px 18px;z-index:11000}
+    .view-inner{max-width:520px;margin:0 auto}
+    .view-back{display:inline-block;margin-bottom:12px;background:var(--primario);color:#fff;padding:8px 12px;border-radius:10px;border:0;font-weight:900;cursor:pointer}
+    .view-title{font-weight:900;font-size:1.2rem;margin-bottom:8px;text-align:center}
+    .section-card{background:var(--input-bg);padding:12px;border-radius:10px;box-shadow:var(--shadow)}
+    .ingredientes-lista,.elaboracion-lista{padding:12px;border-radius:8px;box-shadow:var(--shadow);margin-bottom:10px}
+    .temporizador-row{display:flex;gap:8px;align-items:center;justify-content:flex-end}
+    .temporizador-dropdown{padding:6px 8px;border-radius:8px;border:1px solid rgba(0,0,0,.08);background:var(--input-bg);color:var(--input-txt)}
+    .temporizador-controls{display:flex;gap:8px;margin-top:10px;flex-wrap:wrap}
+    .notas-footer{margin-top:20px;text-align:center}
+    textarea{width:100%;min-height:260px;padding:10px;border-radius:10px;border:1px solid rgba(0,0,0,.06);resize:vertical}
+    @media (max-width:560px){ .titulo{font-size:1.5rem} .btn{font-size:0.98rem} }
   </style>
 </head>
 <body>
-  <div id="pantalla-principal" class="pantalla">
-    <div class="titulo-app">Dulces Patxi</div>
+  <div class="pantalla" id="pantalla-principal" aria-live="polite">
+    <div class="titulo">Dulces Patxi</div>
     <div class="bienvenida">
 Bienvenidos en Dulces de Bachir Krai
 By  Yahya
     </div>
+
     <div class="buscador-row">
-      <input id="buscador" type="text" placeholder="Buscar receta . . ." />
-      <i class="fas fa-search icon-search"></i>
+      <input id="buscador" placeholder="Buscar receta . . ." aria-label="Buscar receta" />
+      <span class="icon-search"><i class="fas fa-search"></i></span>
     </div>
-    <button id="btn-modo" class="main-btn">Modo</button>
-    <button id="btn-buscador-inteligente" class="main-btn">Buscador Inteligente</button>
-    <button id="btn-menu" class="main-btn">Menú</button>
-    <button id="btn-estrella" class="main-btn">Recetas estrella</button>
-    <button id="btn-notas" class="main-btn">Notas personales</button>
+
+    <button id="btn-modo" class="btn btn-mode">Modo</button>
+    <button id="btn-buscador-inteligente" class="btn btn-accent">Buscador inteligente</button>
+    <button id="btn-menu" class="btn btn-prim">Menú</button>
+    <button id="btn-favoritos" class="btn" style="background:#b36f3c;color:#fff">Recetas estrella</button>
+    <button id="btn-notas" class="btn" style="background:#3cb36f;color:#fff">Notas personales</button>
   </div>
 
   
@@ -1328,116 +1313,333 @@ By  Yahya
       }
     ];
 
-    let recetas = [];
-    let favoritos = [];
-    let notas = {};
-    let temporizadores = [];
 
-    // Función: limpiar vistas
-    function clearViews() {
-      document.querySelectorAll('.view').forEach(v=>v.remove());
-      document.getElementById('pantalla-principal').style.display='none';
+
+
+  // Estado global
+  let favoritos = JSON.parse(localStorage.getItem('favoritos')||"[]");
+  let notas = JSON.parse(localStorage.getItem('notas')||"{}");
+  let historial = [];          // stack de vistas {view,data}
+  let recetaActual = null;
+  let ultimaRecetaId = null;
+
+  // Temporizadores globales (soportan múltiples temporizadores)
+  // Cada temporizador: {id:uid, recetaId, label, time, remaining, active, interval}
+  let temporizadores = [];
+
+  // Utilidades
+  function escapeHtml(s){ if(s===null||s===undefined) return ""; return String(s).replace(/[&<>"']/g, c=>({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;' }[c])); }
+  function uid(prefix='t'){ return prefix + Math.random().toString(36).slice(2,9); }
+  function clearViews(){ document.querySelectorAll('.view').forEach(n=>n.remove()); document.getElementById('pantalla-principal').style.display='none'; }
+  function showPrincipal(){ clearViews(); document.getElementById('pantalla-principal').style.display='flex'; document.getElementById('buscador').value = ""; }
+  function pushHistory(view,data){ historial.push({view,data}); }
+  function popHistory(){ historial.pop(); return historial[historial.length-1] || null; }
+
+  // NAVEGACIÓN: setView
+  function setView(view, data={}, push=true){
+    if(push) pushHistory(view,data);
+    clearViews();
+    const container = document.createElement('div');
+    container.className = 'view';
+    const inner = document.createElement('div');
+    inner.className = 'view-inner';
+
+    const backBtnHtml = `<button class="view-back" onclick="handleBack()">← Atrás</button>`;
+
+    if(view === 'menu'){
+      inner.innerHTML = backBtnHtml + `<div class="view-title">Menú</div>
+        <div class="section-card">
+          <button class="btn btn-prim" onclick="setView('categorias')">Categorías</button>
+          <button class="btn" style="background:#b36f3c;color:#fff" onclick="setView('favoritos')">Recetas estrella</button>
+          <button class="btn btn-accent" onclick="openUltima()">Última receta</button>
+        </div>`;
     }
-    function showPrincipal() {
-      clearViews();
-      document.getElementById('pantalla-principal').style.display='flex';
-      document.getElementById('buscador').value = "";
+
+    else if(view === 'categorias'){
+      const cats = [...new Set(recetas.map(r=>r.categoria).filter(Boolean))];
+      inner.innerHTML = backBtnHtml + `<div class="view-title">Categorías</div>
+        <div class="section-card">${cats.length ? cats.map(c => `<button class="btn" onclick="setView('recetas',{categoria:'${escapeHtml(c)}'})">${escapeHtml(c)}</button>`).join('') : '<div>No hay categorías</div>'}</div>`;
     }
 
-    // Crear vista genérica
-    function setView(view, data={}) {
-      clearViews();
-      let v = document.createElement('div');
-      v.className = 'view';
+    else if(view === 'recetas'){
+      const cat = data.categoria || '';
+      const list = recetas.filter(r => r.categoria === cat);
+      inner.innerHTML = backBtnHtml + `<div class="view-title">${escapeHtml(cat)}</div>
+        <div class="section-card">${list.length ? list.map(r => `<button class="btn" onclick="setView('receta',{id:'${r.id}'})">${escapeHtml(r.nombre)}</button>`).join('') : '<div>No hay recetas en esta categoría</div>'}</div>`;
+    }
 
-      if(view==='menu'){
-        v.innerHTML = `
-          <button class="view-back" onclick="showPrincipal()">← Atrás</button>
-          <div class="view-title">Menú</div>
-          <button class="main-btn" onclick="setView('categorias')">Categorías</button>
-          <button class="main-btn" onclick="setView('favoritos')">Recetas estrella</button>
-          <button class="main-btn" onclick="setView('ultima')">Última receta</button>`;
-      }
+    else if(view === 'receta'){
+      recetaActual = recetas.find(r => r.id === data.id);
+      if(!recetaActual){
+        inner.innerHTML = backBtnHtml + `<div class="view-title">Receta no encontrada</div>`;
+      } else {
+        ultimaRecetaId = recetaActual.id;
 
-      if(view==='categorias'){
-        let cats = [...new Set(recetas.map(r=>r.categoria))];
-        v.innerHTML = `<button class="view-back" onclick="setView('menu')">← Atrás</button>
-          <div class="view-title">Categorías</div>
-          ${cats.map(c=>`<button class="main-btn" onclick="setView('recetas',{categoria:'${c}'})">${c}</button>`).join('')}`;
-      }
+        // Temporizador personalizado select (1..90) + control abrir panel de temporizadores
+        const tempSelectHtml = `<select id="personal-timer-select" class="temporizador-dropdown" aria-label="Temporizador personalizado">
+          <option value="">⏱ Personal</option>
+          ${Array.from({length:90},(_,i)=>`<option value="${i+1}">${i+1} min</option>`).join('')}
+        </select>
+        <button id="add-personal-timer" class="btn" style="width:auto;margin-left:8px">Añadir</button>`;
 
-      if(view==='recetas'){
-        v.innerHTML = `<button class="view-back" onclick="setView('categorias')">← Atrás</button>
-          <div class="view-title">${data.categoria}</div>
-          ${recetas.filter(r=>r.categoria===data.categoria).map(r=>`<button class="main-btn" onclick="setView('receta',{id:'${r.id}'})">${r.nombre}</button>`).join('')}`;
-      }
-
-      if(view==='receta'){
-        let r = recetas.find(rr=>rr.id===data.id);
-        if(!r){ v.innerHTML="<h2>Receta no encontrada</h2>"; document.body.appendChild(v); return;}
-        v.innerHTML = `
-          <div style="display:flex;align-items:center;gap:10px;width:100%;">
-            <button class="view-back" onclick="setView('recetas',{categoria:'${r.categoria}'})">← Atrás</button>
-            <select class="temporizador-personal" onchange="crearTemporizadorPersonalizado(this.value)">
-              <option value="">⏱ Personal</option>
-              ${Array.from({length:90},(_,i)=>`<option value="${i+1}">${i+1} min</option>`).join('')}
-            </select>
+        inner.innerHTML = backBtnHtml + `<div style="display:flex;align-items:center;gap:8px;justify-content:space-between;">
+            <div style="font-weight:900">${escapeHtml(recetaActual.nombre)}</div>
+            <div style="display:flex;align-items:center;">${tempSelectHtml}</div>
           </div>
-          <div class="view-title">${r.nombre}</div>
-          <div><b>Categoría:</b> ${r.categoria}</div>
-          <div><b>Ingredientes:</b><ul>${r.ingredientes.map(i=>`<li>${i.nombre} (${i.cantidad} ${i.unidad||''})</li>`).join('')}</ul></div>
-          <div><b>Elaboración:</b><ol>${r.elaboracion.map(e=>`<li>${e}</li>`).join('')}</ol></div>
-          <div class="notas-footer"><button onclick="setView('notas',{id:'${r.id}'})">Notas y observaciones</button></div>`;
-      }
+          <div style="margin-top:8px;"><strong>Categoría:</strong> ${escapeHtml(recetaActual.categoria||'')}</div>
+          <div class="ingredientes-lista"><strong>Ingredientes</strong><ul id="ingredientes-list">${renderIngredientes(recetaActual, recetaActual.porciones||4)}</ul></div>
+          <div class="elaboracion-lista"><strong>Elaboración</strong><ol>${(recetaActual.elaboracion||[]).map(p=>`<li>${escapeHtml(p)}</li>`).join('')}</ol></div>
 
-      if(view==='favoritos'){
-        v.innerHTML = `<button class="view-back" onclick="showPrincipal()">← Atrás</button>
-          <div class="view-title">Recetas estrella</div>`;
-      }
+          <div id="timers-panel" class="section-card" style="margin-top:8px">
+            <strong>Temporizadores activos</strong>
+            <div id="timers-list" style="margin-top:8px"></div>
+          </div>
 
-      if(view==='notas'){
-        let txt = notas[data.id]||"";
-        v.innerHTML = `<button class="view-back" onclick="setView('receta',{id:'${data.id}'})">← Atrás</button>
-          <div class="view-title">Notas y observaciones</div>
-          <textarea id="nota-txt" style="width:100%;min-height:300px;">${txt}</textarea>
-          <div style="margin-top:15px;">
-            <button onclick="guardarNota('${data.id}')">Guardar</button>
-            <button onclick="compartirNota('${data.id}')">Compartir</button>
-          </div>`;
-      }
+          <div style="margin-top:12px;display:flex;gap:8px">
+            <button class="btn btn-accent" onclick="setView('notas',{id:'${recetaActual.id}'})">Notas y observaciones</button>
+            <button class="btn" style="background:#2d5b2f;color:#fff" onclick="compartirReceta('${recetaActual.id}')">Compartir</button>
+          </div>
+        `;
 
-      document.body.appendChild(v);
+        // append then attach handlers
+        setTimeout(()=>{
+          document.getElementById('add-personal-timer').addEventListener('click', ()=>{
+            const val = document.getElementById('personal-timer-select').value;
+            if(!val) return alert('Selecciona minutos');
+            createTimerForRecipe(recetaActual.id, parseInt(val), `Personal ${val}m`);
+            document.getElementById('personal-timer-select').value = '';
+          });
+          // show timers if any
+          renderTimersPanel();
+        }, 0);
+      }
     }
 
-    // Notas
-    function guardarNota(id){ notas[id]=document.getElementById('nota-txt').value; alert("Nota guardada"); }
-    function compartirNota(id){ alert("Compartir nota: "+(notas[id]||"")); }
-
-    // Temporizadores personalizados
-    function crearTemporizadorPersonalizado(mins){
-      if(!mins) return;
-      let tiempo = parseInt(mins)*60;
-      let t = {time:tiempo, active:true, timer:setInterval(()=>{t.time--; if(t.time<=0){clearInterval(t.timer); alert("⏱ Temporizador terminado");}},1000)};
-      temporizadores.push(t);
-      alert("Temporizador iniciado: "+mins+" minutos");
+    else if(view === 'favoritos'){
+      const favs = recetas.filter(r => favoritos.includes(r.id));
+      inner.innerHTML = backBtnHtml + `<div class="view-title">Recetas estrella</div>
+        <div class="section-card">${favs.length ? favs.map(r => `<button class="btn" onclick="setView('receta',{id:'${r.id}'})">${escapeHtml(r.nombre)}</button>`).join('') : '<div>No tienes recetas marcadas como favoritas.</div>'}</div>`;
     }
 
-    // Buscador
-    document.getElementById('buscador').oninput = function(e){
-      let q = e.target.value.toLowerCase();
-      if(!q) return;
-      let res = recetas.filter(r=>r.nombre.toLowerCase().includes(q));
-      if(res.length){ setView('recetas',{categoria:res[0].categoria}); }
-    };
+    else if(view === 'notas'){
+      const id = data.id || Object.keys(notas)[0] || '';
+      const txt = notas[id] || '';
+      inner.innerHTML = backBtnHtml + `<div class="view-title">Notas y observaciones</div>
+        <textarea id="nota-txt">${escapeHtml(txt)}</textarea>
+        <div style="display:flex;gap:8px;margin-top:12px">
+          <button class="btn btn-accent" onclick="guardarNota('${id}')">Guardar</button>
+          <button class="btn" onclick="compartirNota('${id}')">Compartir</button>
+        </div>`;
+    }
 
-    // Eventos principales
-    document.getElementById('btn-modo').onclick=()=>document.body.classList.toggle('modo-oscuro');
-    document.getElementById('btn-menu').onclick=()=>setView('menu');
-    document.getElementById('btn-buscador-inteligente').onclick=()=>alert("Buscador Inteligente (mejorado)");
-    document.getElementById('btn-estrella').onclick=()=>setView('favoritos');
-    document.getElementById('btn-notas').onclick=()=>setView('notas',{id:'general'});
+    else {
+      inner.innerHTML = backBtnHtml + `<div class="view-title">${escapeHtml(view)}</div>`;
+    }
+
+    container.appendChild(inner);
+    document.body.appendChild(container);
+  }
+
+  // Manejo botón Atrás (historial)
+  function handleBack(){
+    popHistory();
+    const prev = historial[historial.length-1];
+    if(prev) setView(prev.view, prev.data, false);
+    else showPrincipal();
+  }
+
+  // Helpers ingredientes y renderizado
+  function renderIngredientes(rec, personas){
+    const por = personas / (rec.porciones || 4);
+    return (rec.ingredientes || []).map(i=>{
+      const cant = Math.round(((i.cantidad||0) * por) * 100)/100;
+      return `<li>${escapeHtml(i.nombre)} — ${cant} ${escapeHtml(i.unidad||'')}</li>`;
+    }).join('');
+  }
+
+  // Notas
+  function guardarNota(id){
+    if(!id) return alert('No hay receta seleccionada para asociar la nota.');
+    const val = document.getElementById('nota-txt')?.value || "";
+    notas[id] = val;
+    localStorage.setItem('notas', JSON.stringify(notas));
+    alert('Nota guardada');
+  }
+  function compartirNota(id){
+    const text = notas[id] || '';
+    if(navigator.share) navigator.share({title:'Nota', text});
+    else navigator.clipboard.writeText(text).then(()=> alert('Nota copiada al portapapeles'));
+  }
+
+  // Compartir receta
+  function compartirReceta(id){
+    const r = recetas.find(x=>x.id===id); if(!r) return;
+    const txt = `Receta: ${r.nombre}\nCategoría: ${r.categoria}\nIngredientes:\n${(r.ingredientes||[]).map(i=>`${i.nombre}: ${i.cantidad} ${i.unidad||''}`).join('\n')}\n\nElaboración:\n${(r.elaboracion||[]).map((p,i)=>`${i+1}. ${p}`).join('\n')}`;
+    if(navigator.share) navigator.share({title:r.nombre, text:txt});
+    else navigator.clipboard.writeText(txt).then(()=> alert('Receta copiada al portapapeles'));
+  }
+
+  // Temporizadores: crear, renderizar, gestionar múltiples temporizadores
+  function createTimerForRecipe(recId, minutes, label){
+    const id = uid('timer_');
+    const t = { id, recetaId:recId, label: label||`${minutes} min`, time: minutes*60, remaining: minutes*60, active:true, interval:null };
+    t.interval = setInterval(()=> {
+      t.remaining--;
+      if(t.remaining <= 0){
+        clearInterval(t.interval);
+        t.active = false;
+        renderTimersPanel();
+        try{ new AudioContext && beep(); }catch(e){}
+        alert(`Temporizador "${t.label}" finalizado`);
+      } else {
+        renderTimersPanel();
+      }
+    }, 1000);
+    temporizadores.push(t);
+    renderTimersPanel();
+  }
+
+  function pauseTimer(id){
+    const t = temporizadores.find(x=>x.id===id);
+    if(!t) return;
+    if(t.active){ clearInterval(t.interval); t.active=false; }
+    renderTimersPanel();
+  }
+  function resumeTimer(id){
+    const t = temporizadores.find(x=>x.id===id);
+    if(!t) return;
+    if(!t.active && t.remaining>0){
+      t.interval = setInterval(()=> {
+        t.remaining--;
+        if(t.remaining <= 0){ clearInterval(t.interval); t.active=false; renderTimersPanel(); alert(`Temporizador "${t.label}" finalizado`); }
+        else renderTimersPanel();
+      },1000);
+      t.active = true;
+    }
+    renderTimersPanel();
+  }
+  function cancelTimer(id){
+    const idx = temporizadores.findIndex(x=>x.id===id);
+    if(idx===-1) return;
+    clearInterval(temporizadores[idx].interval);
+    temporizadores.splice(idx,1);
+    renderTimersPanel();
+  }
+  function renderTimersPanel(){
+    const panel = document.getElementById('timers-list');
+    if(!panel) return;
+    panel.innerHTML = '';
+    const list = temporizadores.filter(t => !recetaActual || t.recetaId === recetaActual.id);
+    if(list.length === 0){ panel.innerHTML = '<div style="opacity:.7">No hay temporizadores activos en esta receta.</div>'; return; }
+    list.forEach(t=>{
+      const el = document.createElement('div');
+      el.style.display='flex'; el.style.justifyContent='space-between'; el.style.alignItems='center'; el.style.marginBottom='8px';
+      el.innerHTML = `<div style="font-weight:700">${escapeHtml(t.label)} <small style="opacity:.8">[${formatTime(t.remaining)}]</small></div>
+        <div style="display:flex;gap:6px">
+          ${t.active ? `<button class="btn" style="padding:6px 8px" onclick="pauseTimer('${t.id}')">Pausar</button>` : `<button class="btn" style="padding:6px 8px" onclick="resumeTimer('${t.id}')">Continuar</button>`}
+          <button class="btn" style="padding:6px 8px" onclick="cancelTimer('${t.id}')">Cancelar</button>
+        </div>`;
+      panel.appendChild(el);
+    });
+  }
+  function formatTime(s){ s = Math.max(0, Math.floor(s||0)); const m = Math.floor(s/60), sec = s%60; return `${m<10?'0':''}${m}:${sec<10?'0':''}${sec}`; }
+  function beep(){
+    try{ const ctx = new (window.AudioContext || window.webkitAudioContext)(); const o = ctx.createOscillator(); const g = ctx.createGain(); o.type='sine'; o.frequency.value=880; g.gain.value=0.2; o.connect(g); g.connect(ctx.destination); o.start(); setTimeout(()=>{ o.stop(); ctx.close(); }, 700);}catch(e){}
+  }
+
+  // Buscador: modal resultados
+  function showModalBusqueda(items){
+    closeModal();
+    const m = document.createElement('div'); m.className='modal';
+    const card = document.createElement('div'); card.className='card';
+    const title = document.createElement('h3'); title.textContent = `Resultados (${items.length})`;
+    card.appendChild(title);
+    const list = document.createElement('div'); list.className='modal-list';
+    if(items.length === 0) list.innerHTML = '<div>No hay resultados</div>';
+    else items.forEach(r=>{
+      const b = document.createElement('button'); b.className='btn btn-accent'; b.textContent = r.nombre;
+      b.onclick = ()=>{ closeModal(); setView('receta',{id:r.id}); };
+      list.appendChild(b);
+    });
+    const closeBtn = document.createElement('button'); closeBtn.className='btn'; closeBtn.textContent='Cerrar'; closeBtn.onclick = closeModal;
+    card.appendChild(list); card.appendChild(closeBtn); m.appendChild(card); document.body.appendChild(m);
+  }
+  function closeModal(){ document.querySelectorAll('.modal').forEach(n=>n.remove()); }
+
+  // Buscador inteligente (mejorado)
+  function showBuscadorInteligente(){
+    closeModal();
+    const m = document.createElement('div'); m.className='modal';
+    const card = document.createElement('div'); card.className='card';
+    const h = document.createElement('h3'); h.textContent = 'Dulces Patxi quiere saber';
+    card.appendChild(h);
+
+    // Ingrediente (input)
+    const ingBtn = document.createElement('button'); ingBtn.className='btn btn-accent'; ingBtn.textContent='Filtrar por ingrediente';
+    ingBtn.onclick = ()=>{ closeModal(); const q = prompt('¿Qué ingrediente?'); if(!q) return; const res = recetas.filter(r=>(r.ingredientes||[]).some(i=> (i.nombre||'').toLowerCase().includes(q.toLowerCase()))); showModalBusqueda(res); };
+
+    // Tiempo (franjas)
+    const timeBtn = document.createElement('button'); timeBtn.className='btn btn-accent'; timeBtn.textContent='Filtrar por tiempo (franjas)';
+    timeBtn.onclick = ()=>{ closeModal(); const choice = prompt('Elige franja: 1) 1-20  2) 21-40  3) 41+  (escribe 1,2 o 3)'); if(!choice) return; const ch = choice.trim(); let res=[]; if(ch==='1'){ res = recetas.filter(r=> (r.tiempo||0) <=20 ); } else if(ch==='2'){ res = recetas.filter(r=> (r.tiempo||0) >=21 && (r.tiempo||0) <=40 ); } else if(ch==='3'){ res = recetas.filter(r=> (r.tiempo||0) >=41 ); } showModalBusqueda(res); };
+
+    // Dificultad (select)
+    const diffBtn = document.createElement('button'); diffBtn.className='btn btn-accent'; diffBtn.textContent='Filtrar por dificultad';
+    diffBtn.onclick = ()=>{ closeModal(); const choice = prompt('Dificultad: fácil / medio / difícil'); if(!choice) return; const ch = choice.toLowerCase(); const res = recetas.filter(r=> ((r.dificultad||'')+'').toLowerCase().includes(ch)); showModalBusqueda(res); };
+
+    const favBtn = document.createElement('button'); favBtn.className='btn'; favBtn.textContent='Favoritos'; favBtn.onclick = ()=>{ closeModal(); setView('favoritos'); };
+
+    const closeBtn = document.createElement('button'); closeBtn.className='btn'; closeBtn.textContent='Cerrar'; closeBtn.onclick = closeModal;
+
+    card.appendChild(ingBtn); card.appendChild(timeBtn); card.appendChild(diffBtn); card.appendChild(favBtn); card.appendChild(closeBtn);
+    m.appendChild(card); document.body.appendChild(m);
+  }
+
+  // Buscador input handler (debounced)
+  function onSearchInput(ev){
+    const q = (ev.target.value || '').trim().toLowerCase();
+    if(!q) return;
+    const res = recetas.filter(r => ((r.nombre||'') + ' ' + (r.categoria||'')).toLowerCase().includes(q));
+    showModalBusqueda(res);
+  }
+  function debounce(fn, ms=250){ let t; return function(...a){ clearTimeout(t); t=setTimeout(()=>fn.apply(this,a), ms); }; }
+
+  // abrir última receta vista
+  function openUltima(){ if(ultimaRecetaId) setView('receta',{id:ultimaRecetaId}); else alert('No hay receta visitada aún'); }
+
+  // inicialización y enlaces
+  document.addEventListener('DOMContentLoaded', ()=>{
+    document.getElementById('btn-modo').addEventListener('click', ()=> document.body.classList.toggle('modo-oscuro'));
+    document.getElementById('btn-menu').addEventListener('click', ()=> setView('menu'));
+    document.getElementById('btn-favoritos').addEventListener('click', ()=> setView('favoritos'));
+    document.getElementById('btn-notas').addEventListener('click', ()=> {
+      const id = recetaActual?.id || Object.keys(notas)[0] || '';
+      if(!id) return alert('Abre una receta para ver/crear notas o visita una receta primero');
+      setView('notas',{id});
+    });
+    document.getElementById('btn-buscador-inteligente').addEventListener('click', showBuscadorInteligente);
+    document.getElementById('buscador').addEventListener('input', debounce(onSearchInput, 300));
+    showPrincipal();
+  });
+
+  // make uid
+  function uid(prefix='id'){ return prefix + Math.random().toString(36).slice(2,9); }
+
+  // Expose a few functions to the global scope used by inline handlers
+  window.setView = setView;
+  window.showPrincipal = showPrincipal;
+  window.handleBack = handleBack;
+  window.createTimerForRecipe = createTimerForRecipe;
+  window.toggleFavorito = function(id){
+    if(favoritos.includes(id)) favoritos = favoritos.filter(x=>x!==id); else favoritos.push(id);
+    localStorage.setItem('favoritos', JSON.stringify(favoritos));
+    // refresh view if viewing same recipe
+    if(recetaActual && recetaActual.id === id) setView('receta',{id}, false);
+  };
+  window.compactTimers = function(){ renderTimersPanel(); };
+
   </script>
 </body>
 </html>
+
 
 
