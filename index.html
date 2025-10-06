@@ -1,56 +1,165 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
 <title>Dulces Patxi</title>
 <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
 <style>
-  html,body{height:100%;margin:0;padding:0;font-family:'Segoe UI',Arial,sans-serif;background:#f5f7fa;color:#222;transition:background .3s,color .3s;}
-  body.modo-oscuro{background:#101217;color:#e2e6ef;}
-  .pantalla-principal{display:flex;flex-direction:column;align-items:center;justify-content:flex-start;min-height:100vh;padding:2em 1em;max-width:480px;margin:auto;text-align:center;}
-  .titulo-app{font-size:2.4em;font-weight:900;margin-bottom:.4em;color:#0b4fa3;}
-  body.modo-oscuro .titulo-app{color:#8ab4ff;}
-  .bienvenida{font-size:1.1em;font-weight:700;margin-bottom:0.4em;white-space:pre-line;}
-  .by-yahya{font-size:1.05em;color:#2b7be4;font-weight:bold;margin-bottom:2em;}
-  body.modo-oscuro .by-yahya{color:#7db2ff;}
-  .buscador-row{width:100%;position:relative;margin-bottom:1.5em;}
-  #buscador{width:100%;padding:14px;border-radius:22px;border:2px solid #0b4fa3;font-size:1.1em;outline:none;}
-  body.modo-oscuro #buscador{background:#181c25;color:#fff;border-color:#4e8ef7;}
-  .main-btn{width:100%;padding:18px 0;margin-bottom:1em;border:none;border-radius:20px;font-size:1.2em;font-weight:800;cursor:pointer;transition:all .25s ease;box-shadow:0 4px 10px #0003;}
-  .main-btn:hover{transform:translateY(-2px);}
-  #btn-modo{background:#2e6cf6;color:#fff;}
-  #btn-buscador-inteligente{background:#00a6a6;color:#fff;}
-  #btn-menu{background:#5c33b8;color:#fff;}
-  #btn-estrella{background:#f7b500;color:#fff;}
-  #btn-notas{background:#22b573;color:#fff;}
-  body.modo-oscuro .main-btn{box-shadow:0 4px 10px #000;}
-  body.modo-oscuro #btn-modo{background:#3573ff;}
-  .view{animation:fadeIn .3s;position:fixed;top:0;left:0;width:100%;height:100%;overflow-y:auto;background:#fff;color:#222;padding:2em 1.5em;box-sizing:border-box;z-index:100;}
-  body.modo-oscuro .view{background:#181c25;color:#e2e6ef;}
-  .view-back{background:#0b4fa3;color:#fff;border:none;border-radius:14px;padding:10px 18px;font-weight:800;margin-bottom:1em;cursor:pointer;}
-  body.modo-oscuro .view-back{background:#3573ff;}
-  .view-title{font-size:1.4em;font-weight:900;text-align:center;margin-bottom:1em;}
-  .temporizador-flotante{position:fixed;bottom:0;left:0;width:100%;background:rgba(0,0,0,0.75);color:#fff;padding:.6em .4em;display:flex;flex-wrap:wrap;justify-content:center;gap:.5em;z-index:9999;}
-  .temporizador-item{background:#3573ff;border-radius:10px;padding:.4em .8em;font-weight:700;display:flex;align-items:center;gap:.4em;}
-  .temp-btn{background:#222;border:none;border-radius:8px;color:#fff;padding:2px 6px;cursor:pointer;font-size:.9em;}
-  @keyframes fadeIn{from{opacity:0;}to{opacity:1;}}
+  :root{
+    --bg:#f5f7fb; --surface:#ffffff; --text:#12202b; --muted:#6b7b88;
+    --accent:#0b66d1; --accent-2:#0f9ad6; --success:#22b573;
+    --card-shadow: 0 6px 18px rgba(12,32,60,0.08);
+  }
+  body{margin:0;font-family: "Segoe UI", Roboto, Arial; background:var(--bg); color:var(--text); -webkit-font-smoothing:antialiased;}
+  body.modo-oscuro{
+    --bg:#0f1316; --surface:#0f1418; --text:#e6eef9; --muted:#9fb8d9;
+    --accent:#2f7fd6; --accent-2:#2b9be6; --success:#2fb57e;
+    --card-shadow: 0 6px 18px rgba(0,0,0,0.5);
+  }
+
+  /* Layout */
+  .app {
+    max-width: 480px;
+    margin: 0 auto;
+    min-height:100vh;
+    box-sizing:border-box;
+    padding:20px;
+  }
+  header{ text-align:center; margin-bottom:16px; }
+  .titulo-app{font-size:2.2rem; font-weight:900; color:var(--accent); margin:6px 0;}
+  .bienvenida{white-space:pre-line; font-weight:700; margin:4px 0 6px; font-size:1rem; color:var(--muted);}
+  .by-yahya{display:block; font-weight:900; color:var(--accent-2); margin-top:10px;}
+
+  /* Search */
+  .search-row{position:relative;margin:16px 0;}
+  #buscador{
+    width:100%; padding:14px 46px 14px 16px; font-size:1.05rem; border-radius:14px; border:2px solid rgba(16,45,90,0.06);
+    background:var(--surface); box-shadow:var(--card-shadow); color:var(--text); outline:none;
+  }
+  body.modo-oscuro #buscador{border-color:rgba(255,255,255,0.06); background:#12151a;}
+  .search-icon{position:absolute; right:14px; top:50%; transform:translateY(-50%); color:var(--muted); font-size:1.05rem;}
+  .suggestions{
+    position:absolute; left:0; right:0; top:56px; z-index:80;
+    background:var(--surface); border-radius:12px; box-shadow:var(--card-shadow); padding:8px; max-height:48vh; overflow:auto;
+  }
+  .suggestions button{display:block; width:100%; text-align:left; padding:10px; border:none; background:transparent; cursor:pointer; border-radius:8px; font-weight:700; color:var(--text);}
+  .suggestions button:hover{background:rgba(11,102,209,0.06);}
+
+  /* Buttons main */
+  .grid{
+    display:grid; gap:12px; grid-template-columns:1fr; margin:18px 0;
+  }
+  .main-btn{
+    padding:18px; border-radius:14px; border:none; font-weight:900; font-size:1.05rem; cursor:pointer; color:#fff;
+    box-shadow:var(--card-shadow);
+  }
+  #btn-modo{background:linear-gradient(180deg,var(--accent),#0b79e3);}
+  #btn-buscador-inteligente{background:linear-gradient(180deg,#0f9ad6,#00a6a6);}
+  #btn-menu{background:linear-gradient(180deg,#5b3db7,#6b44d9);}
+  #btn-estrella{background:linear-gradient(180deg,#f6b500,#f79500);}
+  #btn-notas{background:linear-gradient(180deg,#22b573,#1f9b61);}
+
+  /* View (full-screen pages) */
+  .view {
+    position:fixed; inset:0; z-index:200; padding:20px; overflow:auto; background:var(--surface); color:var(--text);
+    box-sizing:border-box; display:flex; flex-direction:column;
+  }
+  body.modo-oscuro .view{ background:#0e1317; color:var(--text); }
+  .view-header{display:flex; align-items:center; gap:12px; margin-bottom:8px;}
+  .view-back{background:transparent; border:2px solid rgba(11,102,209,0.12); color:var(--accent); padding:8px 12px; border-radius:10px; font-weight:900; cursor:pointer;}
+  body.modo-oscuro .view-back{border-color:rgba(255,255,255,0.06); color:var(--accent-2);}
+  .view-title{flex:1; text-align:center; font-weight:900; font-size:1.25rem;}
+
+  /* Lists / cards */
+  .list{display:flex; flex-direction:column; gap:12px; padding:6px 4px;}
+  .item-btn{background:var(--surface); border-radius:12px; padding:14px; border:2px solid rgba(12,32,60,0.04); font-weight:900; cursor:pointer; text-align:left;}
+  body.modo-oscuro .item-btn{border-color:rgba(255,255,255,0.04);}
+  .section-title{font-weight:900; margin:8px 0 6px;}
+
+  /* Recipe */
+  .recipe-meta{display:flex; gap:8px; align-items:center; justify-content:space-between; margin-bottom:12px;}
+  .ingredientes, .elaboracion{background:var(--surface); padding:12px; border-radius:12px; border:1px solid rgba(12,32,60,0.04);}
+  .ingredientes ul{margin:6px 0 0 18px;}
+  .elaboracion ol{margin:6px 0 0 18px;}
+
+  /* Timer controls in recipe header */
+  .recipe-top-actions{display:flex; gap:10px; align-items:center;}
+  .timer-select{padding:8px;border-radius:10px;border:1px solid rgba(12,32,60,0.06); background:var(--surface); font-weight:900;}
+  .timer-mini-btn{padding:8px 10px;border-radius:10px;border:none;background:var(--accent);color:#fff;font-weight:900;cursor:pointer;}
+
+  /* Bottom floating timers panel */
+  .timers-bottom{
+    position:fixed; left:8px; right:8px; bottom:12px; display:flex; gap:8px; flex-wrap:wrap; z-index:999;
+    justify-content:center;
+  }
+  .timer-chip{
+    background:rgba(11,102,209,0.95); color:#fff; padding:8px 10px; border-radius:12px; display:flex; gap:10px; align-items:center; font-weight:900;
+  }
+  .timer-chip small{font-weight:700; opacity:0.95;}
+  .timer-action{background:transparent;border:1px solid rgba(255,255,255,0.2); color:#fff; padding:6px;border-radius:8px; cursor:pointer;}
+
+  /* Share modal and other modals */
+  .modal{
+    position:fixed; inset:0; display:flex; align-items:center; justify-content:center; z-index:1000; background:linear-gradient(rgba(2,6,23,0.45),rgba(2,6,23,0.45));
+  }
+  .modal-card{width:92%; max-width:420px; background:var(--surface); padding:18px; border-radius:12px; box-shadow:var(--card-shadow); color:var(--text);}
+  .share-list{display:flex; gap:8px; flex-wrap:wrap; margin-top:12px;}
+  .share-btn{flex:1; min-width:86px; padding:10px;border-radius:10px;border:none;background:var(--accent);color:#fff;font-weight:900;cursor:pointer;}
+
+  /* Notes list in main notes screen */
+  .notes-aggregate{display:flex;flex-direction:column;gap:12px;}
+  .note-block{background:var(--surface); padding:12px;border-radius:12px;border:1px solid rgba(12,32,60,0.04);}
+  .note-title{font-weight:900; margin-bottom:8px;}
+
+  @media(min-width:700px){
+    .app{padding:28px;}
+  }
 </style>
 </head>
 <body>
-<div id="pantalla-principal" class="pantalla-principal">
-  <div class="titulo-app">Dulces Patxi</div>
-  <div class="bienvenida">Bienvenidos en Dulces de Bachir Krai
-By Yahya</div>
-  <div class="buscador-row">
-    <input id="buscador" placeholder="Buscar receta . . ." />
+  <div class="app" id="app-root">
+    <header>
+      <div class="titulo-app">Dulces Patxi</div>
+      <div class="bienvenida">Bienvenidos en Dulces de Bachir Krai<br><span class="by-yahya">By Yahya</span></div>
+    </header>
+
+    <div class="search-row">
+      <input id="buscador" placeholder="Buscar receta . . ." autocomplete="off" />
+      <i class="fa fa-search search-icon"></i>
+      <div id="suggestions" class="suggestions" style="display:none;"></div>
+    </div>
+
+    <div class="grid" id="home-grid">
+      <button id="btn-modo" class="main-btn">Modo</button>
+      <button id="btn-buscador-inteligente" class="main-btn">Buscador inteligente</button>
+      <button id="btn-menu" class="main-btn">Menú</button>
+      <button id="btn-estrella" class="main-btn">Recetas estrella</button>
+      <button id="btn-notas" class="main-btn">Notas personales</button>
+    </div>
   </div>
-  <button id="btn-modo" class="main-btn">Modo</button>
-  <button id="btn-buscador-inteligente" class="main-btn">Buscador inteligente</button>
-  <button id="btn-menu" class="main-btn">Menú</button>
-  <button id="btn-estrella" class="main-btn">Recetas estrella</button>
-  <button id="btn-notas" class="main-btn">Notas personales</button>
-</div>
+
+  <!-- Placeholder: páginas dinámicas se inyectan aquí -->
+  <div id="view-root"></div>
+
+  <!-- Bottom timers -->
+  <div id="timers-bottom" class="timers-bottom" aria-hidden="true"></div>
+
+  <!-- Modales -->
+  <div id="modal-root"></div>
+
+<script>
+/* ============================================================
+   Dulces Patxi - index.html JS (todo en un solo archivo)
+   - Navegación por pila (historyStack)
+   - Buscador con sugerencias
+   - Buscador inteligente (ingrediente / tiempo / dificultad)
+   - Parser automático de tiempos en elaboración (múltiples temporizadores por receta)
+   - Temporizadores persistentes en localStorage (soportan start/pause/delete)
+   - Notas por receta + vista agregada (orden cronológico)
+   - Compartir: menú con WhatsApp / Telegram / Email / SMS y uso de navigator.share si disponible
+   - Paleta: modo claro / negro-gris con acento azul
+   ============================================================ */
 
 
 
@@ -1304,175 +1413,861 @@ By Yahya</div>
 
 
 
-let favoritos = JSON.parse(localStorage.getItem('favoritos')||"[]");
-let notas = JSON.parse(localStorage.getItem('notas')||"{}");
-let temporizadoresActivos = [];
-let historial = [];
-
-function renderView(html){
-  document.querySelectorAll('.view').forEach(v=>v.remove());
-  const v=document.createElement('div');
-  v.className='view';
-  v.innerHTML=html;
-  document.body.appendChild(v);
-}
-
-function showPrincipal(){
-  document.querySelectorAll('.view').forEach(v=>v.remove());
-  document.getElementById('pantalla-principal').style.display='flex';
-}
-
-function goBack(){
-  const prev = historial.pop();
-  if(prev){setView(prev.view, prev.data);}
-  else showPrincipal();
-}
-
-function setView(view,data={}){
-  document.getElementById('pantalla-principal').style.display='none';
-  let html="";
-  historial.push({view,data});
-
-  if(view==='menu'){
-    html=`<button class="view-back" onclick="goBack()">← Atrás</button>
-    <div class="view-title">Menú</div>
-    <button class="main-btn" onclick="setView('categorias')">Categorías</button>
-    <button class="main-btn" onclick="setView('favoritos')">Recetas estrella</button>
-    <button class="main-btn" onclick="setView('ultima')">Última receta</button>`;
-  }
-  else if(view==='categorias'){
-    const cats=[...new Set(recetas.map(r=>r.categoria))];
-    html=`<button class="view-back" onclick="goBack()">← Atrás</button>
-    <div class="view-title">Categorías</div>
-    ${cats.map(c=>`<button class="main-btn" onclick="setView('recetas',{categoria:'${c}'})">${c}</button>`).join('')}`;
-  }
-  else if(view==='recetas'){
-    const items=recetas.filter(r=>r.categoria===data.categoria);
-    html=`<button class="view-back" onclick="goBack()">← Atrás</button>
-    <div class="view-title">${data.categoria}</div>
-    ${items.map(r=>`<button class="main-btn" onclick="setView('receta',{id:'${r.id}'})">${r.nombre}</button>`).join('')}`;
-  }
-  else if(view==='receta'){
-    const r=recetas.find(x=>x.id===data.id);
-    if(!r){html="<h2>Receta no encontrada</h2>";renderView(html);return;}
-    html=`<button class="view-back" onclick="goBack()">← Atrás</button>
-    <div class="view-title">${r.nombre}</div>
-    <div><b>Categoría:</b> ${r.categoria}</div>
-    <div><b>Ingredientes:</b><ul>${r.ingredientes.map(i=>`<li>${i.nombre}: ${i.cantidad||''} ${i.unidad||''}</li>`).join('')}</ul></div>
-    <div><b>Elaboración:</b><ol>${r.elaboracion.map(e=>`<li>${e}</li>`).join('')}</ol></div>
-    <button class="main-btn" onclick="compartirReceta('${r.id}')">Compartir</button>
-    <button class="main-btn" onclick="abrirNotas('${r.id}')">Notas personales</button>`;
-    iniciarParserTemporizadores(r);
-  }
-  else if(view==='favoritos'){
-    const fav=recetas.filter(r=>favoritos.includes(r.id));
-    html=`<button class="view-back" onclick="goBack()">← Atrás</button><div class="view-title">Recetas estrella</div>
-    ${fav.map(r=>`<button class="main-btn" onclick="setView('receta',{id:'${r.id}'})">${r.nombre}</button>`).join('')||'No tienes recetas favoritas.'}`;
-  }
-  else if(view==='notas'){
-    let texto = notas[data.id]||"";
-    html=`<button class="view-back" onclick="goBack()">← Atrás</button>
-    <div class="view-title">Notas personales</div>
-    <textarea id="nota-txt" style="width:100%;height:50vh;border-radius:12px;font-size:1.1em;">${texto}</textarea>
-    <button class="main-btn" onclick="guardarNota('${data.id}')">Guardar</button>
-    <button class="main-btn" onclick="compartirNota('${data.id}')">Compartir</button>`;
-  }
-
-  renderView(html);
-}
-
-function guardarNota(id){
-  notas[id]=document.getElementById('nota-txt').value;
-  localStorage.setItem('notas',JSON.stringify(notas));
-  alert('Nota guardada.');
-}
-
-function compartirReceta(id){
-  const r=recetas.find(x=>x.id===id);
-  if(!r)return;
-  const txt=`🍰 ${r.nombre}\n--------------------\n🥄 Ingredientes:\n${r.ingredientes.map(i=>`- ${i.nombre}: ${i.cantidad||''} ${i.unidad||''}`).join('\n')}\n\n👩‍🍳 Elaboración:\n${r.elaboracion.map((e,i)=>`${i+1}. ${e}`).join('\n')}`;
-  navigator.share?navigator.share({title:r.nombre,text:txt}):alert(txt);
-}
-
-function compartirNota(id){
-  const txt=notas[id]||"";
-  navigator.share?navigator.share({title:"Nota",text:txt}):alert(txt);
-}
-
-function abrirNotas(id){setView('notas',{id});}
-
-// Parser de tiempos en texto
-function iniciarParserTemporizadores(r){
-  let regex=/(\d+)\s*(min|mins|minutos|minuto|hora|horas)/gi;
-  let texto=r.elaboracion.join(' ');
-  let match;let tiempos=[];
-  while((match=regex.exec(texto))!==null){
-    let val=parseInt(match[1]);
-    if(/hora/.test(match[2]))val*=60;
-    tiempos.push(val);
-  }
-  if(r.tiempo)tiempos.push(r.tiempo);
-  tiempos.forEach(t=>crearTemporizador(t,r.nombre));
-}
-
-// Temporizadores persistentes
-function crearTemporizador(mins, nombre){
-  let id=Date.now()+Math.random();
-  let time=mins*60;
-  let temp={id,nombre,time,activo:true};
-  temporizadoresActivos.push(temp);
-  actualizarPanelTemporizadores();
-  temp.interval=setInterval(()=>{
-    temp.time--;
-    if(temp.time<=0){
-      clearInterval(temp.interval);
-      temp.activo=false;
-      alert(`⏰ ¡${temp.nombre} ha terminado!`);
-      temporizadoresActivos=temporizadoresActivos.filter(t=>t.id!==temp.id);
-      actualizarPanelTemporizadores();
-    }
-    actualizarPanelTemporizadores();
-  },1000);
-}
-
-function actualizarPanelTemporizadores(){
-  document.querySelectorAll('.temporizador-flotante').forEach(e=>e.remove());
-  if(!temporizadoresActivos.length)return;
-  let div=document.createElement('div');
-  div.className='temporizador-flotante';
-  div.innerHTML=temporizadoresActivos.map(t=>{
-    let m=Math.floor(t.time/60),s=t.time%60;
-    return `<div class="temporizador-item">${t.nombre}: ${m}:${s.toString().padStart(2,'0')}
-    <button class="temp-btn" onclick="pararTemporizador(${t.id})">Parar</button>
-    <button class="temp-btn" onclick="eliminarTemporizador(${t.id})">Eliminar</button></div>`;
-  }).join('');
-  document.body.appendChild(div);
-}
-
-function pararTemporizador(id){
-  let t=temporizadoresActivos.find(x=>x.id===id);
-  if(t){clearInterval(t.interval);t.activo=false;}
-}
-
-function eliminarTemporizador(id){
-  let t=temporizadoresActivos.find(x=>x.id===id);
-  if(t){clearInterval(t.interval);}
-  temporizadoresActivos=temporizadoresActivos.filter(x=>x.id!==id);
-  actualizarPanelTemporizadores();
-}
-
-// Modo y buscador
-document.getElementById('btn-modo').onclick=()=>document.body.classList.toggle('modo-oscuro');
-document.getElementById('btn-buscador-inteligente').onclick=()=>setView('menu'); // para demo
-document.getElementById('btn-menu').onclick=()=>setView('menu');
-document.getElementById('btn-estrella').onclick=()=>setView('favoritos');
-document.getElementById('btn-notas').onclick=()=>setView('notas',{id:'general'});
-document.getElementById('buscador').oninput=e=>{
-  let q=e.target.value.toLowerCase();
-  if(!q)return;
-  let res=recetas.filter(r=>r.nombre.toLowerCase().includes(q));
-  if(res.length)setView('recetas',{categoria:'Resultados',resultados:res});
+   Estado global y persistencia
+   ============================ */
+const STORAGE = {
+  FAVORITOS: 'dp_favoritos_v1',
+  NOTES: 'dp_notes_v1',
+  TIMERS: 'dp_timers_v1'
 };
+
+let favoritos = JSON.parse(localStorage.getItem(STORAGE.FAVORITOS) || "[]");
+let notesMap = JSON.parse(localStorage.getItem(STORAGE.NOTES) || "{}"); // { recipeId: [{text,timestamp}] }
+let timersStore = JSON.parse(localStorage.getItem(STORAGE.TIMERS) || "[]"); // array of timer objects persisted
+// timersStore item: { id, recipeId, label, remainingSec, running, endTimestamp (if running) }
+
+const historyStack = []; // array of { view, data }
+
+const appRoot = document.getElementById('app-root');
+const viewRoot = document.getElementById('view-root');
+const suggestionsEl = document.getElementById('suggestions');
+const modalRoot = document.getElementById('modal-root');
+const timersBottom = document.getElementById('timers-bottom');
+
+/* In-memory runtime map for intervals so we can clear them */
+const runtimeIntervals = {}; // id -> intervalId
+
+/* ============================
+   Utilities
+   ============================ */
+function byId(id){ return document.getElementById(id); }
+function formatTimeSec(sec){
+  if(sec < 0) sec = 0;
+  const m = Math.floor(sec/60); const s = sec % 60;
+  return `${m}:${String(s).padStart(2,'0')}`;
+}
+function nowMs(){ return Date.now(); }
+function saveTimers(){ localStorage.setItem(STORAGE.TIMERS, JSON.stringify(timersStore)); }
+function saveNotes(){ localStorage.setItem(STORAGE.NOTES, JSON.stringify(notesMap)); }
+function saveFavs(){ localStorage.setItem(STORAGE.FAVORITOS, JSON.stringify(favoritos)); }
+
+/* ============================
+   Navigation (stack-based)
+   ============================ */
+function pushView(view, data = {}) {
+  historyStack.push({ view, data });
+  renderView(view, data);
+}
+function replaceView(view, data = {}) {
+  if(historyStack.length) historyStack[historyStack.length - 1] = { view, data };
+  else historyStack.push({ view, data });
+  renderView(view, data);
+}
+function goBack() {
+  // pop current
+  if(historyStack.length <= 1) {
+    // go to home
+    historyStack.length = 0;
+    renderHome();
+    return;
+  }
+  historyStack.pop();
+  const prev = historyStack[historyStack.length - 1];
+  renderView(prev.view, prev.data);
+}
+
+/* ============================
+   Renderers
+   ============================ */
+function clearViewRoot(){ viewRoot.innerHTML = ''; modalRoot.innerHTML = ''; }
+function renderHome(){
+  // clear stack and show home
+  historyStack.length = 0;
+  clearViewRoot();
+  appRoot.style.display = 'block';
+  resetSearchBox();
+}
+function renderView(view, data = {}) {
+  clearViewRoot();
+  appRoot.style.display = 'none';
+  if(view === 'menu') renderMenuView(data);
+  else if(view === 'categorias') renderCategoriasView(data);
+  else if(view === 'recetas') renderRecetasListView(data);
+  else if(view === 'receta') renderRecetaView(data);
+  else if(view === 'favoritos') renderFavoritosView(data);
+  else if(view === 'notesAggregate') renderNotesAggregateView(data);
+  else if(view === 'searchResults') renderSearchResultsView(data);
+  else if(view === 'smartFilters') renderSmartFiltersView(data);
+  else if(view === 'filterTime') renderFilterTimeView(data);
+  else if(view === 'filterIngredient') renderFilterIngredientView(data);
+  else if(view === 'filterDifficulty') renderFilterDifficultyView(data);
+  else renderHome();
+}
+
+/* ---- Home helpers already in HTML: search and buttons will push new views ---- */
+
+function renderMenuView(){
+  const html = document.createElement('div');
+  html.className = 'view';
+  html.innerHTML = `
+    <div class="view-header"><button class="view-back" onclick="goBack()">← Atrás</button><div class="view-title">Menú</div></div>
+    <div class="list">
+      <button class="item-btn" onclick="pushView('categorias')">Categorías</button>
+      <button class="item-btn" onclick="pushView('favoritos')">Recetas estrella</button>
+      <button class="item-btn" onclick="pushView('ultima')">Última receta</button>
+    </div>
+  `;
+  viewRoot.appendChild(html);
+}
+
+function renderCategoriasView(){
+  const cats = [...new Set(recetas.map(r=>r.categoria || 'Sin categoría'))].filter(Boolean);
+  const html = document.createElement('div'); html.className='view';
+  html.innerHTML = `<div class="view-header"><button class="view-back" onclick="goBack()">← Atrás</button><div class="view-title">Categorías</div></div>`;
+  const list = document.createElement('div'); list.className='list';
+  if(!cats.length) list.innerHTML = '<div class="item-btn">No hay categorías</div>';
+  cats.forEach(c => {
+    const b = document.createElement('button'); b.className='item-btn';
+    b.textContent = c;
+    b.onclick = ()=> pushView('recetas',{ categoria: c });
+    list.appendChild(b);
+  });
+  html.appendChild(list);
+  viewRoot.appendChild(html);
+}
+
+function renderRecetasListView(data){
+  const results = data.resultados || recetas.filter(r=>r.categoria === data.categoria);
+  const title = data.title || data.categoria || 'Recetas';
+  const html = document.createElement('div'); html.className='view';
+  html.innerHTML = `<div class="view-header"><button class="view-back" onclick="goBack()">← Atrás</button><div class="view-title">${title}</div></div>`;
+  const list = document.createElement('div'); list.className='list';
+  if(!results.length) list.innerHTML = '<div class="item-btn">No hay recetas.</div>';
+  results.forEach(r => {
+    const b = document.createElement('button'); b.className='item-btn';
+    b.textContent = r.nombre;
+    b.onclick = ()=> pushView('receta',{ id: r.id, fromList: { view:'recetas', data } });
+    list.appendChild(b);
+  });
+  html.appendChild(list);
+  viewRoot.appendChild(html);
+}
+
+function renderSearchResultsView(data){
+  const results = data.results || [];
+  const q = data.query || 'Resultados';
+  const html = document.createElement('div'); html.className='view';
+  html.innerHTML = `<div class="view-header"><button class="view-back" onclick="goBack()">← Atrás</button><div class="view-title">Resultados: ${escapeHtml(q)}</div></div>`;
+  const list = document.createElement('div'); list.className='list';
+  if(!results.length) list.innerHTML = '<div class="item-btn">No hay resultados.</div>';
+  results.forEach(r => {
+    const b = document.createElement('button'); b.className='item-btn';
+    b.textContent = r.nombre;
+    b.onclick = ()=> pushView('receta',{ id: r.id, fromList: { view:'searchResults', data } });
+    list.appendChild(b);
+  });
+  html.appendChild(list);
+  viewRoot.appendChild(html);
+}
+
+function renderFavoritosView(){
+  const favs = recetas.filter(r => favoritos.includes(r.id));
+  const html = document.createElement('div'); html.className='view';
+  html.innerHTML = `<div class="view-header"><button class="view-back" onclick="goBack()">← Atrás</button><div class="view-title">Recetas estrella</div></div>`;
+  const list = document.createElement('div'); list.className='list';
+  if(!favs.length) list.innerHTML = '<div class="item-btn">No tienes recetas favoritas.</div>';
+  favs.forEach(r=>{
+    const b = document.createElement('button'); b.className='item-btn';
+    b.textContent = r.nombre;
+    b.onclick = ()=> pushView('receta',{ id: r.id, fromList: { view:'favoritos' } });
+    list.appendChild(b);
+  });
+  html.appendChild(list);
+  viewRoot.appendChild(html);
+}
+
+function renderNotesAggregateView(){
+  // Aggregate all notes across recipes sorted chronologically (latest first)
+  const entries = [];
+  for(const rid in notesMap){
+    (notesMap[rid]||[]).forEach(note => {
+      entries.push({ recipeId: rid, text: note.text, ts: note.ts });
+    });
+  }
+  entries.sort((a,b)=>b.ts - a.ts);
+  const html = document.createElement('div'); html.className='view';
+  html.innerHTML = `<div class="view-header"><button class="view-back" onclick="goBack()">← Atrás</button><div class="view-title">Notas personales (todas)</div></div>`;
+  const container = document.createElement('div'); container.className='notes-aggregate';
+  if(!entries.length) container.innerHTML = '<div class="item-btn">Aún no hay notas.</div>';
+  entries.forEach(e=>{
+    const block = document.createElement('div'); block.className='note-block';
+    const recipe = recetas.find(r=>r.id === e.recipeId);
+    block.innerHTML = `<div class="note-title">${escapeHtml(recipe?recipe.nombre: e.recipeId)} <small style="color:var(--muted);margin-left:8px">${new Date(e.ts).toLocaleString()}</small></div>
+      <div>${escapeHtml(e.text)}</div>
+      <div style="margin-top:8px"><button class="item-btn" style="width:auto" onclick="shareText('${encodeURIComponent((recipe?recipe.nombre: e.recipeId) + '\\n\\n' + e.text)}')">Compartir</button></div>`;
+    container.appendChild(block);
+  });
+  html.appendChild(container);
+  viewRoot.appendChild(html);
+}
+
+function renderRecetaView(data){
+  const id = data.id;
+  const r = recetas.find(x => x.id === id);
+  if(!r){
+    const html = document.createElement('div'); html.className='view'; html.innerHTML = `<div class="view-header"><button class="view-back" onclick="goBack()">← Atrás</button><div class="view-title">Receta no encontrada</div></div>`;
+    viewRoot.appendChild(html); return;
+  }
+
+  // ensure parser-created timers exist (but do not auto-start)
+  ensureTimersCreatedForRecipe(r);
+
+  // build view
+  const html = document.createElement('div'); html.className='view';
+  // header with back + timer select + actions
+  const header = document.createElement('div'); header.className='view-header';
+  header.innerHTML = `
+    <button class="view-back" onclick="goBack()">← Atrás</button>
+    <div class="view-title">${escapeHtml(r.nombre)}</div>
+  `;
+
+  html.appendChild(header);
+
+  // recipe content container
+  const content = document.createElement('div');
+
+  // recipe meta (category + favorite)
+  const favActive = favoritos.includes(r.id);
+  const favBtnHtml = `<button class="item-btn" style="width:auto" onclick="toggleFavorito('${r.id}', this)">${favActive? '★ Favorito' : '☆ Marcar favorito'}</button>`;
+  const metaHtml = `<div style="display:flex;justify-content:space-between;gap:8px;align-items:center;margin-bottom:12px">
+    <div style="font-weight:900;color:var(--muted)">${escapeHtml(r.categoria||'')}</div>
+    <div>${favBtnHtml}</div>
+  </div>`;
+  content.insertAdjacentHTML('beforeend', metaHtml);
+
+  // timer control row (select minutes 1..90 + create timer button)
+  const timerRow = document.createElement('div'); timerRow.className = 'recipe-top-actions';
+  const select = document.createElement('select'); select.className='timer-select'; select.id='recipe-timer-select';
+  for(let i=1;i<=90;i++){ const o = document.createElement('option'); o.value = i; o.textContent = `${i} min`; select.appendChild(o); }
+  const addTimerBtn = document.createElement('button'); addTimerBtn.className='timer-mini-btn'; addTimerBtn.textContent='Añadir temporizador';
+  addTimerBtn.onclick = ()=> {
+    const mins = parseInt(select.value);
+    createTimerForRecipe(r.id, mins, r.nombre, { startImmediately:false });
+    alert(`Temporizador de ${mins} min creado para "${r.nombre}". Puedes iniciarlo desde la receta o desde el panel inferior.`);
+    renderTimersInRecipeView(r.id, content); // refresh section
+    renderTimersBottom();
+  };
+  timerRow.appendChild(select); timerRow.appendChild(addTimerBtn);
+  content.appendChild(timerRow);
+
+  // Ingredients and elaboration
+  const ingHtml = `<div class="section-title">Ingredientes</div><div class="ingredientes"><ul>${(r.ingredientes||[]).map(i=>`<li>${escapeHtml(i.nombre)} ${i.cantidad?('- '+escapeHtml(String(i.cantidad))):''} ${i.unidad?escapeHtml(i.unidad):''}</li>`).join('')}</ul></div>`;
+  content.insertAdjacentHTML('beforeend', ingHtml);
+
+  const elaborHtml = `<div class="section-title">Elaboración</div><div class="elaboracion"><ol>${(r.elaboracion||[]).map(s=>`<li>${escapeHtml(s)}</li>`).join('')}</ol></div>`;
+  content.insertAdjacentHTML('beforeend', elaborHtml);
+
+  // timers area inside recipe (shows timers for this recipe with start/pause/change/delete)
+  const timersContainer = document.createElement('div'); timersContainer.id = 'recipe-timers-container';
+  timersContainer.style.marginTop = '12px';
+  content.appendChild(timersContainer);
+
+  // share and notes buttons
+  const actions = document.createElement('div'); actions.style.display='flex'; actions.style.gap='10px'; actions.style.marginTop='14px';
+  const shareBtn = document.createElement('button'); shareBtn.className='item-btn'; shareBtn.style.width='50%'; shareBtn.textContent='Compartir';
+  shareBtn.onclick = ()=> openShareMenuForRecipe(r);
+  const notesBtn = document.createElement('button'); notesBtn.className='item-btn'; notesBtn.style.width='50%'; notesBtn.textContent='Notas y observaciones';
+  notesBtn.onclick = ()=> pushView('notesForRecipe',{ id: r.id });
+  actions.appendChild(shareBtn); actions.appendChild(notesBtn);
+  content.appendChild(actions);
+
+  html.appendChild(content);
+  viewRoot.appendChild(html);
+
+  // render recipe timers area
+  renderTimersInRecipeView(r.id, content);
+
+  // push current view into history if not already the top
+  const top = historyStack[historyStack.length-1];
+  if(!top || top.view !== 'receta' || top.data.id !== r.id) pushHistoryKeep(r.id);
+}
+
+// small helper: pushView but for receta we want to mark proper data
+function pushHistoryKeep(recipeId){
+  // ensure last in stack is current view (we call pushView elsewhere) - this function called only from recipe render
+  // Instead of pushing again, we rely on caller pushView when invoked. This function ensures stack correct.
+  // noop here — navigation push already done in pushView('receta', ...)
+}
+
+/* ============================
+   Timers: create / start / pause / delete / restore
+   ============================ */
+
+function ensureTimersCreatedForRecipe(recipe){
+  // detect minutes in recipe (tiempo field and in elaboracion text)
+  const foundMins = detectTimesFromRecipe(recipe); // returns array[int minutes]
+  // For each detected time, if there's not an existing timer for same recipe and same minutes, create it (not running)
+  foundMins.forEach(mins=>{
+    const exists = timersStore.some(t => t.recipeId === recipe.id && t.label === `${mins}min` && !t._autoCreated);
+    // _autoCreated used to mark we auto-created from parser previously
+    if(!exists){
+      createTimerForRecipe(recipe.id, mins, recipe.nombre, { startImmediately:false, autoCreated:true });
+    }
+  });
+}
+
+function detectTimesFromRecipe(recipe){
+  const times = [];
+  if(typeof recipe.tiempo === 'number' && recipe.tiempo > 0) times.push(recipe.tiempo);
+  if(Array.isArray(recipe.elaboracion)){
+    const text = recipe.elaboracion.join(' ');
+    // detect "30 min", "20 minutos", "1 hora", "2 horas"
+    const reMin = /(\d+)\s*(min|mins|minuto|minutos)/ig;
+    const reHour = /(\d+)\s*(h|hora|horas)/ig;
+    let m;
+    while((m = reMin.exec(text)) !== null) times.push(parseInt(m[1]));
+    while((m = reHour.exec(text)) !== null) times.push(parseInt(m[1]) * 60);
+  }
+  // unique and positive
+  return Array.from(new Set(times.filter(n => Number.isFinite(n) && n > 0)));
+}
+
+function createTimerForRecipe(recipeId, minutes, labelStr, opts={ startImmediately:false, autoCreated:false }){
+  const id = 't_' + Date.now() + '_' + Math.floor(Math.random()*9999);
+  const remainingSec = minutes * 60;
+  const timer = {
+    id, recipeId, label: `${minutes}min`, remainingSec,
+    running: false, endTs: null, autoCreated: !!opts.autoCreated
+  };
+  timersStore.push(timer);
+  saveTimers();
+  if(opts.startImmediately) startTimer(id);
+  renderTimersBottom();
+  return timer;
+}
+
+function startTimer(id){
+  const t = timersStore.find(x => x.id === id);
+  if(!t) return;
+  if(t.running){
+    // already running
+    return;
+  }
+  // set end timestamp
+  t.endTs = nowMs() + (t.remainingSec * 1000);
+  t.running = true;
+  saveTimers();
+  // start runtime interval
+  attachIntervalForTimer(t);
+  renderTimersBottom();
+  refreshRecipeTimerAreaIfVisible(t.recipeId);
+}
+function pauseTimer(id){
+  const t = timersStore.find(x => x.id === id);
+  if(!t) return;
+  if(!t.running) return;
+  // compute remaining
+  const rem = Math.max(0, Math.round((t.endTs - nowMs())/1000));
+  t.remainingSec = rem;
+  t.running = false;
+  t.endTs = null;
+  saveTimers();
+  detachIntervalForTimer(t.id);
+  renderTimersBottom();
+  refreshRecipeTimerAreaIfVisible(t.recipeId);
+}
+function stopAndRemoveTimer(id){
+  const idx = timersStore.findIndex(x => x.id === id);
+  if(idx === -1) return;
+  const t = timersStore[idx];
+  detachIntervalForTimer(t.id);
+  timersStore.splice(idx,1);
+  saveTimers();
+  renderTimersBottom();
+  refreshRecipeTimerAreaIfVisible(t.recipeId);
+}
+function attachIntervalForTimer(timerObj){
+  // avoid duplicate
+  if(runtimeIntervals[timerObj.id]) return;
+  const loop = ()=>{
+    const t = timersStore.find(x => x.id === timerObj.id);
+    if(!t) { clearInterval(runtimeIntervals[timerObj.id]); delete runtimeIntervals[timerObj.id]; return; }
+    if(!t.running) { clearInterval(runtimeIntervals[t.id]); delete runtimeIntervals[t.id]; return; }
+    const rem = Math.max(0, Math.round((t.endTs - nowMs())/1000));
+    t.remainingSec = rem;
+    if(rem <= 0){
+      // finish
+      t.running = false; t.endTs = null; t.remainingSec = 0;
+      saveTimers();
+      clearInterval(runtimeIntervals[t.id]); delete runtimeIntervals[t.id];
+      // notify user (only in current session)
+      try { if(window.navigator && window.navigator.vibrate) window.navigator.vibrate(200); } catch(e){}
+      alert(`⏰ Temporizador "${t.label}" de "${findRecipeName(t.recipeId)}" ha terminado.`);
+      renderTimersBottom();
+      refreshRecipeTimerAreaIfVisible(t.recipeId);
+      return;
+    }
+    saveTimers();
+    renderTimersBottom();
+    refreshRecipeTimerAreaIfVisible(t.recipeId);
+  };
+  loop(); // initial
+  runtimeIntervals[timerObj.id] = setInterval(loop, 1000);
+}
+function detachIntervalForTimer(id){
+  if(runtimeIntervals[id]){ clearInterval(runtimeIntervals[id]); delete runtimeIntervals[id]; }
+}
+
+function resumeTimersFromStore(){
+  // Called on load to attach intervals for running timers and compute remainingSecs
+  timersStore.forEach(t=>{
+    if(t.running && t.endTs){
+      // recalc remaining
+      const rem = Math.max(0, Math.round((t.endTs - nowMs())/1000));
+      t.remainingSec = rem;
+      if(rem <= 0){
+        // finished
+        t.running = false; t.remainingSec = 0; t.endTs = null;
+      } else {
+        attachIntervalForTimer(t);
+      }
+    }
+  });
+  saveTimers();
+  renderTimersBottom();
+}
+
+/* ============================
+   Render timers areas
+   - In recipe view: show timers associated with recipe (start/pause/change/delete)
+   - Bottom panel: show all timers (running or paused) in compact chips with stop/delete controls
+   ============================ */
+
+function renderTimersInRecipeView(recipeId, contentContainer){
+  // contentContainer may be passed; if not find by id; create or refresh container
+  let container = contentContainer ? contentContainer.querySelector('#recipe-timers-container') : document.getElementById('recipe-timers-container');
+  if(!container){
+    // If not found, nothing to render
+    return;
+  }
+  container.innerHTML = '';
+  const title = document.createElement('div'); title.className='section-title'; title.textContent = 'Temporizadores de esta receta';
+  container.appendChild(title);
+  const list = document.createElement('div'); list.style.display='flex'; list.style.flexDirection='column'; list.style.gap='8px';
+  const myTimers = timersStore.filter(t => t.recipeId === recipeId);
+  if(!myTimers.length){
+    const none = document.createElement('div'); none.className='item-btn'; none.textContent = 'No hay temporizadores asociados. Usa el selector superior para añadir uno.';
+    list.appendChild(none);
+  } else {
+    myTimers.forEach(t=>{
+      const row = document.createElement('div'); row.style.display='flex'; row.style.gap='8px'; row.style.alignItems='center';
+      const label = document.createElement('div'); label.style.flex='1'; label.innerHTML = `<strong>${escapeHtml(t.label)}</strong> — ${formatTimeSec(t.remainingSec)} ${t.running?'<small style="color:var(--muted)"> (en marcha)</small>':''}`;
+      const startBtn = document.createElement('button'); startBtn.className='timer-mini-btn'; startBtn.textContent = t.running? 'Pausar' : 'Iniciar';
+      startBtn.onclick = ()=> {
+        if(t.running) pauseTimer(t.id);
+        else startTimer(t.id);
+        renderTimersInRecipeView(recipeId, contentContainer);
+      };
+      const changeBtn = document.createElement('button'); changeBtn.className='timer-mini-btn'; changeBtn.textContent = 'Cambiar';
+      changeBtn.onclick = ()=> {
+        const nuevo = prompt('Nuevo tiempo en minutos:', Math.max(1, Math.round(t.remainingSec/60)));
+        if(nuevo && !isNaN(nuevo)){
+          t.remainingSec = Math.max(1, parseInt(nuevo)) * 60;
+          if(t.running) t.endTs = nowMs() + t.remainingSec*1000;
+          saveTimers(); renderTimersInRecipeView(recipeId, contentContainer); renderTimersBottom();
+        }
+      };
+      const delBtn = document.createElement('button'); delBtn.className='timer-mini-btn'; delBtn.textContent='Eliminar';
+      delBtn.onclick = ()=> { if(confirm('Eliminar este temporizador?')){ stopAndRemoveTimer(t.id); renderTimersInRecipeView(recipeId, contentContainer); } };
+      row.appendChild(label); row.appendChild(startBtn); row.appendChild(changeBtn); row.appendChild(delBtn);
+      list.appendChild(row);
+    });
+  }
+  container.appendChild(list);
+}
+
+function renderTimersBottom(){
+  timersBottom.innerHTML = '';
+  if(!timersStore.length) { timersBottom.style.display='none'; return; }
+  timersBottom.style.display = 'flex';
+  timersStore.forEach(t => {
+    // show only if running or paused — user wanted an unobtrusive panel; show all, with running highlighted.
+    const chip = document.createElement('div'); chip.className='timer-chip';
+    const name = document.createElement('small'); name.textContent = `${truncate(findRecipeName(t.recipeId),20)}: ${formatTimeSec(t.remainingSec)}`;
+    const startPause = document.createElement('button'); startPause.className='timer-action'; startPause.textContent = t.running? 'Pausar' : 'Iniciar';
+    startPause.onclick = ()=>{ t.running? pauseTimer(t.id): startTimer(t.id); };
+    const del = document.createElement('button'); del.className='timer-action'; del.textContent='Eliminar';
+    del.onclick = ()=>{ if(confirm('Eliminar temporizador?')) stopAndRemoveTimer(t.id); };
+    chip.appendChild(name); chip.appendChild(startPause); chip.appendChild(del);
+    timersBottom.appendChild(chip);
+  });
+}
+
+/* ============================
+   Helpers for recipes, favorites, notes
+   ============================ */
+function findRecipeName(id){ const r = recetas.find(x=>x.id===id); return r? r.nombre : id; }
+function toggleFavorito(id, btnEl){
+  if(favoritos.includes(id)){
+    favoritos = favoritos.filter(x=>x!==id);
+  } else {
+    favoritos.push(id);
+  }
+  saveFavs();
+  // update UI label if provided
+  if(btnEl) btnEl.textContent = favoritos.includes(id)? '★ Favorito' : '☆ Marcar favorito';
+}
+function openShareMenuForRecipe(recipe){
+  // share formatted recipe
+  const formatted = formatRecipeForShare(recipe);
+  openShareModal(formatted, recipe.nombre);
+}
+function formatRecipeForShare(r){
+  const ing = (r.ingredientes||[]).map(i=>`- ${i.nombre}${i.cantidad?` — ${i.cantidad} ${i.unidad||''}`:''}`).join('\n');
+  const el = (r.elaboracion||[]).map((s,i)=>`${i+1}. ${s}`).join('\n');
+  const ttotal = detectTimesFromRecipe(r).reduce((a,b)=>a+b,0);
+  return `🍰 ${r.nombre}\n-------------------\n🥄 Ingredientes:\n${ing}\n\n👩‍🍳 Elaboración:\n${el}\n\n⏱ Tiempo total aprox: ${ttotal? ttotal + ' min' : 'No especificado'}`;
+}
+function shareText(encodedText){
+  const text = decodeURIComponent(encodedText);
+  if(navigator.share){
+    navigator.share({ title:'Nota / Receta', text }).catch(()=>{ alert('No se pudo usar compartir nativo.'); });
+  } else {
+    // show a modal with direct links
+    openShareModal(text, 'Compartir');
+  }
+}
+
+/* ============================
+   Modals: share & simple prompt-like UI (custom)
+   ============================ */
+function openShareModal(text, title='Compartir'){
+  modalRoot.innerHTML = '';
+  const modal = document.createElement('div'); modal.className='modal';
+  const card = document.createElement('div'); card.className='modal-card';
+  card.innerHTML = `<div style="display:flex;justify-content:space-between;align-items:center;"><strong>${escapeHtml(title)}</strong><button onclick="closeModal()" style="background:transparent;border:none;font-weight:900;cursor:pointer">✕</button></div>
+    <div style="margin-top:12px; white-space:pre-wrap;">${escapeHtml(text)}</div>
+    <div class="share-list">
+      <button class="share-btn" onclick='doShareWeb("whatsapp","${encodeURIComponent(text)}")'><i class="fa fa-whatsapp"></i> WhatsApp</button>
+      <button class="share-btn" onclick='doShareWeb("telegram","${encodeURIComponent(text)}")'><i class="fa fa-paper-plane"></i> Telegram</button>
+      <button class="share-btn" onclick='doShareWeb("email","${encodeURIComponent(text)}")'><i class="fa fa-envelope"></i> Email</button>
+      <button class="share-btn" onclick='doShareWeb("sms","${encodeURIComponent(text)}")'><i class="fa fa-sms"></i> SMS</button>
+    </div>`;
+  modal.appendChild(card);
+  modalRoot.appendChild(modal);
+}
+function closeModal(){ modalRoot.innerHTML = ''; }
+
+/* helper used by share modal */
+function doShareWeb(type, encodedText){
+  closeModal();
+  const text = decodeURIComponent(encodedText);
+  if(type === 'whatsapp'){
+    window.open(`https://api.whatsapp.com/send?text=${encodeURIComponent(text)}`, '_blank');
+  } else if(type === 'telegram'){
+    window.open(`https://t.me/share/url?url=&text=${encodeURIComponent(text)}`, '_blank');
+  } else if(type === 'email'){
+    window.location.href = `mailto:?subject=${encodeURIComponent('Receta / Nota')}&body=${encodeURIComponent(text)}`;
+  } else if(type === 'sms'){
+    window.location.href = `sms:?body=${encodeURIComponent(text)}`;
+  }
+}
+
+/* ============================
+   Smart filters (buscador inteligente)
+   - time: A/B/C mapping to ranges
+   - difficulty: F/M/D mapping based on detected times
+   - ingredient: text input
+   ============================ */
+
+function renderSmartFiltersView(){
+  const html = document.createElement('div'); html.className='view';
+  html.innerHTML = `<div class="view-header"><button class="view-back" onclick="goBack()">← Atrás</button><div class="view-title">Buscador inteligente</div></div>`;
+  const container = document.createElement('div'); container.className='list';
+  const btn1 = document.createElement('button'); btn1.className='item-btn'; btn1.textContent='Filtrar por ingrediente'; btn1.onclick = ()=> pushView('filterIngredient');
+  const btn2 = document.createElement('button'); btn2.className='item-btn'; btn2.textContent='Filtrar por tiempo (A/B/C)'; btn2.onclick = ()=> pushView('filterTime');
+  const btn3 = document.createElement('button'); btn3.className='item-btn'; btn3.textContent='Filtrar por dificultad (F/M/D)'; btn3.onclick = ()=> pushView('filterDifficulty');
+  container.appendChild(btn1); container.appendChild(btn2); container.appendChild(btn3);
+  html.appendChild(container); viewRoot.appendChild(html);
+}
+
+function renderFilterIngredientView(){
+  const html = document.createElement('div'); html.className='view';
+  html.innerHTML = `<div class="view-header"><button class="view-back" onclick="goBack()">← Atrás</button><div class="view-title">Filtrar por ingrediente</div></div>`;
+  const container = document.createElement('div'); container.className='list';
+  const input = document.createElement('input'); input.placeholder='¿Qué ingrediente?'; input.style.padding='12px'; input.style.borderRadius='10px'; input.style.border='1px solid rgba(12,32,60,0.06)';
+  const searchBtn = document.createElement('button'); searchBtn.className='item-btn'; searchBtn.textContent='Buscar';
+  searchBtn.onclick = ()=>{
+    const q = (input.value||'').trim().toLowerCase();
+    if(!q){ alert('Introduce un ingrediente.'); return; }
+    const results = recetas.filter(r => (r.ingredientes||[]).some(i => (i.nombre||'').toLowerCase().includes(q)));
+    pushView('searchResults',{ results, query: input.value });
+  };
+  container.appendChild(input); container.appendChild(searchBtn);
+  html.appendChild(container); viewRoot.appendChild(html);
+}
+
+function renderFilterTimeView(){
+  const html = document.createElement('div'); html.className='view';
+  html.innerHTML = `<div class="view-header"><button class="view-back" onclick="goBack()">← Atrás</button><div class="view-title">Filtrar por tiempo</div></div>`;
+  const container = document.createElement('div'); container.className='list';
+  container.appendChild(makeFilterOptionButton('Franja "A": 1 - 20 min','A', (opt)=>{ applyTimeFilter(opt); }));
+  container.appendChild(makeFilterOptionButton('Franja "B": 21 - 40 min','B', (opt)=>{ applyTimeFilter(opt); }));
+  container.appendChild(makeFilterOptionButton('Franja "C": 41+ min','C', (opt)=>{ applyTimeFilter(opt); }));
+  html.appendChild(container); viewRoot.appendChild(html);
+}
+function applyTimeFilter(letter){
+  const L = (letter||'').toString().trim().toUpperCase();
+  let results=[];
+  if(L === 'A') results = recetas.filter(r => totalTimeOfRecipe(r) <= 20);
+  if(L === 'B') results = recetas.filter(r => totalTimeOfRecipe(r) >= 21 && totalTimeOfRecipe(r) <= 40);
+  if(L === 'C') results = recetas.filter(r => totalTimeOfRecipe(r) >= 41);
+  pushView('searchResults',{ results, query: `Franja ${L}` });
+}
+function renderFilterDifficultyView(){
+  const html = document.createElement('div'); html.className='view';
+  html.innerHTML = `<div class="view-header"><button class="view-back" onclick="goBack()">← Atrás</button><div class="view-title">Filtrar por dificultad</div></div>`;
+  const container = document.createElement('div'); container.className='list';
+  container.appendChild(makeFilterOptionButton('Fácil (F)','F', (opt)=>applyDifficultyFilter(opt)));
+  container.appendChild(makeFilterOptionButton('Medio (M)','M', (opt)=>applyDifficultyFilter(opt)));
+  container.appendChild(makeFilterOptionButton('Difícil (D)','D', (opt)=>applyDifficultyFilter(opt)));
+  html.appendChild(container); viewRoot.appendChild(html);
+}
+function applyDifficultyFilter(letter){
+  const L = (letter||'').toString().trim().toUpperCase();
+  const map = { 'F': r => recipeDifficulty(r) === 'F', 'M': r => recipeDifficulty(r) === 'M', 'D': r => recipeDifficulty(r) === 'D' };
+  const pred = map[L] || (()=>false);
+  const results = recetas.filter(pred);
+  pushView('searchResults',{ results, query: `Nivel ${L}` });
+}
+function makeFilterOptionButton(label, key, onClick){
+  const b = document.createElement('button'); b.className='item-btn'; b.textContent = label;
+  b.onclick = ()=> onClick(key);
+  return b;
+}
+
+/* ============================
+   Search suggestions and search box
+   - suggestions appear under input and do not navigate immediately
+   - clicking suggestion opens searchResults view (so back returns to results)
+   ============================ */
+
+const busquedaInput = byId('buscador');
+busquedaInput.addEventListener('input', onSearchInput);
+busquedaInput.addEventListener('keydown', e=>{
+  // Enter -> open searchResults
+  if(e.key === 'Enter'){
+    const q = busquedaInput.value.trim();
+    if(!q) return;
+    const results = searchRecipesByQuery(q);
+    pushView('searchResults',{ results, query: q });
+    hideSuggestions();
+  }
+});
+function onSearchInput(e){
+  const q = (e.target.value || '').trim();
+  if(!q){ hideSuggestions(); return; }
+  const results = searchRecipesByQuery(q).slice(0,12);
+  if(!results.length){ hideSuggestions(); return; }
+  showSuggestions(results, q);
+}
+function searchRecipesByQuery(q){
+  q = (q||'').toLowerCase();
+  return recetas.filter(r=>{
+    if((r.nombre||'').toLowerCase().includes(q)) return true;
+    if((r.categoria||'').toLowerCase().includes(q)) return true;
+    if((r.ingredientes||[]).some(i=> (i.nombre||'').toLowerCase().includes(q))) return true;
+    return false;
+  });
+}
+function showSuggestions(results, q){
+  suggestionsEl.innerHTML = '';
+  suggestionsEl.style.display = 'block';
+  results.forEach(r => {
+    const btn = document.createElement('button');
+    btn.textContent = r.nombre + (r.categoria ? ` — ${r.categoria}` : '');
+    btn.onclick = ()=> {
+      // open searchResults with full results for the query so back goes there
+      const all = searchRecipesByQuery(q);
+      pushView('searchResults',{ results: all, query: q });
+      hideSuggestions();
+    };
+    suggestionsEl.appendChild(btn);
+  });
+}
+function hideSuggestions(){ suggestionsEl.style.display = 'none'; suggestionsEl.innerHTML = ''; }
+function resetSearchBox(){ busquedaInput.value = ''; hideSuggestions(); busquedaInput.placeholder = 'Buscar receta . . .'; }
+
+/* ============================
+   Notes per recipe
+   - notesMap stored as { recipeId: [ { text, ts } ] }
+   - per-recipe notes view (pushView('notesForRecipe',{id}))
+   - saving stores in notesMap and localStorage and shows in aggregate in main notes view
+   ============================ */
+
+function pushViewNotesForRecipe(recipeId){
+  pushView('notesForRecipe', { id: recipeId });
+}
+function renderNotesForRecipeView(data){
+  const recipeId = data.id;
+  const recipe = recetas.find(r=>r.id===recipeId);
+  const html = document.createElement('div'); html.className='view';
+  html.innerHTML = `<div class="view-header"><button class="view-back" onclick="goBack()">← Atrás</button><div class="view-title">Notas: ${escapeHtml(recipe?recipe.nombre:recipeId)}</div></div>`;
+  const container = document.createElement('div'); container.className='list';
+  const textarea = document.createElement('textarea'); textarea.style.width='100%'; textarea.style.minHeight='40vh'; textarea.style.padding='12px'; textarea.style.borderRadius='10px';
+  textarea.value = (notesMap[recipeId] && notesMap[recipeId].length) ? notesMap[recipeId][notesMap[recipeId].length-1].text : '';
+  const saveBtn = document.createElement('button'); saveBtn.className='item-btn'; saveBtn.textContent='Guardar';
+  saveBtn.onclick = ()=> {
+    const txt = textarea.value.trim();
+    if(!txt){ alert('La nota está vacía.'); return; }
+    const arr = notesMap[recipeId] || [];
+    arr.push({ text: txt, ts: Date.now() });
+    notesMap[recipeId] = arr;
+    saveNotes();
+    alert('Nota guardada.');
+  };
+  const shareBtn = document.createElement('button'); shareBtn.className='item-btn'; shareBtn.textContent='Compartir';
+  shareBtn.onclick = ()=> shareText(encodeURIComponent((recipe?recipe.nombre:recipeId) + '\n\n' + textarea.value));
+  container.appendChild(textarea); container.appendChild(saveBtn); container.appendChild(shareBtn);
+  // show previous notes for this recipe chronologically
+  const prev = document.createElement('div'); prev.style.marginTop = '12px';
+  const arrPrev = notesMap[recipeId] || [];
+  if(arrPrev.length){
+    arrPrev.slice().reverse().forEach(n=>{
+      const b = document.createElement('div'); b.className='note-block'; b.style.marginBottom='8px';
+      b.innerHTML = `<div style="font-weight:900;margin-bottom:6px">${new Date(n.ts).toLocaleString()}</div><div style="white-space:pre-wrap">${escapeHtml(n.text)}</div>`;
+      prev.appendChild(b);
+    });
+  }
+  html.appendChild(container); html.appendChild(prev);
+  viewRoot.appendChild(html);
+}
+
+/* ============================
+   Small helper + init
+   ============================ */
+
+function escapeHtml(s){
+  if(s==null) return '';
+  return String(s).replace(/[&<>"']/g, (m)=>({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;' })[m]);
+}
+function truncate(s, n){ if(!s) return ''; return (s.length>n)? s.slice(0,n-1)+'…': s; }
+
+/* totalTimeOfRecipe used by filters */
+function totalTimeOfRecipe(r){
+  return detectTimesFromRecipe(r).reduce((a,b)=>a+b, 0);
+}
+function recipeDifficulty(r){
+  const t = totalTimeOfRecipe(r);
+  if(t === 0 || t <= 20) return 'F';
+  if(t > 20 && t <= 30) return 'M';
+  return 'D';
+}
+
+/* helpers for recipe notes view plumbing with pushView */
+window.pushView = function(v,d){ pushView(v,d); };
+window.goBack = function(){ goBack(); };
+window.openShareMenuForRecipe = openShareMenuForRecipe;
+window.createTimerForRecipe = createTimerForRecipe;
+
+/* ============================
+   Initialization: event hooks & restoring timers
+   ============================ */
+
+document.getElementById('btn-modo').addEventListener('click', ()=>{
+  document.body.classList.toggle('modo-oscuro');
+});
+document.getElementById('btn-menu').addEventListener('click', ()=> { pushView('menu'); });
+document.getElementById('btn-estrella').addEventListener('click', ()=> { pushView('favoritos'); });
+document.getElementById('btn-notas').addEventListener('click', ()=> { pushView('notesAggregate'); });
+document.getElementById('btn-buscador-inteligente').addEventListener('click', ()=> { pushView('smartFilters'); });
+
+// suggestions hide on click outside
+document.addEventListener('click', (e)=>{
+  if(!document.querySelector('.search-row').contains(e.target)) hideSuggestions();
+});
+
+// load timers from storage and resume if running
+resumeTimersFromStore();
+
+// If the stack empty, show home
+renderHome();
+
+/* Hook for when a view is pushed: we used pushView(...) from UI — ensure rendering recipe notes view has support */
+(function hookPushViewForNotes(){
+  // Intercept pushView (we used pushView in code above) to support notesForRecipe
+  const origPush = pushView;
+  window.pushView = function(v,d){
+    // call original (but ensure d default)
+    origPush(v,d||{});
+    // if pushed notesForRecipe view, render special view
+    if(v === 'notesForRecipe'){
+      // replace last view render with our specialized function
+      historyStack[historyStack.length-1] = { view:'notesForRecipe', data:d };
+      clearViewRoot();
+      renderNotesForRecipeView(d);
+    }
+  }
+})();
+
+/* Render notes aggregate view on request mapping */
+(function hookRenderViewNotesAggregate(){
+  // patch renderView to handle notesAggregate and notesForRecipe mapping to proper functions
+  const origRender = renderView;
+  renderView = function(view, data){
+    clearViewRoot();
+    if(view === 'notesAggregate') renderNotesAggregateView();
+    else if(view === 'notesForRecipe') renderNotesForRecipeView(data);
+    else origRender(view,data);
+  }
+})();
+
+/* On load: ensure if any recipe view should be shown (none), keep home */
+/* Provide a small utility: if user hits Back browser button, map to goBack (optional) */
+window.addEventListener('popstate', (e)=>{ goBack(); });
+
+/* Expose some helpers in global for inline onclick use */
+window.startTimer = startTimer;
+window.pauseTimer = pauseTimer;
+window.stopAndRemoveTimer = stopAndRemoveTimer;
+window.shareText = shareText;
+
+/* Initialize UI: make suggestions hidden and attach behavior to Opening recipe view link from suggestions works via pushView in code above */
+function hideSuggestions(){ suggestionsEl.style.display='none'; suggestionsEl.innerHTML=''; }
+function showSuggestions(arr){ /* not used directly */ }
+
+/* Refresh recipe timer area when timers change and the recipe view is visible */
+function refreshRecipeTimerAreaIfVisible(recipeId){
+  const rc = document.querySelector('.view .recipe-top-actions') || null;
+  // easiest: if current top view is receta with same id, re-render view
+  const top = historyStack[historyStack.length - 1];
+  if(top && top.view === 'receta' && top.data && top.data.id === recipeId){
+    // re-render same view without pushing
+    renderView('receta', top.data);
+  }
+}
+
+/* small helper: when bottom timers updated, keep it visible */
+function ensureTimersUI(){
+  renderTimersBottom();
+}
+
+// expose a few functions to window for inline onclick attributes used earlier
+window.ensureTimersCreatedForRecipe = ensureTimersCreatedForRecipe;
+window.renderTimersInRecipeView = renderTimersInRecipeView;
+window.renderTimersBottom = renderTimersBottom;
+window.findRecipeName = findRecipeName;
+
+/* Final: wire a small handler so when user pushes "searchResults" or similar with search, the functions above are used.
+   NOTE: Some older inline-created functions call pushView('receta'... etc).
+*/
+
+/* ============================
+   Compatibility: if pushView replaced earlier, ensure proper functions exist
+   ============================ */
+if(!window.pushView) window.pushView = (v,d)=>{ pushView(v,d); };
+
+/* END of script */
 </script>
 </body>
 </html>
