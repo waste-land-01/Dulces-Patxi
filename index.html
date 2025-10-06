@@ -5,26 +5,27 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Dulces Patxi</title>
   <meta name="theme-color" content="#6c3b8e">
+  <link rel="manifest" href="manifest.json">
+  <link rel="icon" type="image/png" href="icon-192.png">
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
   <style>
-    html, body { height: 100%; }
-    body {
+    html, body {
+      height: 100%;
+      min-height: 100vh;
       background: #f6f4ff;
       color: #574b36;
       font-family: 'Segoe UI', 'Arial', sans-serif;
-      margin: 0; min-height: 100vh;
-      font-size: 1.08em;
-      transition: background 0.3s, color 0.3s;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: flex-start;
+      margin: 0;
+      padding: 0;
     }
-    .modo-oscuro { background: #181621 !important; color: #ffe0a3 !important;}
+    body.modo-oscuro {
+      background: #181621 !important;
+      color: #ffe0a3 !important;
+    }
     .pantalla, .view {
-      max-width: 430px; width: 100vw;
+      max-width: 430px;
       min-height: 100vh;
-      box-sizing: border-box;
+      margin: 0 auto;
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -34,12 +35,32 @@
       color: inherit;
       position: relative;
     }
-    .titulo-app { text-align: center; font-size:2.25em; font-weight:900; margin-top:32px; margin-bottom:0.35em; color:#2d5b2f;}
-    .bienvenida { text-align: center; font-size:1.14em; margin-bottom:0.1em; color:#574b36; font-weight:700;}
-    .by-yahya { text-align: center; font-size:1.07em; margin-bottom:32px; color:#2b7be4; font-weight:bold; text-shadow:0 1px 6px #b2d6ff; letter-spacing:0.09em;}
-    .modo-oscuro .titulo-app { color: #aee869;}
-    .modo-oscuro .bienvenida { color: #ffe0a3;}
-    .modo-oscuro .by-yahya { color: #69bfff; text-shadow:0 1px 6px #3777ff;}
+    .titulo-app {
+      text-align: center;
+      font-size: 2.25em;
+      font-weight: 900;
+      margin-top: 32px;
+      margin-bottom: 0.35em;
+      color: #2d5b2f;
+    }
+    .bienvenida {
+      text-align: center;
+      font-size: 1.14em;
+      margin-bottom: 0.1em;
+      color: #574b36;
+      font-weight: 700;
+    }
+    .by-yahya {
+      text-align: center;
+      font-size: 1.07em;
+      margin-bottom: 32px;
+      color: #2b7be4;
+      font-weight: bold;
+      text-shadow: 0 1px 6px #b2d6ff;
+    }
+    body.modo-oscuro .titulo-app { color: #aee869;}
+    body.modo-oscuro .bienvenida { color: #ffe0a3;}
+    body.modo-oscuro .by-yahya { color: #69bfff; text-shadow:0 1px 6px #3777ff;}
     .buscador-row {
       width: 100%;
       margin-bottom: 32px;
@@ -61,7 +82,7 @@
       outline: none;
       transition: background 0.3s, border 0.3s, color 0.3s;
     }
-    .modo-oscuro #buscador { background: #262241; color: #fff; border-color: #f7b563;}
+    body.modo-oscuro #buscador { background: #262241; color: #fff; border-color: #f7b563;}
     .icon-search {
       font-size: 1.18em;
       position: absolute;
@@ -73,10 +94,11 @@
     .main-btn, .modal-btn {
       border: none; border-radius: 21px;
       font-weight: 900; font-size: 1.17em;
-      width: 100%; box-shadow: 0 4px 24px #0002;
+      width: 100%; max-width:400px; box-shadow: 0 4px 24px #0002;
       cursor: pointer;
       margin-bottom: 16px; padding: 18px 0;
-      display: flex; align-items: center; justify-content: center; letter-spacing: 0.01em;
+      display: flex; align-items: center; justify-content: center;
+      letter-spacing: 0.01em;
       transition: background 0.3s, color 0.3s;
     }
     #btn-modo { background:#3498db; color:#fff;}
@@ -114,9 +136,9 @@
     .modal-btn { min-width:175px; font-size:1.07em; padding:17px 0; border-radius:15px; border:none; font-weight:900; background:#f7b563; color:#fff; box-shadow:0 4px 24px #0002; cursor:pointer;}
     .modal-btn:last-child { background:#e2e2e2; color:#222; margin-top:18px;}
     .modal-btn:active { background:#e9a23d;}
-    .modo-oscuro .modal-content { background: #292542; color: #fffbe5;}
-    .modo-oscuro .modal-btn { background: #c47e43; color: #fff;}
-    .modo-oscuro .modal-btn:last-child { background: #181621; color: #fffbe5; }
+    body.modo-oscuro .modal-content { background: #292542; color: #fffbe5;}
+    body.modo-oscuro .modal-btn { background: #c47e43; color: #fff;}
+    body.modo-oscuro .modal-btn:last-child { background: #181621; color: #fffbe5; }
     .view {
       animation: fadeIn .35s;
       width: 100vw; min-height: 100vh;
@@ -127,27 +149,27 @@
       opacity:1; transform:translateY(0); transition:opacity .3s, transform .3s;
     }
     .view.hide { opacity:0; transform:translateY(30px); pointer-events:none;}
-    .modo-oscuro .view { background: #181621; color: #fffbe5;}
+    body.modo-oscuro .view { background: #181621; color: #fffbe5;}
     .view-title { font-size:1.28em; font-weight:900; margin-bottom:1.2em; text-align:center; letter-spacing:0.03em;}
     .view-back { margin-bottom:1em; font-size:1.09em; width:110px; align-self:flex-start; background:#2d5b2f; color:#fff; border:none; border-radius:15px; padding:11px 0; font-weight:900; box-shadow:0 4px 24px #0002; cursor:pointer;}
-    .modo-oscuro .view-back { background:#6c3b8e; color:#fff;}
+    body.modo-oscuro .view-back { background:#6c3b8e; color:#fff;}
     .section { width:100%; margin-bottom:1.5em;}
     .ingredientes-lista { background:#f9e3e3; color:#b36f3c; border-radius:14px; padding:13px 10px; margin-bottom:1.2em; font-size:1.09em; box-shadow:0 4px 24px #0002;}
-    .modo-oscuro .ingredientes-lista { background:#37323e; color:#f7b563;}
+    body.modo-oscuro .ingredientes-lista { background:#37323e; color:#f7b563;}
     .elaboracion-lista { background:#e3f9f4; color:#3cb36f; border-radius:14px; padding:13px 10px; margin-bottom:1em; font-size:1.09em; box-shadow:0 4px 24px #0002;}
-    .modo-oscuro .elaboracion-lista { background:#22202e; color:#3cb36f;}
+    body.modo-oscuro .elaboracion-lista { background:#22202e; color:#3cb36f;}
     .fav-lista { background:#fffbe5; color:#b36f3c; border-radius:14px; padding:13px 10px; margin-bottom:1.2em; font-size:1.09em; box-shadow:0 4px 24px #0002;}
-    .modo-oscuro .fav-lista { background:#292542; color:#f7b563;}
+    body.modo-oscuro .fav-lista { background:#292542; color:#f7b563;}
     .notas-toolbar { display:flex; gap:14px; justify-content:center; margin-top:22px; margin-bottom:5px;}
     .notas-btn { font-size:1.05em; padding:13px 0; min-width:130px; border-radius:14px; border:none; font-weight:900; background:#f7b563; color:#fff; box-shadow:0 4px 24px #0002; cursor:pointer;}
     .notas-btn:last-child { background:#e2e2e2; color:#222;}
     .notas-btn:active { background:#e9a23d; }
-    .modo-oscuro .notas-btn { background:#c47e43; color:#fff;}
-    .modo-oscuro .notas-btn:last-child { background:#181621; color:#fffbe5;}
+    body.modo-oscuro .notas-btn { background:#c47e43; color:#fff;}
+    body.modo-oscuro .notas-btn:last-child { background:#181621; color:#fffbe5;}
     .notas-ampliada { min-height:70vh; font-size:1.18em; border-radius:18px; padding:22px 11px; box-shadow:0 8px 32px #0005; margin-bottom:22px; background:#fff; color:#222;}
-    .modo-oscuro .notas-ampliada { background:#292542; color:#fffbe5;}
+    body.modo-oscuro .notas-ampliada { background:#292542; color:#fffbe5;}
     .temporizador-panel { display:flex; flex-direction:column; align-items:center; gap:18px; margin:25px 0; background:#f4f8ff; border-radius:16px; padding:14px 0; box-shadow:0 4px 24px #0002;}
-    .modo-oscuro .temporizador-panel { background:#282844; color:#fffbe5;}
+    body.modo-oscuro .temporizador-panel { background:#282844; color:#fffbe5;}
     .temporizador-time { font-size:2.3em; font-weight:900; margin-bottom:6px; letter-spacing:0.07em;}
     .temporizador-btns { display:flex; gap:14px; flex-wrap:wrap; justify-content:center; margin-bottom:8px;}
     .temporizador-btn { font-size:1.05em; padding:11px 0; min-width:90px; border-radius:13px; border:none; font-weight:900; background:#6c3b8e; color:#fff; box-shadow:0 4px 24px #0002; cursor:pointer; }
@@ -155,9 +177,25 @@
     .calc-row { width:100%; display:flex; align-items:center; justify-content:flex-start; gap:18px; margin-bottom:18px; margin-top:8px;}
     .calc-label { font-weight:900; font-size:1.13em; letter-spacing:0.01em; margin-right:4px;}
     .calc-input { font-size:1.09em; padding:9px 12px; border-radius:13px; border:2px solid #7C4D9F; background:#fff; color:#222; font-weight:900; width:70px;}
-    .modo-oscuro .calc-input { background:#292542; color:#fff; border-color:#f7b563;}
+    body.modo-oscuro .calc-input { background:#292542; color:#fff; border-color:#f7b563;}
     @keyframes fadeIn { from { opacity:0; } to { opacity:1; } }
   </style>
+</head>
+<body>
+  <div class="pantalla" id="pantalla-principal">
+    <div class="titulo-app">DULCES PATXI</div>
+    <div class="bienvenida">BIENVENIDOS A DULCES DE BACHIR KRAI</div>
+    <div class="by-yahya">by yahya</div>
+    <div class="buscador-row">
+      <input type="text" id="buscador" placeholder="Buscar receta..." autocomplete="off"/>
+      <span class="icon-search"><i class="fas fa-search"></i></span>
+    </div>
+    <button id="btn-modo" class="main-btn">MODO</button>
+    <button id="btn-buscador-inteligente" class="main-btn">BUSCADOR INTELIGENTE</button>
+    <button id="btn-menu" class="main-btn">MENÚ</button>
+    <button id="btn-estrella" class="main-btn">RECETAS ESTRELLA <span class="estrella-ico">★</span></button>
+    <button id="btn-notas" class="main-btn">NOTAS PERSONALES <span class="estrella-ico">★</span></button>
+  </div>
   
 
 
@@ -1408,8 +1446,6 @@
       }
     ];
 
-
-
     let favoritos = JSON.parse(localStorage.getItem('favoritos') || "[]");
     let notas = JSON.parse(localStorage.getItem('notas') || "{}");
     let recetaActual = null;
@@ -1418,6 +1454,7 @@
     let notasAmpliada = false;
     let temporizador = {active:false, time:0, timer:null, pitido:false, recetaId:null, originalTime:0};
 
+    // Helpers para pantalla y navegación real
     function clearViews() {
       document.querySelectorAll('.view, .modal').forEach(v => v.remove());
       document.getElementById('pantalla-principal').style.display='none';
