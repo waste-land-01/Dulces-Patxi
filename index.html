@@ -1,96 +1,56 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <title>Dulces Patxi</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      margin: 0; padding: 0;
-      background: var(--bg);
-      color: var(--fg);
-      transition: background 0.3s, color 0.3s;
-    }
-    :root {
-      --bg: #fff;
-      --fg: #000;
-      --btn-bg: #eee;
-      --btn-fg: #000;
-    }
-    .dark {
-      --bg: #222;
-      --fg: #eee;
-      --btn-bg: #444;
-      --btn-fg: #fff;
-    }
-    header {
-      text-align: center;
-      padding: 20px;
-    }
-    header h1 {
-      font-size: 2em;
-      margin: 0;
-    }
-    header p {
-      margin: 5px 0;
-    }
-    .container {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      padding: 20px;
-    }
-    button {
-      background: var(--btn-bg);
-      color: var(--btn-fg);
-      border: none;
-      margin: 10px;
-      padding: 20px;
-      font-size: 1.2em;
-      width: 80%;
-      max-width: 400px;
-      border-radius: 10px;
-      cursor: pointer;
-      transition: background 0.2s;
-    }
-    button:hover { background: #888; color:#fff; }
-    .view { padding: 20px; }
-    .back-btn {
-      background: #c33; color:#fff; padding: 10px; margin-bottom: 15px;
-      border-radius: 8px; font-size: 1em; width: auto;
-    }
-    .receta { padding: 10px; }
-    .receta h2 { margin-top:0; }
-    .ingredientes, .elaboracion { margin: 15px 0; }
-    .notas-btn {
-      background:#369; color:#fff; margin-top:20px;
-    }
-    /* Modales */
-    .modal {
-      position: fixed; top:0; left:0; width:100%; height:100%;
-      background: rgba(0,0,0,0.7);
-      display:flex; justify-content:center; align-items:center;
-      z-index:1000;
-    }
-    .modal-content {
-      background: var(--bg);
-      color: var(--fg);
-      padding:20px; border-radius:10px;
-      width:80%; max-width:400px;
-      text-align:center;
-    }
-    .modal-content button {
-      width:auto; margin:5px;
-    }
-    .temporizadores { margin-top:15px; }
-    .temporizador {
-      border:1px solid #aaa; padding:10px; margin:5px 0; border-radius:8px;
-    }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dulces Patxi</title>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+<style>
+  html,body{height:100%;margin:0;padding:0;font-family:'Segoe UI',Arial,sans-serif;background:#f5f7fa;color:#222;transition:background .3s,color .3s;}
+  body.modo-oscuro{background:#101217;color:#e2e6ef;}
+  .pantalla-principal{display:flex;flex-direction:column;align-items:center;justify-content:flex-start;min-height:100vh;padding:2em 1em;max-width:480px;margin:auto;text-align:center;}
+  .titulo-app{font-size:2.4em;font-weight:900;margin-bottom:.4em;color:#0b4fa3;}
+  body.modo-oscuro .titulo-app{color:#8ab4ff;}
+  .bienvenida{font-size:1.1em;font-weight:700;margin-bottom:0.4em;white-space:pre-line;}
+  .by-yahya{font-size:1.05em;color:#2b7be4;font-weight:bold;margin-bottom:2em;}
+  body.modo-oscuro .by-yahya{color:#7db2ff;}
+  .buscador-row{width:100%;position:relative;margin-bottom:1.5em;}
+  #buscador{width:100%;padding:14px;border-radius:22px;border:2px solid #0b4fa3;font-size:1.1em;outline:none;}
+  body.modo-oscuro #buscador{background:#181c25;color:#fff;border-color:#4e8ef7;}
+  .main-btn{width:100%;padding:18px 0;margin-bottom:1em;border:none;border-radius:20px;font-size:1.2em;font-weight:800;cursor:pointer;transition:all .25s ease;box-shadow:0 4px 10px #0003;}
+  .main-btn:hover{transform:translateY(-2px);}
+  #btn-modo{background:#2e6cf6;color:#fff;}
+  #btn-buscador-inteligente{background:#00a6a6;color:#fff;}
+  #btn-menu{background:#5c33b8;color:#fff;}
+  #btn-estrella{background:#f7b500;color:#fff;}
+  #btn-notas{background:#22b573;color:#fff;}
+  body.modo-oscuro .main-btn{box-shadow:0 4px 10px #000;}
+  body.modo-oscuro #btn-modo{background:#3573ff;}
+  .view{animation:fadeIn .3s;position:fixed;top:0;left:0;width:100%;height:100%;overflow-y:auto;background:#fff;color:#222;padding:2em 1.5em;box-sizing:border-box;z-index:100;}
+  body.modo-oscuro .view{background:#181c25;color:#e2e6ef;}
+  .view-back{background:#0b4fa3;color:#fff;border:none;border-radius:14px;padding:10px 18px;font-weight:800;margin-bottom:1em;cursor:pointer;}
+  body.modo-oscuro .view-back{background:#3573ff;}
+  .view-title{font-size:1.4em;font-weight:900;text-align:center;margin-bottom:1em;}
+  .temporizador-flotante{position:fixed;bottom:0;left:0;width:100%;background:rgba(0,0,0,0.75);color:#fff;padding:.6em .4em;display:flex;flex-wrap:wrap;justify-content:center;gap:.5em;z-index:9999;}
+  .temporizador-item{background:#3573ff;border-radius:10px;padding:.4em .8em;font-weight:700;display:flex;align-items:center;gap:.4em;}
+  .temp-btn{background:#222;border:none;border-radius:8px;color:#fff;padding:2px 6px;cursor:pointer;font-size:.9em;}
+  @keyframes fadeIn{from{opacity:0;}to{opacity:1;}}
+</style>
 </head>
 <body>
-  <div id="app"></div>
+<div id="pantalla-principal" class="pantalla-principal">
+  <div class="titulo-app">Dulces Patxi</div>
+  <div class="bienvenida">Bienvenidos en Dulces de Bachir Krai
+By Yahya</div>
+  <div class="buscador-row">
+    <input id="buscador" placeholder="Buscar receta . . ." />
+  </div>
+  <button id="btn-modo" class="main-btn">Modo</button>
+  <button id="btn-buscador-inteligente" class="main-btn">Buscador inteligente</button>
+  <button id="btn-menu" class="main-btn">Menú</button>
+  <button id="btn-estrella" class="main-btn">Recetas estrella</button>
+  <button id="btn-notas" class="main-btn">Notas personales</button>
+</div>
 
 
 
@@ -1344,271 +1304,175 @@
 
 
 
+let favoritos = JSON.parse(localStorage.getItem('favoritos')||"[]");
+let notas = JSON.parse(localStorage.getItem('notas')||"{}");
+let temporizadoresActivos = [];
+let historial = [];
 
-// ======== ESTADO Y NAVEGACIÓN ========
-let currentView = 'home';
-let stack = [];
-let modoOscuro = false;
-
-function setView(view, data=null) {
-  const app = document.getElementById("app");
-  app.innerHTML = "";
-  currentView = view;
-  if(view==="home") renderHome(app);
-  if(view==="receta") renderReceta(app, data);
-  if(view==="categorias") renderCategorias(app);
-  if(view==="favoritos") renderFavoritos(app);
-  if(view==="notas") renderNotas(app);
+function renderView(html){
+  document.querySelectorAll('.view').forEach(v=>v.remove());
+  const v=document.createElement('div');
+  v.className='view';
+  v.innerHTML=html;
+  document.body.appendChild(v);
 }
 
-// ======== VISTAS ========
-function renderHome(app){
-  const h = document.createElement("header");
-  h.innerHTML = `
-    <h1>Dulce Patxi</h1>
-    <p>Bienvenidos en Dulces de Bachir Krai<br>By Yahya</p>
-  `;
-  app.appendChild(h);
-  const c = document.createElement("div");
-  c.className="container";
-  const btns = [
-    {t:"Buscar receta...", a:()=>showBuscador()},
-    {t:"Modo", a:()=>toggleMode()},
-    {t:"Buscador inteligente", a:()=>showBuscadorInteligente()},
-    {t:"Menu", a:()=>renderMenu()},
-    {t:"Recetas estrella", a:()=>setView('favoritos')},
-    {t:"Notas personales", a:()=>setView('notas')}
-  ];
-  btns.forEach(b=>{
-    const btn=document.createElement("button");
-    btn.textContent=b.t;
-    btn.onclick=b.a;
-    c.appendChild(btn);
-  });
-  app.appendChild(c);
+function showPrincipal(){
+  document.querySelectorAll('.view').forEach(v=>v.remove());
+  document.getElementById('pantalla-principal').style.display='flex';
 }
 
-function renderMenu(){
-  const app = document.getElementById("app");
-  app.innerHTML = "";
-  const back = mkBackBtn();
-  app.appendChild(back);
-  const c=document.createElement("div");
-  c.className="container";
-  const opts=[
-    {t:"Categorías", a:()=>setView("categorias")},
-    {t:"Recetas estrella", a:()=>setView("favoritos")},
-    {t:"Última receta", a:()=>{if(lastReceta) setView("receta", lastReceta);}}
-  ];
-  opts.forEach(o=>{
-    const btn=document.createElement("button");
-    btn.textContent=o.t; btn.onclick=o.a;
-    c.appendChild(btn);
-  });
-  app.appendChild(c);
+function goBack(){
+  const prev = historial.pop();
+  if(prev){setView(prev.view, prev.data);}
+  else showPrincipal();
 }
 
-function renderCategorias(app){
-  const back=mkBackBtn(); app.appendChild(back);
-  const c=document.createElement("div");
-  c.className="container";
-  const cats=[...new Set(recetas.map(r=>r.categoria))];
-  cats.forEach(cat=>{
-    const b=document.createElement("button");
-    b.textContent=cat;
-    b.onclick=()=>showRecetas(cat);
-    c.appendChild(b);
-  });
-  app.appendChild(c);
-}
+function setView(view,data={}){
+  document.getElementById('pantalla-principal').style.display='none';
+  let html="";
+  historial.push({view,data});
 
-function renderFavoritos(app){
-  const back=mkBackBtn(); app.appendChild(back);
-  const c=document.createElement("div"); c.className="container";
-  recetas.filter(r=>r.estrella).forEach(r=>{
-    const b=document.createElement("button");
-    b.textContent=r.nombre;
-    b.onclick=()=>setView("receta",r);
-    c.appendChild(b);
-  });
-  app.appendChild(c);
-}
-
-function renderNotas(app){
-  const back=mkBackBtn(); app.appendChild(back);
-  const t=document.createElement("textarea");
-  t.style.width="100%"; t.style.height="200px";
-  app.appendChild(t);
-  const g=document.createElement("button"); g.textContent="Guardar";
-  const s=document.createElement("button"); s.textContent="Compartir";
-  g.onclick=()=>alert("Nota guardada");
-  s.onclick=()=>alert("Nota compartida");
-  app.appendChild(g); app.appendChild(s);
-}
-
-// ======== RECETAS ========
-let lastReceta=null;
-
-function renderReceta(app, r){
-  lastReceta=r;
-  const back=mkBackBtn(); app.appendChild(back);
-  const t=document.createElement("div"); t.className="receta";
-  t.innerHTML=`<h2>${r.nombre}</h2>`;
-  // Ingredientes
-  const ing=document.createElement("div"); ing.className="ingredientes";
-  ing.innerHTML="<h3>Ingredientes:</h3><ul>"+r.ingredientes.map(i=>`<li>${i.nombre} - ${i.cantidad||''} ${i.unidad||''}</li>`).join("")+"</ul>";
-  t.appendChild(ing);
-  // Elaboración
-  const el=document.createElement("div"); el.className="elaboracion";
-  el.innerHTML="<h3>Elaboración:</h3><ol>"+r.elaboracion.map(e=>`<li>${e}</li>`).join("")+"</ol>";
-  t.appendChild(el);
-  // Temporizadores automáticos
-  const tiempos = detectarTiempos(r);
-  if(tiempos.length>0){
-    const sec=document.createElement("div");
-    sec.className="temporizadores";
-    sec.innerHTML="<h3>Temporizadores:</h3>";
-    tiempos.forEach((min,i)=>{
-      const div=document.createElement("div"); div.className="temporizador";
-      let tiempoRest=min*60; let intervalo=null;
-      const p=document.createElement("p"); p.textContent=`${min} minutos restantes`;
-      const start=document.createElement("button"); start.textContent="Iniciar";
-      const pause=document.createElement("button"); pause.textContent="Pausar";
-      start.onclick=()=>{if(!intervalo){intervalo=setInterval(()=>{if(tiempoRest>0){tiempoRest--;p.textContent=Math.floor(tiempoRest/60)+" min "+(tiempoRest%60)+" s";}else{clearInterval(intervalo);alert("¡Tiempo terminado!");}},1000);}};
-      pause.onclick=()=>{clearInterval(intervalo); intervalo=null;};
-      div.appendChild(p); div.appendChild(start); div.appendChild(pause);
-      sec.appendChild(div);
-    });
-    t.appendChild(sec);
+  if(view==='menu'){
+    html=`<button class="view-back" onclick="goBack()">← Atrás</button>
+    <div class="view-title">Menú</div>
+    <button class="main-btn" onclick="setView('categorias')">Categorías</button>
+    <button class="main-btn" onclick="setView('favoritos')">Recetas estrella</button>
+    <button class="main-btn" onclick="setView('ultima')">Última receta</button>`;
   }
-  // Botón notas
-  const nb=document.createElement("button"); nb.className="notas-btn";
-  nb.textContent="Notas y Observaciones";
-  nb.onclick=()=>setView("notas");
-  t.appendChild(nb);
-  // Compartir elegante
-  const cb=document.createElement("button"); cb.textContent="Compartir";
-  cb.onclick=()=>shareReceta(r);
-  t.appendChild(cb);
-
-  app.appendChild(t);
-}
-
-// ======== HELPERS ========
-function mkBackBtn(){ const b=document.createElement("button"); b.className="back-btn"; b.textContent="← Atrás"; b.onclick=()=>setView("home"); return b; }
-function toggleMode(){ document.body.classList.toggle("dark"); }
-
-function showRecetas(cat){
-  const app=document.getElementById("app"); app.innerHTML=""; const back=mkBackBtn(); app.appendChild(back);
-  const c=document.createElement("div"); c.className="container";
-  recetas.filter(r=>r.categoria===cat).forEach(r=>{
-    const b=document.createElement("button"); b.textContent=r.nombre; b.onclick=()=>setView("receta",r); c.appendChild(b);
-  });
-  app.appendChild(c);
-}
-
-// ======== BUSCADOR ========
-function showBuscador(){
-  const m=document.createElement("div"); m.className="modal";
-  m.innerHTML=`<div class="modal-content"><h3>Buscar receta</h3><input id="busq" placeholder="Buscar receta..."><div id="res"></div><button onclick="closeModal()">Cerrar</button></div>`;
-  document.body.appendChild(m);
-  document.getElementById("busq").oninput=(e)=>{
-    const q=e.target.value.toLowerCase();
-    const r=recetas.filter(x=>x.nombre.toLowerCase().includes(q));
-    const res=document.getElementById("res");
-    res.innerHTML="";
-    r.forEach(rx=>{
-      const b=document.createElement("button"); b.textContent=rx.nombre; b.onclick=()=>{closeModal();setView("receta",rx);};
-      res.appendChild(b);
-    });
-  };
-}
-function closeModal(){document.querySelectorAll(".modal").forEach(m=>m.remove());}
-
-// ======== BUSCADOR INTELIGENTE ========
-function showBuscadorInteligente(){
-  const m=document.createElement("div"); m.className="modal";
-  m.innerHTML=`<div class="modal-content"><h3>Buscador inteligente</h3>
-    <button onclick="filtrarIngrediente()">Filtrar por ingrediente</button>
-    <button onclick="filtrarTiempo()">Filtrar por tiempo</button>
-    <button onclick="filtrarDificultad()">Filtrar por dificultad</button>
-    <button onclick="closeModal()">Cerrar</button></div>`;
-  document.body.appendChild(m);
-}
-
-function filtrarIngrediente(){
-  closeModal();
-  const ing=prompt("¿Qué ingrediente?");
-  if(!ing)return;
-  const r=recetas.filter(r=>r.ingredientes.some(i=>i.nombre.toLowerCase().includes(ing.toLowerCase())));
-  mostrarResultados(r);
-}
-function filtrarTiempo(){
-  closeModal();
-  const msg="Franja \"A\": de 1 - 20 min\nFranja \"B\": de 21 - 40 min\nFranja \"C\": de 41+\nElige una franja: A, B, C";
-  const f=prompt(msg);
-  let r=[];
-  if(f==="A")r=recetas.filter(r=>tiempoTotal(r)<=20);
-  if(f==="B")r=recetas.filter(r=>tiempoTotal(r)>20 && tiempoTotal(r)<=40);
-  if(f==="C")r=recetas.filter(r=>tiempoTotal(r)>40);
-  mostrarResultados(r);
-}
-function filtrarDificultad(){
-  closeModal();
-  const msg="¿A qué nivel de dificultad te atreves: Fácil, Medio o Difícil?\nElige un nivel: F, M, D";
-  const f=prompt(msg);
-  let r=[];
-  if(f==="F")r=recetas.filter(r=>nivelReceta(r)==="F");
-  if(f==="M")r=recetas.filter(r=>nivelReceta(r)==="M");
-  if(f==="D")r=recetas.filter(r=>nivelReceta(r)==="D");
-  mostrarResultados(r);
-}
-function mostrarResultados(r){
-  const m=document.createElement("div"); m.className="modal";
-  const c=document.createElement("div"); c.className="modal-content";
-  r.forEach(rx=>{const b=document.createElement("button"); b.textContent=rx.nombre; b.onclick=()=>{closeModal();setView("receta",rx);}; c.appendChild(b);});
-  const cl=document.createElement("button"); cl.textContent="Cerrar"; cl.onclick=()=>closeModal(); c.appendChild(cl);
-  m.appendChild(c); document.body.appendChild(m);
-}
-
-// ======== PARSER TIEMPOS ========
-function detectarTiempos(r){
-  let tiempos=[];
-  if(r.tiempo) tiempos.push(r.tiempo);
-  if(r.elaboracion){
-    r.elaboracion.forEach(e=>{
-      const m=e.match(/(\d+)\s*(min|minuto|minutos)/i);
-      if(m) tiempos.push(parseInt(m[1]));
-      const h=e.match(/(\d+)\s*(h|hora|horas)/i);
-      if(h) tiempos.push(parseInt(h[1])*60);
-    });
+  else if(view==='categorias'){
+    const cats=[...new Set(recetas.map(r=>r.categoria))];
+    html=`<button class="view-back" onclick="goBack()">← Atrás</button>
+    <div class="view-title">Categorías</div>
+    ${cats.map(c=>`<button class="main-btn" onclick="setView('recetas',{categoria:'${c}'})">${c}</button>`).join('')}`;
   }
-  return tiempos;
-}
-function tiempoTotal(r){
-  return detectarTiempos(r).reduce((a,b)=>a+b,0);
-}
-function nivelReceta(r){
-  const t=tiempoTotal(r);
-  if(t===0||t<=20)return "F";
-  if(t>20&&t<=30)return "M";
-  if(t>30)return "D";
-  return "F";
+  else if(view==='recetas'){
+    const items=recetas.filter(r=>r.categoria===data.categoria);
+    html=`<button class="view-back" onclick="goBack()">← Atrás</button>
+    <div class="view-title">${data.categoria}</div>
+    ${items.map(r=>`<button class="main-btn" onclick="setView('receta',{id:'${r.id}'})">${r.nombre}</button>`).join('')}`;
+  }
+  else if(view==='receta'){
+    const r=recetas.find(x=>x.id===data.id);
+    if(!r){html="<h2>Receta no encontrada</h2>";renderView(html);return;}
+    html=`<button class="view-back" onclick="goBack()">← Atrás</button>
+    <div class="view-title">${r.nombre}</div>
+    <div><b>Categoría:</b> ${r.categoria}</div>
+    <div><b>Ingredientes:</b><ul>${r.ingredientes.map(i=>`<li>${i.nombre}: ${i.cantidad||''} ${i.unidad||''}</li>`).join('')}</ul></div>
+    <div><b>Elaboración:</b><ol>${r.elaboracion.map(e=>`<li>${e}</li>`).join('')}</ol></div>
+    <button class="main-btn" onclick="compartirReceta('${r.id}')">Compartir</button>
+    <button class="main-btn" onclick="abrirNotas('${r.id}')">Notas personales</button>`;
+    iniciarParserTemporizadores(r);
+  }
+  else if(view==='favoritos'){
+    const fav=recetas.filter(r=>favoritos.includes(r.id));
+    html=`<button class="view-back" onclick="goBack()">← Atrás</button><div class="view-title">Recetas estrella</div>
+    ${fav.map(r=>`<button class="main-btn" onclick="setView('receta',{id:'${r.id}'})">${r.nombre}</button>`).join('')||'No tienes recetas favoritas.'}`;
+  }
+  else if(view==='notas'){
+    let texto = notas[data.id]||"";
+    html=`<button class="view-back" onclick="goBack()">← Atrás</button>
+    <div class="view-title">Notas personales</div>
+    <textarea id="nota-txt" style="width:100%;height:50vh;border-radius:12px;font-size:1.1em;">${texto}</textarea>
+    <button class="main-btn" onclick="guardarNota('${data.id}')">Guardar</button>
+    <button class="main-btn" onclick="compartirNota('${data.id}')">Compartir</button>`;
+  }
+
+  renderView(html);
 }
 
-// ======== COMPARTIR ========
-function shareReceta(r){
-  let txt=`🍰 ${r.nombre}\n-----------------------\n🥄 Ingredientes:\n`;
-  r.ingredientes.forEach(i=>{txt+=`- ${i.nombre} ${i.cantidad||''} ${i.unidad||''}\n`;});
-  txt+="\n👩‍🍳 Elaboración:\n";
-  r.elaboracion.forEach((e,i)=>{txt+=`${i+1}. ${e}\n`;});
-  const tt=tiempoTotal(r); if(tt>0)txt+=`\n⏱️ Tiempo total: ${tt} min\n`;
-  navigator.clipboard.writeText(txt);
-  alert("Receta copiada con estilo 👍");
+function guardarNota(id){
+  notas[id]=document.getElementById('nota-txt').value;
+  localStorage.setItem('notas',JSON.stringify(notas));
+  alert('Nota guardada.');
 }
 
-// ======== START ========
-setView("home");
+function compartirReceta(id){
+  const r=recetas.find(x=>x.id===id);
+  if(!r)return;
+  const txt=`🍰 ${r.nombre}\n--------------------\n🥄 Ingredientes:\n${r.ingredientes.map(i=>`- ${i.nombre}: ${i.cantidad||''} ${i.unidad||''}`).join('\n')}\n\n👩‍🍳 Elaboración:\n${r.elaboracion.map((e,i)=>`${i+1}. ${e}`).join('\n')}`;
+  navigator.share?navigator.share({title:r.nombre,text:txt}):alert(txt);
+}
+
+function compartirNota(id){
+  const txt=notas[id]||"";
+  navigator.share?navigator.share({title:"Nota",text:txt}):alert(txt);
+}
+
+function abrirNotas(id){setView('notas',{id});}
+
+// Parser de tiempos en texto
+function iniciarParserTemporizadores(r){
+  let regex=/(\d+)\s*(min|mins|minutos|minuto|hora|horas)/gi;
+  let texto=r.elaboracion.join(' ');
+  let match;let tiempos=[];
+  while((match=regex.exec(texto))!==null){
+    let val=parseInt(match[1]);
+    if(/hora/.test(match[2]))val*=60;
+    tiempos.push(val);
+  }
+  if(r.tiempo)tiempos.push(r.tiempo);
+  tiempos.forEach(t=>crearTemporizador(t,r.nombre));
+}
+
+// Temporizadores persistentes
+function crearTemporizador(mins, nombre){
+  let id=Date.now()+Math.random();
+  let time=mins*60;
+  let temp={id,nombre,time,activo:true};
+  temporizadoresActivos.push(temp);
+  actualizarPanelTemporizadores();
+  temp.interval=setInterval(()=>{
+    temp.time--;
+    if(temp.time<=0){
+      clearInterval(temp.interval);
+      temp.activo=false;
+      alert(`⏰ ¡${temp.nombre} ha terminado!`);
+      temporizadoresActivos=temporizadoresActivos.filter(t=>t.id!==temp.id);
+      actualizarPanelTemporizadores();
+    }
+    actualizarPanelTemporizadores();
+  },1000);
+}
+
+function actualizarPanelTemporizadores(){
+  document.querySelectorAll('.temporizador-flotante').forEach(e=>e.remove());
+  if(!temporizadoresActivos.length)return;
+  let div=document.createElement('div');
+  div.className='temporizador-flotante';
+  div.innerHTML=temporizadoresActivos.map(t=>{
+    let m=Math.floor(t.time/60),s=t.time%60;
+    return `<div class="temporizador-item">${t.nombre}: ${m}:${s.toString().padStart(2,'0')}
+    <button class="temp-btn" onclick="pararTemporizador(${t.id})">Parar</button>
+    <button class="temp-btn" onclick="eliminarTemporizador(${t.id})">Eliminar</button></div>`;
+  }).join('');
+  document.body.appendChild(div);
+}
+
+function pararTemporizador(id){
+  let t=temporizadoresActivos.find(x=>x.id===id);
+  if(t){clearInterval(t.interval);t.activo=false;}
+}
+
+function eliminarTemporizador(id){
+  let t=temporizadoresActivos.find(x=>x.id===id);
+  if(t){clearInterval(t.interval);}
+  temporizadoresActivos=temporizadoresActivos.filter(x=>x.id!==id);
+  actualizarPanelTemporizadores();
+}
+
+// Modo y buscador
+document.getElementById('btn-modo').onclick=()=>document.body.classList.toggle('modo-oscuro');
+document.getElementById('btn-buscador-inteligente').onclick=()=>setView('menu'); // para demo
+document.getElementById('btn-menu').onclick=()=>setView('menu');
+document.getElementById('btn-estrella').onclick=()=>setView('favoritos');
+document.getElementById('btn-notas').onclick=()=>setView('notas',{id:'general'});
+document.getElementById('buscador').oninput=e=>{
+  let q=e.target.value.toLowerCase();
+  if(!q)return;
+  let res=recetas.filter(r=>r.nombre.toLowerCase().includes(q));
+  if(res.length)setView('recetas',{categoria:'Resultados',resultados:res});
+};
 </script>
 </body>
 </html>
