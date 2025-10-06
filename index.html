@@ -5,27 +5,26 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Dulces Patxi</title>
   <meta name="theme-color" content="#6c3b8e">
-  <link rel="manifest" href="manifest.json">
-  <link rel="icon" type="image/png" href="icon-192.png">
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
   <style>
-    html, body {
-      height: 100%;
-      min-height: 100vh;
+    html, body { height: 100%; margin:0; }
+    body {
       background: #f6f4ff;
       color: #574b36;
       font-family: 'Segoe UI', 'Arial', sans-serif;
-      margin: 0;
-      padding: 0;
-    }
-    body.modo-oscuro {
-      background: #181621 !important;
-      color: #ffe0a3 !important;
-    }
-    .pantalla, .view {
-      max-width: 430px;
       min-height: 100vh;
-      margin: 0 auto;
+      font-size: 1.08em;
+      transition: background 0.3s, color 0.3s;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+    }
+    .modo-oscuro { background: #181621 !important; color: #ffe0a3 !important;}
+    .pantalla, .view {
+      max-width: 430px; width: 100%;
+      min-height: 100vh;
+      box-sizing: border-box;
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -35,167 +34,62 @@
       color: inherit;
       position: relative;
     }
-    .titulo-app {
-      text-align: center;
-      font-size: 2.25em;
-      font-weight: 900;
-      margin-top: 32px;
-      margin-bottom: 0.35em;
-      color: #2d5b2f;
-    }
-    .bienvenida {
-      text-align: center;
-      font-size: 1.14em;
-      margin-bottom: 0.1em;
-      color: #574b36;
-      font-weight: 700;
-    }
-    .by-yahya {
-      text-align: center;
-      font-size: 1.07em;
-      margin-bottom: 32px;
-      color: #2b7be4;
-      font-weight: bold;
-      text-shadow: 0 1px 6px #b2d6ff;
-    }
-    body.modo-oscuro .titulo-app { color: #aee869;}
-    body.modo-oscuro .bienvenida { color: #ffe0a3;}
-    body.modo-oscuro .by-yahya { color: #69bfff; text-shadow:0 1px 6px #3777ff;}
-    .buscador-row {
-      width: 100%;
-      margin-bottom: 32px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 0.5em;
-      position: relative;
-    }
+    .titulo-app { text-align: center; font-size:2.25em; font-weight:900; margin-top:32px; margin-bottom:0.35em; color:#2d5b2f;}
+    .bienvenida { text-align: center; font-size:1.14em; margin-bottom:0.1em; color:#574b36; font-weight:700;}
+    .by-yahya { text-align: center; font-size:1.07em; margin-bottom:32px; color:#2b7be4; font-weight:bold; text-shadow:0 1px 6px #b2d6ff; letter-spacing:0.09em;}
+    .modo-oscuro .titulo-app { color: #aee869;}
+    .modo-oscuro .bienvenida { color: #ffe0a3;}
+    .modo-oscuro .by-yahya { color: #69bfff; text-shadow:0 1px 6px #3777ff;}
+    .buscador-row { width: 100%; margin-bottom: 32px; display: flex; align-items: center; justify-content: center; position: relative; }
     #buscador {
-      width: 100%;
-      padding: 15px 14px;
-      border-radius: 21px;
-      border: 2px solid #7C4D9F;
-      font-size: 1.15em;
-      background: #fff;
-      color: #222;
-      box-shadow: 0 4px 24px #0002;
-      outline: none;
-      transition: background 0.3s, border 0.3s, color 0.3s;
+      width: 100%; padding: 15px 14px;
+      border-radius: 21px; border: 2px solid #7C4D9F;
+      font-size: 1.15em; background: #fff; color: #222;
+      box-shadow: 0 4px 24px #0002; outline: none;
     }
-    body.modo-oscuro #buscador { background: #262241; color: #fff; border-color: #f7b563;}
-    .icon-search {
-      font-size: 1.18em;
-      position: absolute;
-      right: 17px;
-      top: 16px;
-      color: #aaa;
-      pointer-events: none;
-    }
+    .modo-oscuro #buscador { background:#262241; color:#fff; border-color:#f7b563;}
+    .icon-search { font-size:1.18em; position: absolute; right: 17px; top: 16px; color:#aaa;}
     .main-btn, .modal-btn {
-      border: none; border-radius: 21px;
-      font-weight: 900; font-size: 1.17em;
-      width: 100%; max-width:400px; box-shadow: 0 4px 24px #0002;
-      cursor: pointer;
-      margin-bottom: 16px; padding: 18px 0;
-      display: flex; align-items: center; justify-content: center;
-      letter-spacing: 0.01em;
-      transition: background 0.3s, color 0.3s;
+      border:none; border-radius:21px; font-weight:900; font-size:1.17em;
+      width:100%; box-shadow:0 4px 24px #0002; cursor:pointer;
+      margin-bottom:16px; padding:18px 0; display:flex; align-items:center; justify-content:center;
     }
     #btn-modo { background:#3498db; color:#fff;}
     #btn-buscador-inteligente { background:#f7b563; color:#fff;}
     #btn-menu { background:#6c3b8e; color:#fff;}
     #btn-estrella { background:#b36f3c; color:#fff;}
     #btn-notas { background:#3cb36f; color:#fff;}
-    .estrella-ico { color: #FFE066; font-size: 1.25em; margin-left: 10px; }
     .modal {
-      position: fixed;
-      top: 0; left: 0; right: 0; bottom: 0;
-      z-index: 10000;
-      background: rgba(0,0,0,0.25);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      animation: fadeIn .25s;
+      position:fixed; inset:0; z-index:10000;
+      background:rgba(0,0,0,0.25); display:flex; align-items:center; justify-content:center;
     }
     .modal-content {
-      background: #fff;
-      color: #222;
-      box-shadow: 0 8px 32px #0006;
-      border-radius: 28px;
-      padding: 30px 22px;
-      min-width: 260px;
-      max-width: 95vw;
-      min-height: 120px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 22px;
-      font-size: 1.13em;
+      background:#fff; color:#222; border-radius:28px; padding:30px 22px;
+      min-width:260px; max-width:95vw; box-shadow:0 8px 32px #0006;
     }
-    .modal-content h3 { margin:0 0 16px 0; font-size:1.19em; font-weight:900; text-align:center;}
-    .modal-btn { min-width:175px; font-size:1.07em; padding:17px 0; border-radius:15px; border:none; font-weight:900; background:#f7b563; color:#fff; box-shadow:0 4px 24px #0002; cursor:pointer;}
-    .modal-btn:last-child { background:#e2e2e2; color:#222; margin-top:18px;}
-    .modal-btn:active { background:#e9a23d;}
-    body.modo-oscuro .modal-content { background: #292542; color: #fffbe5;}
-    body.modo-oscuro .modal-btn { background: #c47e43; color: #fff;}
-    body.modo-oscuro .modal-btn:last-child { background: #181621; color: #fffbe5; }
-    .view {
-      animation: fadeIn .35s;
-      width: 100vw; min-height: 100vh;
-      background: #fff; color: #2d5b2f;
-      position: fixed; top: 0; left: 0;
-      z-index: 9999; overflow-y:auto; box-sizing:border-box;
-      padding:32px 5vw 0 5vw; display:flex; flex-direction:column; align-items:center;
-      opacity:1; transform:translateY(0); transition:opacity .3s, transform .3s;
-    }
-    .view.hide { opacity:0; transform:translateY(30px); pointer-events:none;}
-    body.modo-oscuro .view { background: #181621; color: #fffbe5;}
-    .view-title { font-size:1.28em; font-weight:900; margin-bottom:1.2em; text-align:center; letter-spacing:0.03em;}
-    .view-back { margin-bottom:1em; font-size:1.09em; width:110px; align-self:flex-start; background:#2d5b2f; color:#fff; border:none; border-radius:15px; padding:11px 0; font-weight:900; box-shadow:0 4px 24px #0002; cursor:pointer;}
-    body.modo-oscuro .view-back { background:#6c3b8e; color:#fff;}
-    .section { width:100%; margin-bottom:1.5em;}
-    .ingredientes-lista { background:#f9e3e3; color:#b36f3c; border-radius:14px; padding:13px 10px; margin-bottom:1.2em; font-size:1.09em; box-shadow:0 4px 24px #0002;}
-    body.modo-oscuro .ingredientes-lista { background:#37323e; color:#f7b563;}
-    .elaboracion-lista { background:#e3f9f4; color:#3cb36f; border-radius:14px; padding:13px 10px; margin-bottom:1em; font-size:1.09em; box-shadow:0 4px 24px #0002;}
-    body.modo-oscuro .elaboracion-lista { background:#22202e; color:#3cb36f;}
-    .fav-lista { background:#fffbe5; color:#b36f3c; border-radius:14px; padding:13px 10px; margin-bottom:1.2em; font-size:1.09em; box-shadow:0 4px 24px #0002;}
-    body.modo-oscuro .fav-lista { background:#292542; color:#f7b563;}
-    .notas-toolbar { display:flex; gap:14px; justify-content:center; margin-top:22px; margin-bottom:5px;}
-    .notas-btn { font-size:1.05em; padding:13px 0; min-width:130px; border-radius:14px; border:none; font-weight:900; background:#f7b563; color:#fff; box-shadow:0 4px 24px #0002; cursor:pointer;}
-    .notas-btn:last-child { background:#e2e2e2; color:#222;}
-    .notas-btn:active { background:#e9a23d; }
-    body.modo-oscuro .notas-btn { background:#c47e43; color:#fff;}
-    body.modo-oscuro .notas-btn:last-child { background:#181621; color:#fffbe5;}
-    .notas-ampliada { min-height:70vh; font-size:1.18em; border-radius:18px; padding:22px 11px; box-shadow:0 8px 32px #0005; margin-bottom:22px; background:#fff; color:#222;}
-    body.modo-oscuro .notas-ampliada { background:#292542; color:#fffbe5;}
-    .temporizador-panel { display:flex; flex-direction:column; align-items:center; gap:18px; margin:25px 0; background:#f4f8ff; border-radius:16px; padding:14px 0; box-shadow:0 4px 24px #0002;}
-    body.modo-oscuro .temporizador-panel { background:#282844; color:#fffbe5;}
-    .temporizador-time { font-size:2.3em; font-weight:900; margin-bottom:6px; letter-spacing:0.07em;}
-    .temporizador-btns { display:flex; gap:14px; flex-wrap:wrap; justify-content:center; margin-bottom:8px;}
-    .temporizador-btn { font-size:1.05em; padding:11px 0; min-width:90px; border-radius:13px; border:none; font-weight:900; background:#6c3b8e; color:#fff; box-shadow:0 4px 24px #0002; cursor:pointer; }
-    .temporizador-btn:active { background:#b36f3c; }
-    .calc-row { width:100%; display:flex; align-items:center; justify-content:flex-start; gap:18px; margin-bottom:18px; margin-top:8px;}
-    .calc-label { font-weight:900; font-size:1.13em; letter-spacing:0.01em; margin-right:4px;}
-    .calc-input { font-size:1.09em; padding:9px 12px; border-radius:13px; border:2px solid #7C4D9F; background:#fff; color:#222; font-weight:900; width:70px;}
-    body.modo-oscuro .calc-input { background:#292542; color:#fff; border-color:#f7b563;}
-    @keyframes fadeIn { from { opacity:0; } to { opacity:1; } }
+    .modal-btn { background:#f7b563; color:#fff; margin:8px 0; }
+    .modal-btn:last-child { background:#e2e2e2; color:#222; }
+    .view { animation: fadeIn .35s; width:100%; min-height:100vh; position:fixed; top:0; left:0; z-index:9999; overflow-y:auto; background:#fff; color:#2d5b2f; padding:32px 5vw; }
+    .view-back { margin-bottom:1em; width:110px; background:#2d5b2f; color:#fff; border:none; border-radius:15px; padding:11px 0; font-weight:900; }
+    @keyframes fadeIn { from {opacity:0;} to {opacity:1;} }
   </style>
 </head>
 <body>
   <div class="pantalla" id="pantalla-principal">
     <div class="titulo-app">DULCES PATXI</div>
-    <div class="bienvenida">BIENVENIDOS A DULCES DE BACHIR KRAI</div>
-    <div class="by-yahya">by yahya</div>
+    <div class="bienvenida">Bienvenidos</div>
+    <div class="by-yahya">by Yahya</div>
     <div class="buscador-row">
-      <input type="text" id="buscador" placeholder="Buscar receta..." autocomplete="off"/>
+      <input type="text" id="buscador" placeholder="Buscar receta..." />
       <span class="icon-search"><i class="fas fa-search"></i></span>
     </div>
-    <button id="btn-modo" class="main-btn">MODO</button>
-    <button id="btn-buscador-inteligente" class="main-btn">BUSCADOR INTELIGENTE</button>
-    <button id="btn-menu" class="main-btn">MENÚ</button>
-    <button id="btn-estrella" class="main-btn">RECETAS ESTRELLA <span class="estrella-ico">★</span></button>
-    <button id="btn-notas" class="main-btn">NOTAS PERSONALES <span class="estrella-ico">★</span></button>
+    <button id="btn-modo" class="main-btn">Modo</button>
+    <button id="btn-buscador-inteligente" class="main-btn">Buscador Inteligente</button>
+    <button id="btn-menu" class="main-btn">Menú</button>
+    <button id="btn-estrella" class="main-btn">Recetas estrella</button>
+    <button id="btn-notas" class="main-btn">Notas personales</button>
   </div>
+
   
 
 
@@ -1450,343 +1344,61 @@
     let notas = JSON.parse(localStorage.getItem('notas') || "{}");
     let recetaActual = null;
     let historial = [];
-    let fuente = 1.17;
     let notasAmpliada = false;
-    let temporizador = {active:false, time:0, timer:null, pitido:false, recetaId:null, originalTime:0};
+    let temporizador = {active:false,time:0,timer:null,pitido:false,originalTime:0};
 
-    // Helpers para pantalla y navegación real
-    function clearViews() {
-      document.querySelectorAll('.view, .modal').forEach(v => v.remove());
-      document.getElementById('pantalla-principal').style.display='none';
-    }
-    function showPrincipal() {
+    function clearViews(){ document.querySelectorAll('.view,.modal').forEach(v=>v.remove()); document.getElementById('pantalla-principal').style.display='none'; }
+    function showPrincipal(){ clearViews(); document.getElementById('pantalla-principal').style.display='flex'; }
+    function setView(view,data={},push=true){
+      if(push) historial.push({view,data});
       clearViews();
-      document.getElementById('pantalla-principal').style.display='flex';
-      historial=[];
+      let v=document.createElement('div'); v.className='view'; let html="";
+      if(view==='menu'){ html=`<button class="view-back" onclick="goBack()">← Atrás</button><div class="view-title">Menú</div>`;}
+      if(view==='favoritos'){ html=`<button class="view-back" onclick="goBack()">← Atrás</button><div class="view-title">Favoritos</div>`;}
+      v.innerHTML=html; document.body.appendChild(v);
     }
-    function setView(view, data={}) {
-      clearViews();
-      historial.push({view, data});
-      let v = document.createElement('div');
-      v.className = 'view';
-      let html = "";
-      if(view==='menu') {
-        html = `<button class="view-back" onclick="goBack()">← Atrás</button>
-          <div class="view-title">Menú</div>
-          <div class="section" style="display:flex;flex-direction:column;gap:18px;">
-            <button class="main-btn" onclick="setView('categorias')">Categorías</button>
-            <button class="main-btn" onclick="setView('favoritos')">Recetas estrella</button>
-            <button class="main-btn" onclick="setView('ultima')">Última receta</button>
-          </div>`;
-      }
-      if(view==='categorias') {
-        html = `<button class="view-back" onclick="goBack()">← Atrás</button>
-          <div class="view-title">Categorías</div>
-          <div class="section">${[...new Set(recetas.map(r=>r.categoria))].map(c=>
-            `<button class="main-btn" onclick="setView('recetas',{categoria:'${c}'})">${c}</button>`).join('')}</div>`;
-      }
-      if(view==='recetas') {
-        html = `<button class="view-back" onclick="goBack()">← Atrás</button>
-          <div class="view-title">${data.categoria}</div>
-          <div class="section">${recetas.filter(r=>r.categoria===data.categoria).map(r=>
-            `<button class="main-btn" onclick="setView('receta',{id:'${r.id}'})">${r.nombre}</button>`).join('')}</div>`;
-      }
-      if(view==='receta') {
-        recetaActual = recetas.find(r=>r.id===data.id);
-        if(!recetaActual) { v.innerHTML = "<h2>Receta no encontrada</h2>"; document.body.appendChild(v); return;}
-        let personas = recetaActual.porciones || 4;
-        html = `<button class="view-back" onclick="goBack()">← Atrás</button>
-          <div class="view-title">${recetaActual.nombre}
-          <button class="favorito-btn ${favoritos.includes(recetaActual.id)?'fav':''}" style="margin-left:18px;" onclick="toggleFavorito('${recetaActual.id}')">${favoritos.includes(recetaActual.id)?'★':'☆'}</button></div>
-          <div class="calc-row">
-            <span class="calc-label">Porciones:</span>
-            <input type="number" min="1" max="32" value="${personas}" id="calc-input" class="calc-input" onchange="actualizaPorciones('${recetaActual.id}')"/>
-          </div>
-          <div class="section" style="margin-bottom:1em;"><b>Categoría:</b> ${recetaActual.categoria}</div>
-          <div class="ingredientes-lista"><b>Ingredientes:</b>
-            <ul id="ingredientes-list">${recetaActual.ingredientes.map(i=>{
-              let por = personas/(recetaActual.porciones||4);
-              let cantidad = Math.round(i.cantidad*por*100)/100;
-              return `<li>${i.nombre} <b>(${cantidad} ${i.unidad||''})</b></li>`;
-            }).join('')}</ul>
-          </div>
-          <div class="elaboracion-lista"><b>Elaboración:</b>
-            <ol>${recetaActual.elaboracion.map(e=>`<li>${e}</li>`).join('')}</ol>
-          </div>
-          <div id="temporizador-panel" class="temporizador-panel"></div>
-          <div style="margin:1em 0;">
-            <button class="main-btn" onclick="compartirReceta('${recetaActual.id}')">Compartir</button>
-            <button class="main-btn" onclick="setView('notas',{id:'${recetaActual.id}'})">Notas personales</button>
-          </div>`;
-        temporizador.time = recetaActual.tiempo ? recetaActual.tiempo*60 : 0;
-        temporizador.originalTime = temporizador.time;
-        temporizador.recetaId = recetaActual.id;
-        updateTemporizadorPanel();
-      }
-      if(view==='favoritos') {
-        html = `<button class="view-back" onclick="goBack()">← Atrás</button>
-          <div class="view-title">Recetas estrella</div>
-          <div class="fav-lista">${recetas.filter(r=>favoritos.includes(r.id)).map(r=>
-            `<button class="main-btn" onclick="setView('receta',{id:'${r.id}'})">${r.nombre}</button>`).join('') || '<div>No tienes recetas favoritas.</div>'}</div>`;
-      }
-      if(view==='ultima') {
-        let lastId = historial.findLast(h => h.view==='receta')?.data?.id;
-        if(lastId) { setView('receta',{id:lastId}); return;}
-        else html = `<button class="view-back" onclick="goBack()">← Atrás</button>
-          <div class="view-title">Última receta</div><div>No hay última receta.</div>`;
-      }
-      if(view==='notas') {
-        let nota = notas[data.id] || "";
-        html = `<button class="view-back" onclick="goBack()">← Atrás</button>
-          <div class="view-title">Notas personales</div>
-          <textarea id="nota-txt" style="width:96vw;min-height:${notasAmpliada? '300px' : '130px'};border-radius:15px;font-size:${fuente}em;">${nota}</textarea>
-          <div class="notas-toolbar">
-            <button class="notas-btn" onclick="ampliarNota()">Ampliar</button>
-            <button class="notas-btn" onclick="guardarNota('${data.id}')">Guardar</button>
-            <button class="notas-btn" onclick="compartirNota('${data.id}')">Compartir</button>
-            <button class="notas-btn" onclick="goBack()">Atrás</button>
-          </div>`;
-      }
-      if(view==='notas-ampliada') {
-        let nota = notas[data.id] || "";
-        html = `<button class="view-back" onclick="goBackNotas()">← Atrás</button>
-          <div class="view-title">Notas personales (Ampliado)</div>
-          <textarea id="nota-txt" class="notas-ampliada" style="font-size:${fuente}em;">${nota}</textarea>
-          <div class="notas-toolbar">
-            <button class="notas-btn" onclick="guardarNota('${data.id}')">Guardar</button>
-            <button class="notas-btn" onclick="compartirNota('${data.id}')">Compartir</button>
-            <button class="notas-btn" onclick="goBackNotas()">Atrás</button>
-          </div>`;
-      }
-      if(view==='busqueda') {
-        html = `<button class="view-back" onclick="goBack()">← Atrás</button>
-          <div class="view-title">Resultados de búsqueda</div>
-          <div class="section">${data.result.map(r=>
-            `<button class="main-btn" onclick="setView('receta',{id:'${r.id}'})">${r.nombre}</button>`).join('') || '<div>No hay resultados.</div>'}</div>`;
-      }
-      if(view==='filtros') {
-        showModalBuscadorInteligente();
-        return;
-      }
-      v.innerHTML = html;
-      document.body.appendChild(v);
-    }
-    function goBack() {
-      clearViews();
-      historial.pop();
-      if(historial.length) {
-        let {view,data} = historial.pop();
-        setView(view,data);
-      } else {
-        showPrincipal();
-      }
-    }
-    function goBackNotas() {
-      notasAmpliada = false;
-      setView('notas',{id: recetaActual?.id || Object.keys(notas)[0]});
-    }
-    function ampliarNota() {
-      notasAmpliada = true;
-      setView('notas-ampliada',{id: recetaActual?.id || Object.keys(notas)[0]});
-    }
-    function toggleFavorito(id) {
-      if (favoritos.includes(id)) {
-        favoritos = favoritos.filter(f => f !== id);
-      } else {
-        favoritos.push(id);
-      }
-      localStorage.setItem('favoritos', JSON.stringify(favoritos));
-      setView('receta',{id});
-    }
-    function compartirReceta(id) {
-      const receta = recetas.find(r=>r.id===id);
-      if(!receta) return;
-      const txt = `Receta: ${receta.nombre}\nCategoría: ${receta.categoria}\nIngredientes:\n`+
-        receta.ingredientes?.map(i=>`${i.nombre}: ${i.cantidad} ${i.unidad||''}`).join('\n')+"\n"+
-        'Elaboración:\n'+receta.elaboracion?.map((e,i)=>`${i+1}. ${e}`).join('\n');
-      if (navigator.share){
-        navigator.share({title:receta.nombre,text:txt});
-      } else {
-        alert('Tu dispositivo no soporta compartir nativo. Copiando texto al portapapeles.');
-        navigator.clipboard.writeText(txt);
-      }
-    }
-    function compartirNota(id){
-      const txt = notas[id]||"";
-      if (navigator.share){
-        navigator.share({title:'Nota de receta',text:txt});
-      } else {
-        alert('Tu dispositivo no soporta compartir nativo. Copiando texto al portapapeles.');
-        navigator.clipboard.writeText(txt);
-      }
-    }
-    function guardarNota(id){
-      notas[id] = document.getElementById('nota-txt').value;
-      localStorage.setItem('notas', JSON.stringify(notas));
-      alert('Nota guardada');
-      goBack();
-    }
-    function actualizaPorciones(id) {
-      let val = parseInt(document.getElementById('calc-input').value) || 1;
-      let receta = recetas.find(r=>r.id===id);
-      let ul = document.getElementById('ingredientes-list');
-      if(receta && ul) {
-        ul.innerHTML = receta.ingredientes.map(i=>{
-          let por = val/(receta.porciones||4);
-          let cantidad = Math.round(i.cantidad*por*100)/100;
-          return `<li>${i.nombre} <b>(${cantidad} ${i.unidad||''})</b></li>`;
-        }).join('');
-      }
-    }
-    function updateTemporizadorPanel() {
-      let el = document.getElementById('temporizador-panel');
-      if(!el) return;
-      el.innerHTML = `
-        <div class="temporizador-time">${formatTime(temporizador.time)}</div>
-        <div class="temporizador-btns">
-          <button class="temporizador-btn" onclick="startTemporizador()">Iniciar</button>
-          <button class="temporizador-btn" onclick="pauseTemporizador()">Pausar</button>
-          <button class="temporizador-btn" onclick="resetTemporizador()">Reset</button>
-          <button class="temporizador-btn" onclick="modificarTemporizador()">Modificar</button>
-          ${temporizador.pitido ? `<button class="temporizador-btn" onclick="detenerPitido()">Detener pitido</button>` : ""}
-        </div>
-      `;
-    }
-    function formatTime(seg) {
-      let m = Math.floor(seg/60), s = seg%60;
-      return `${m<10?'0':''}${m}:${s<10?'0':''}${s}`;
-    }
-    function startTemporizador() {
-      if(!temporizador.active && temporizador.time > 0) {
-        temporizador.active = true;
-        temporizador.timer = setInterval(()=>{
-          temporizador.time--;
-          updateTemporizadorPanel();
-          if(temporizador.time<=0 && temporizador.active) {
-            temporizador.active = false;
-            temporizador.pitido = true;
-            pitidoContinuo();
-            updateTemporizadorPanel();
-          }
-        },1000);
-      }
-    }
-    function pauseTemporizador() {
-      temporizador.active = false;
-      clearInterval(temporizador.timer);
-      updateTemporizadorPanel();
-    }
-    function resetTemporizador() {
-      temporizador.active = false;
-      clearInterval(temporizador.timer);
-      temporizador.time = temporizador.originalTime;
-      updateTemporizadorPanel();
-    }
-    function modificarTemporizador() {
-      let nuevo = prompt("Nuevo tiempo en minutos:", Math.ceil(temporizador.time/60));
-      if(nuevo && !isNaN(nuevo)) {
-        temporizador.time = parseInt(nuevo)*60;
-        temporizador.originalTime = temporizador.time;
-        updateTemporizadorPanel();
-      }
-    }
-    function pitidoContinuo(){
-      if (!temporizador.pitido) return;
-      try {
-        window._beepCtx = new (window.AudioContext || window.webkitAudioContext)();
-        window._beepOsc = window._beepCtx.createOscillator();
-        window._beepGain = window._beepCtx.createGain();
-        window._beepOsc.type = "sine";
-        window._beepOsc.frequency.value = 880;
-        window._beepGain.gain.value = 0.3;
-        window._beepOsc.connect(window._beepGain).connect(window._beepCtx.destination);
-        window._beepOsc.start();
-      } catch(e){}
-    }
-    function detenerPitido(){
-      temporizador.pitido = false;
-      try{
-        window._beepGain.gain.value = 0.0;
-        window._beepOsc.stop();
-        window._beepCtx.close();
-      }catch(e){}
-      updateTemporizadorPanel();
-    }
-    // ==== BUSCADOR MODAL ====
-    function showModalBuscadorInteligente() {
-      clearViews();
-      let m = document.createElement('div');
-      m.className = "modal";
-      m.innerHTML = `<div class="modal-content">
+    function goBack(){ historial.pop(); if(historial.length){let prev=historial[historial.length-1]; setView(prev.view,prev.data,false);} else showPrincipal(); }
+
+    // ==== MODALES ====
+    function showModalBuscadorInteligente(){
+      closeModal();
+      let m=document.createElement('div'); m.className="modal";
+      m.innerHTML=`<div class="modal-content">
         <h3>Buscador Inteligente</h3>
-        <button class="modal-btn" onclick="filtroIngrediente()">Filtrar por Ingrediente</button>
-        <button class="modal-btn" onclick="filtroTiempo()">Filtrar por Tiempo</button>
-        <button class="modal-btn" onclick="filtroDificultad()">Filtrar por Dificultad</button>
-        <button class="modal-btn" onclick="setView('favoritos')">Favoritos</button>
-        <button class="modal-btn" onclick="closeModal();showPrincipal()">Cerrar</button>
+        <button class="modal-btn" onclick="filtroIngrediente()">Por Ingrediente</button>
+        <button class="modal-btn" onclick="filtroTiempo()">Por Tiempo</button>
+        <button class="modal-btn" onclick="filtroDificultad()">Por Dificultad</button>
+        <button class="modal-btn" onclick="closeModal()">Cerrar</button>
       </div>`;
       document.body.appendChild(m);
     }
-    function closeModal() {
-      document.querySelectorAll('.modal').forEach(m=>m.remove());
-    }
-    function showModalBusqueda(filtradas) {
+    function closeModal(){ document.querySelectorAll('.modal').forEach(m=>m.remove()); }
+    function showModalBusqueda(filtradas){
       closeModal();
-      let m = document.createElement('div');
-      m.className = "modal";
-      m.innerHTML = `<div class="modal-content" style="max-height:82vh;overflow-y:auto;">
-        <h3>Resultados de búsqueda</h3>
-        <div style="width:100%;display:flex;flex-wrap:wrap;gap:10px;justify-content:center;">
-          ${filtradas.map(r=>
-            `<button class="modal-btn" onclick="closeModal();setView('receta',{id:'${r.id}'})">${r.nombre}</button>`).join('') || '<div>No hay resultados.</div>'}
-        </div>
-        <button class="modal-btn" onclick="closeModal();showPrincipal()">Cerrar</button>
+      let m=document.createElement('div'); m.className="modal";
+      m.innerHTML=`<div class="modal-content">
+        <h3>Resultados</h3>
+        ${(filtradas||[]).map(r=>`<button class="modal-btn" onclick="closeModal();setView('receta',{id:'${r.id}'})">${r.nombre}</button>`).join('')||'No hay resultados'}
+        <button class="modal-btn" onclick="closeModal()">Cerrar</button>
       </div>`;
       document.body.appendChild(m);
     }
-    window.filtroIngrediente = function(){
-      closeModal();
-      let q = prompt("Filtrar por ingrediente:");
-      if(!q) return;
-      let filtradas = recetas.filter(r=>r.ingredientes && r.ingredientes.some(i => (i.nombre||"").toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,"").includes((q||"").toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,""))));
-      showModalBusqueda(filtradas);
-    }
-    window.filtroTiempo = function(){
-      closeModal();
-      let q = prompt("Filtrar por tiempo máximo (min):");
-      if(!q) return;
-      let filtradas = recetas.filter(r=>(r.tiempo||0) <= parseInt(q));
-      showModalBusqueda(filtradas);
-    }
-    window.filtroDificultad = function(){
-      closeModal();
-      let q = prompt("Filtrar por dificultad:");
-      if(!q) return;
-      let filtradas = recetas.filter(r=>(r.dificultad||"").toLowerCase().includes((q||"").toLowerCase()));
-      showModalBusqueda(filtradas);
-    }
-    // ==== BOTONES PRINCIPALES ====
-    document.addEventListener("DOMContentLoaded", function() {
-      document.getElementById('btn-modo').onclick = function() {
-        document.body.classList.toggle('modo-oscuro');
-      };
-      document.getElementById('btn-buscador-inteligente').onclick = () => setView('filtros');
-      document.getElementById('btn-menu').onclick = () => setView('menu');
-      document.getElementById('btn-estrella').onclick = () => setView('favoritos');
-      document.getElementById('btn-notas').onclick = () => {
-        let id = recetaActual?.id || Object.keys(notas)[0];
-        if(id) setView('notas',{id});
-      };
-      document.getElementById('buscador').oninput = function(e) {
-        let q = (e.target.value||"").toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,"");
-        if (!q) return;
-        let filtradas = recetas.filter(r =>
-          r.nombre.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,"").includes(q) ||
-          r.categoria.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,"").includes(q) ||
-          r.ingredientes?.some(i=>i.nombre.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,"").includes(q))
-        );
-        if(filtradas.length)
-          showModalBusqueda(filtradas);
+
+    // ==== FILTROS DEMO ====
+    window.filtroIngrediente=function(){ closeModal(); let q=prompt("Ingrediente:"); if(!q)return; showModalBusqueda(recetas.filter(r=>r.ingredientes?.some(i=>i.nombre.toLowerCase().includes(q.toLowerCase())))); }
+    window.filtroTiempo=function(){ closeModal(); let q=prompt("Tiempo máximo (min):"); if(!q)return; showModalBusqueda(recetas.filter(r=>(r.tiempo||0)<=parseInt(q))); }
+    window.filtroDificultad=function(){ closeModal(); let q=prompt("Dificultad:"); if(!q)return; showModalBusqueda(recetas.filter(r=>(r.dificultad||"").toLowerCase().includes(q.toLowerCase()))); }
+
+    document.addEventListener("DOMContentLoaded",()=>{
+      document.getElementById('btn-modo').onclick=()=>document.body.classList.toggle('modo-oscuro');
+      document.getElementById('btn-buscador-inteligente').onclick=showModalBuscadorInteligente;
+      document.getElementById('btn-menu').onclick=()=>setView('menu');
+      document.getElementById('btn-estrella').onclick=()=>setView('favoritos');
+      document.getElementById('btn-notas').onclick=()=>setView('notas',{id:recetaActual?.id||Object.keys(notas)[0]});
+      document.getElementById('buscador').oninput=e=>{
+        let q=(e.target.value||"").toLowerCase();
+        if(!q) return;
+        showModalBusqueda(recetas.filter(r=>r.nombre.toLowerCase().includes(q)));
       };
       showPrincipal();
     });
