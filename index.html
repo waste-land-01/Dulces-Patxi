@@ -5,187 +5,159 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Dulces Patxi</title>
   <meta name="theme-color" content="#6c3b8e">
-  <link rel="manifest" href="manifest.json">
-  <link rel="icon" type="image/png" href="icon-192.png">
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
   <style>
     html, body { height: 100%; }
-    :root {
-      --fondo: #f6f4ff;
-      --titulo: #2d5b2f;
-      --bienvenida: #574b36;
-      --byyahya: #2b7be4;
-      --byyahya-shadow: #b2d6ff;
-      --buscador-bg: #fff;
-      --buscador-border: #7C4D9F;
-      --buscador-txt: #222;
-      --modo-bg: #3498db;
-      --modo-txt: #fff;
-      --inteligente-bg: #f7b563;
-      --inteligente-txt: #fff;
-      --menu-bg: #6c3b8e;
-      --menu-txt: #fff;
-      --estrella-bg: #b36f3c;
-      --estrella-txt: #fff;
-      --notas-bg: #3cb36f;
-      --notas-txt: #fff;
-      --back-bg: #2d5b2f;
-      --back-txt: #fff;
-      --view-bg: #fff;
-      --view-txt: #2d5b2f;
-      --input-bg: #fff;
-      --input-txt: #222;
-      --input-border: #7C4D9F;
-      --overlay-bg: #fff;
-      --overlay-txt: #222;
-      --overlay-shadow: 0 8px 32px #0006;
-      --margin-v: 22px;
-      --radius: 21px;
-      --shadow: 0 4px 24px #0002;
-      --transition: 0.25s cubic-bezier(.68,-0.55,.27,1.55);
-    }
-    .modo-oscuro {
-      --fondo: #181621;
-      --titulo: #aee869;
-      --bienvenida: #ffe0a3;
-      --byyahya: #69bfff;
-      --byyahya-shadow: #3777ff;
-      --buscador-bg: #262241;
-      --buscador-border: #f7b563;
-      --buscador-txt: #fff;
-      --modo-bg: #69bfff;
-      --modo-txt: #181621;
-      --inteligente-bg: #c47e43;
-      --inteligente-txt: #fff;
-      --menu-bg: #b36f3c;
-      --menu-txt: #fff;
-      --estrella-bg: #6c3b8e;
-      --estrella-txt: #fff;
-      --notas-bg: #3cb36f;
-      --notas-txt: #fff;
-      --back-bg: #6c3b8e;
-      --back-txt: #fff;
-      --view-bg: #181621;
-      --view-txt: #fffbe5;
-      --input-bg: #292542;
-      --input-txt: #fff;
-      --input-border: #f7b563;
-      --overlay-bg: #292542;
-      --overlay-txt: #fffbe5;
-      --overlay-shadow: 0 8px 32px #000d;
-    }
     body {
-      background: var(--fondo);
-      color: var(--bienvenida);
+      background: #f6f4ff;
+      color: #574b36;
       font-family: 'Segoe UI', 'Arial', sans-serif;
-      padding: 0;
-      margin: 0;
-      min-height: 100vh;
+      margin: 0; min-height: 100vh;
       font-size: 1.08em;
-      transition: background var(--transition), color var(--transition);
+      transition: background 0.3s, color 0.3s;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
     }
+    .modo-oscuro { background: #181621 !important; color: #ffe0a3 !important;}
     .pantalla, .view {
-      max-width: 450px;
-      margin: 0 auto;
+      max-width: 430px; width: 100vw;
       min-height: 100vh;
       box-sizing: border-box;
       display: flex;
       flex-direction: column;
-      align-items: stretch;
+      align-items: center;
       justify-content: flex-start;
       padding: 0 5vw;
-      background: var(--fondo);
-      color: var(--view-txt);
+      background: inherit;
+      color: inherit;
       position: relative;
     }
-    .titulo-app { text-align: center; font-size:2.25em; font-weight:900; margin-top:var(--margin-v); margin-bottom:0.35em; letter-spacing:0.04em; color:var(--titulo);}
-    .bienvenida { text-align: center; font-size:1.14em; margin-bottom:0.1em; color:var(--bienvenida); font-weight:700;}
-    .by-yahya { text-align: center; font-size:1.07em; margin-bottom:var(--margin-v); color:var(--byyahya); font-weight:bold; text-shadow:0 1px 6px var(--byyahya-shadow); letter-spacing:0.09em;}
-    .buscador-row { width: 100%; margin-bottom: var(--margin-v); display: flex; align-items: center; justify-content: center; gap: 0.5em; position: relative;}
-    #buscador { width:100%; padding:15px 14px; border-radius:var(--radius); border:2px solid var(--buscador-border); font-size:1.09em; background:var(--buscador-bg); color:var(--buscador-txt); box-shadow:var(--shadow); transition:background var(--transition), border var(--transition), color var(--transition); outline:none;}
-    .modo-oscuro #buscador { color:var(--buscador-txt); background:var(--buscador-bg);}
-    .icon-search { font-size:1.18em; position:absolute; right:17px; top:16px; color:#aaa; pointer-events:none;}
-    .main-btn { border:none; border-radius:var(--radius); font-weight:900; font-size:1.19em; width:100%; box-shadow:var(--shadow); cursor:pointer; transition:background var(--transition), color var(--transition); margin-bottom:2px; padding:18px 0; display:flex; align-items:center; justify-content:center; letter-spacing:0.01em;}
-    #btn-modo { background:var(--modo-bg); color:var(--modo-txt);}
-    #btn-buscador-inteligente { background:var(--inteligente-bg); color:var(--inteligente-txt);}
-    #btn-menu { background:var(--menu-bg); color:var(--menu-txt);}
-    #btn-estrella { background:var(--estrella-bg); color:var(--estrella-txt); }
-    #btn-notas { background:var(--notas-bg); color:var(--notas-txt); }
+    .titulo-app { text-align: center; font-size:2.25em; font-weight:900; margin-top:32px; margin-bottom:0.35em; color:#2d5b2f;}
+    .bienvenida { text-align: center; font-size:1.14em; margin-bottom:0.1em; color:#574b36; font-weight:700;}
+    .by-yahya { text-align: center; font-size:1.07em; margin-bottom:32px; color:#2b7be4; font-weight:bold; text-shadow:0 1px 6px #b2d6ff; letter-spacing:0.09em;}
+    .modo-oscuro .titulo-app { color: #aee869;}
+    .modo-oscuro .bienvenida { color: #ffe0a3;}
+    .modo-oscuro .by-yahya { color: #69bfff; text-shadow:0 1px 6px #3777ff;}
+    .buscador-row {
+      width: 100%;
+      margin-bottom: 32px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5em;
+      position: relative;
+    }
+    #buscador {
+      width: 100%;
+      padding: 15px 14px;
+      border-radius: 21px;
+      border: 2px solid #7C4D9F;
+      font-size: 1.15em;
+      background: #fff;
+      color: #222;
+      box-shadow: 0 4px 24px #0002;
+      outline: none;
+      transition: background 0.3s, border 0.3s, color 0.3s;
+    }
+    .modo-oscuro #buscador { background: #262241; color: #fff; border-color: #f7b563;}
+    .icon-search {
+      font-size: 1.18em;
+      position: absolute;
+      right: 17px;
+      top: 16px;
+      color: #aaa;
+      pointer-events: none;
+    }
+    .main-btn, .modal-btn {
+      border: none; border-radius: 21px;
+      font-weight: 900; font-size: 1.17em;
+      width: 100%; box-shadow: 0 4px 24px #0002;
+      cursor: pointer;
+      margin-bottom: 16px; padding: 18px 0;
+      display: flex; align-items: center; justify-content: center; letter-spacing: 0.01em;
+      transition: background 0.3s, color 0.3s;
+    }
+    #btn-modo { background:#3498db; color:#fff;}
+    #btn-buscador-inteligente { background:#f7b563; color:#fff;}
+    #btn-menu { background:#6c3b8e; color:#fff;}
+    #btn-estrella { background:#b36f3c; color:#fff;}
+    #btn-notas { background:#3cb36f; color:#fff;}
     .estrella-ico { color: #FFE066; font-size: 1.25em; margin-left: 10px; }
-    .modal { position: fixed; top: 0; left: 0; right: 0; bottom: 0; z-index: 10000; background: rgba(0,0,0,0.25); display: flex; align-items: center; justify-content: center; animation: fadeIn .25s;}
-    .modal-content { background: var(--overlay-bg); color: var(--overlay-txt); box-shadow: var(--overlay-shadow); border-radius: 28px; padding: 30px 22px; min-width: 260px; max-width: 95vw; min-height: 120px; display: flex; flex-direction: column; align-items: center; gap: 22px; font-size: 1.13em;}
-    .modal-content h3 { margin:0 0 16px 0; font-size:1.19em; font-weight:900; text-align:center; color:var(--titulo);}
-    .modal-content .modal-btn { margin:8px 0; min-width:175px; font-size:1.07em; padding:17px 0; border-radius:15px; border:none; font-weight:900; background:var(--inteligente-bg); color:var(--inteligente-txt); box-shadow:var(--shadow); cursor:pointer; transition:background var(--transition);}
-    .modal-content .modal-btn:last-child { background:#e2e2e2; color:#222; margin-top:18px;}
-    .modal-content .modal-btn:active { background:#e9a23d;}
-    .view { animation: fadeIn .35s; width:100vw; min-height:100vh; background:var(--view-bg); color:var(--view-txt); position:fixed; top:0; left:0; z-index:9999; overflow-y:auto; box-sizing:border-box; padding:var(--margin-v); display:flex; flex-direction:column; align-items:stretch; opacity:1; transform:translateY(0); transition:opacity .3s, transform .3s;}
+    .modal {
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      z-index: 10000;
+      background: rgba(0,0,0,0.25);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      animation: fadeIn .25s;
+    }
+    .modal-content {
+      background: #fff;
+      color: #222;
+      box-shadow: 0 8px 32px #0006;
+      border-radius: 28px;
+      padding: 30px 22px;
+      min-width: 260px;
+      max-width: 95vw;
+      min-height: 120px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 22px;
+      font-size: 1.13em;
+    }
+    .modal-content h3 { margin:0 0 16px 0; font-size:1.19em; font-weight:900; text-align:center;}
+    .modal-btn { min-width:175px; font-size:1.07em; padding:17px 0; border-radius:15px; border:none; font-weight:900; background:#f7b563; color:#fff; box-shadow:0 4px 24px #0002; cursor:pointer;}
+    .modal-btn:last-child { background:#e2e2e2; color:#222; margin-top:18px;}
+    .modal-btn:active { background:#e9a23d;}
+    .modo-oscuro .modal-content { background: #292542; color: #fffbe5;}
+    .modo-oscuro .modal-btn { background: #c47e43; color: #fff;}
+    .modo-oscuro .modal-btn:last-child { background: #181621; color: #fffbe5; }
+    .view {
+      animation: fadeIn .35s;
+      width: 100vw; min-height: 100vh;
+      background: #fff; color: #2d5b2f;
+      position: fixed; top: 0; left: 0;
+      z-index: 9999; overflow-y:auto; box-sizing:border-box;
+      padding:32px 5vw 0 5vw; display:flex; flex-direction:column; align-items:center;
+      opacity:1; transform:translateY(0); transition:opacity .3s, transform .3s;
+    }
     .view.hide { opacity:0; transform:translateY(30px); pointer-events:none;}
-    .view-title { font-size:1.28em; font-weight:900; color:var(--titulo); margin-bottom:1.2em; text-align:center; letter-spacing:0.03em; background:none;}
-    .view-back { margin-bottom:1em; font-size:1.09em; width:110px; align-self:flex-start; background:var(--back-bg); color:var(--back-txt); border:none; border-radius:15px; padding:11px 0; font-weight:900; box-shadow:var(--shadow); cursor:pointer; transition:background var(--transition), color var(--transition);}
+    .modo-oscuro .view { background: #181621; color: #fffbe5;}
+    .view-title { font-size:1.28em; font-weight:900; margin-bottom:1.2em; text-align:center; letter-spacing:0.03em;}
+    .view-back { margin-bottom:1em; font-size:1.09em; width:110px; align-self:flex-start; background:#2d5b2f; color:#fff; border:none; border-radius:15px; padding:11px 0; font-weight:900; box-shadow:0 4px 24px #0002; cursor:pointer;}
+    .modo-oscuro .view-back { background:#6c3b8e; color:#fff;}
     .section { width:100%; margin-bottom:1.5em;}
-    .ingredientes-lista { background:#f9e3e3; color:#b36f3c; border-radius:14px; padding:13px 10px; margin-bottom:1.2em; font-size:1.09em; box-shadow:var(--shadow);}
+    .ingredientes-lista { background:#f9e3e3; color:#b36f3c; border-radius:14px; padding:13px 10px; margin-bottom:1.2em; font-size:1.09em; box-shadow:0 4px 24px #0002;}
     .modo-oscuro .ingredientes-lista { background:#37323e; color:#f7b563;}
-    .elaboracion-lista { background:#e3f9f4; color:#3cb36f; border-radius:14px; padding:13px 10px; margin-bottom:1em; font-size:1.09em; box-shadow:var(--shadow);}
+    .elaboracion-lista { background:#e3f9f4; color:#3cb36f; border-radius:14px; padding:13px 10px; margin-bottom:1em; font-size:1.09em; box-shadow:0 4px 24px #0002;}
     .modo-oscuro .elaboracion-lista { background:#22202e; color:#3cb36f;}
-    .fav-lista { background:#fffbe5; color:#b36f3c; border-radius:14px; padding:13px 10px; margin-bottom:1.2em; font-size:1.09em; box-shadow:var(--shadow);}
+    .fav-lista { background:#fffbe5; color:#b36f3c; border-radius:14px; padding:13px 10px; margin-bottom:1.2em; font-size:1.09em; box-shadow:0 4px 24px #0002;}
     .modo-oscuro .fav-lista { background:#292542; color:#f7b563;}
     .notas-toolbar { display:flex; gap:14px; justify-content:center; margin-top:22px; margin-bottom:5px;}
-    .notas-btn { font-size:1.05em; padding:13px 0; min-width:130px; border-radius:14px; border:none; font-weight:900; background:var(--inteligente-bg); color:var(--inteligente-txt); box-shadow:var(--shadow); cursor:pointer; transition:background var(--transition);}
+    .notas-btn { font-size:1.05em; padding:13px 0; min-width:130px; border-radius:14px; border:none; font-weight:900; background:#f7b563; color:#fff; box-shadow:0 4px 24px #0002; cursor:pointer;}
     .notas-btn:last-child { background:#e2e2e2; color:#222;}
     .notas-btn:active { background:#e9a23d; }
-    .notas-ampliada { min-height:70vh; font-size:1.18em; border-radius:18px; padding:22px 11px; box-shadow:0 8px 32px #0005; margin-bottom:22px; background:var(--overlay-bg); color:var(--overlay-txt); }
-    .temporizador-panel { display:flex; flex-direction:column; align-items:center; gap:18px; margin:25px 0; background:#f4f8ff; border-radius:16px; padding:14px 0; box-shadow:var(--shadow);}
+    .modo-oscuro .notas-btn { background:#c47e43; color:#fff;}
+    .modo-oscuro .notas-btn:last-child { background:#181621; color:#fffbe5;}
+    .notas-ampliada { min-height:70vh; font-size:1.18em; border-radius:18px; padding:22px 11px; box-shadow:0 8px 32px #0005; margin-bottom:22px; background:#fff; color:#222;}
+    .modo-oscuro .notas-ampliada { background:#292542; color:#fffbe5;}
+    .temporizador-panel { display:flex; flex-direction:column; align-items:center; gap:18px; margin:25px 0; background:#f4f8ff; border-radius:16px; padding:14px 0; box-shadow:0 4px 24px #0002;}
     .modo-oscuro .temporizador-panel { background:#282844; color:#fffbe5;}
     .temporizador-time { font-size:2.3em; font-weight:900; margin-bottom:6px; letter-spacing:0.07em;}
     .temporizador-btns { display:flex; gap:14px; flex-wrap:wrap; justify-content:center; margin-bottom:8px;}
-    .temporizador-btn { font-size:1.05em; padding:11px 0; min-width:90px; border-radius:13px; border:none; font-weight:900; background:var(--menu-bg); color:var(--menu-txt); box-shadow:var(--shadow); cursor:pointer; transition:background var(--transition);}
-    .temporizador-btn:active { background:#6c3b8e; }
+    .temporizador-btn { font-size:1.05em; padding:11px 0; min-width:90px; border-radius:13px; border:none; font-weight:900; background:#6c3b8e; color:#fff; box-shadow:0 4px 24px #0002; cursor:pointer; }
+    .temporizador-btn:active { background:#b36f3c; }
     .calc-row { width:100%; display:flex; align-items:center; justify-content:flex-start; gap:18px; margin-bottom:18px; margin-top:8px;}
     .calc-label { font-weight:900; font-size:1.13em; letter-spacing:0.01em; margin-right:4px;}
-    .calc-input { font-size:1.09em; padding:9px 12px; border-radius:13px; border:2px solid var(--input-border); background:var(--input-bg); color:var(--input-txt); font-weight:900; width:70px;}
+    .calc-input { font-size:1.09em; padding:9px 12px; border-radius:13px; border:2px solid #7C4D9F; background:#fff; color:#222; font-weight:900; width:70px;}
+    .modo-oscuro .calc-input { background:#292542; color:#fff; border-color:#f7b563;}
     @keyframes fadeIn { from { opacity:0; } to { opacity:1; } }
-    @media (max-width:600px) {
-      .pantalla, .view { max-width: 100vw; padding: 0 2vw;}
-      .titulo-app {font-size:1.13em;}
-      .bienvenida, .by-yahya {font-size:1em;}
-      .main-btn {font-size:1em;padding:15px 0;}
-      #btn-buscador-inteligente, #btn-modo {font-size:1em;}
-      .view-title {font-size:1.09em;}
-      .view-back {padding:9px 0;}
-      .modal-content {padding:20px 8px;}
-      .modal-content .modal-btn {font-size:0.97em;min-width:120px;}
-      .temporizador-time {font-size: 1.6em;}
-      .temporizador-btn {font-size:1em;min-width:90px;}
-    }
   </style>
-</head>
-<body>
-  <div class="pantalla" id="pantalla-principal">
-    <div class="titulo-app">DULCES PATXI</div>
-    <div class="bienvenida">BIENVENIDOS A DULCES DE BACHIR KRAI</div>
-    <div class="by-yahya">by yahya</div>
-    <div class="buscador-row">
-      <input type="text" id="buscador" placeholder="Buscar receta..." autocomplete="off"/>
-      <span class="icon-search"><i class="fas fa-search"></i></span>
-    </div>
-    <div class="modo-row">
-      <button id="btn-modo" class="main-btn">MODO</button>
-    </div>
-    <div class="inteligente-row">
-      <button id="btn-buscador-inteligente" class="main-btn">BUSCADOR INTELIGENTE</button>
-    </div>
-    <div class="menu-row">
-      <button id="btn-menu" class="main-btn">MENÚ</button>
-    </div>
-    <div class="estrella-row">
-      <button id="btn-estrella" class="main-btn">RECETAS ESTRELLA <span class="estrella-ico">★</span></button>
-    </div>
-    <div class="notas-row">
-      <button id="btn-notas" class="main-btn">NOTAS PERSONALES <span class="estrella-ico">★</span></button>
-    </div>
-  </div>
-
-  <!-- Script colocado después del body para asegurar que DOM existe -->
   
 
 
@@ -1437,6 +1409,7 @@
     ];
 
 
+
     let favoritos = JSON.parse(localStorage.getItem('favoritos') || "[]");
     let notas = JSON.parse(localStorage.getItem('notas') || "{}");
     let recetaActual = null;
@@ -1452,18 +1425,14 @@
     function showPrincipal() {
       clearViews();
       document.getElementById('pantalla-principal').style.display='flex';
-      historial = [];
+      historial=[];
     }
-
-    // setView con opción para no empujar al historial (útil para restaurar)
-    function setView(view, data = {}, pushHistory = true) {
-      if (pushHistory) historial.push({view, data});
+    function setView(view, data={}) {
       clearViews();
-      const main = document.body;
+      historial.push({view, data});
       let v = document.createElement('div');
       v.className = 'view';
       let html = "";
-
       if(view==='menu') {
         html = `<button class="view-back" onclick="goBack()">← Atrás</button>
           <div class="view-title">Menú</div>
@@ -1474,10 +1443,9 @@
           </div>`;
       }
       if(view==='categorias') {
-        const cats = [...new Set(recetas.map(r=>r.categoria))];
         html = `<button class="view-back" onclick="goBack()">← Atrás</button>
           <div class="view-title">Categorías</div>
-          <div class="section">${cats.map(c=>
+          <div class="section">${[...new Set(recetas.map(r=>r.categoria))].map(c=>
             `<button class="main-btn" onclick="setView('recetas',{categoria:'${c}'})">${c}</button>`).join('')}</div>`;
       }
       if(view==='recetas') {
@@ -1488,7 +1456,7 @@
       }
       if(view==='receta') {
         recetaActual = recetas.find(r=>r.id===data.id);
-        if(!recetaActual) { v.innerHTML = "<h2>Receta no encontrada</h2>"; main.appendChild(v); return;}
+        if(!recetaActual) { v.innerHTML = "<h2>Receta no encontrada</h2>"; document.body.appendChild(v); return;}
         let personas = recetaActual.porciones || 4;
         html = `<button class="view-back" onclick="goBack()">← Atrás</button>
           <div class="view-title">${recetaActual.nombre}
@@ -1525,11 +1493,7 @@
             `<button class="main-btn" onclick="setView('receta',{id:'${r.id}'})">${r.nombre}</button>`).join('') || '<div>No tienes recetas favoritas.</div>'}</div>`;
       }
       if(view==='ultima') {
-        // bucle compatible para buscar la última receta en historial
-        let lastId = null;
-        for(let i = historial.length - 1; i >= 0; i--) {
-          if (historial[i].view === 'receta') { lastId = historial[i].data?.id; break; }
-        }
+        let lastId = historial.findLast(h => h.view==='receta')?.data?.id;
         if(lastId) { setView('receta',{id:lastId}); return;}
         else html = `<button class="view-back" onclick="goBack()">← Atrás</button>
           <div class="view-title">Última receta</div><div>No hay última receta.</div>`;
@@ -1563,17 +1527,19 @@
           <div class="section">${data.result.map(r=>
             `<button class="main-btn" onclick="setView('receta',{id:'${r.id}'})">${r.nombre}</button>`).join('') || '<div>No hay resultados.</div>'}</div>`;
       }
+      if(view==='filtros') {
+        showModalBuscadorInteligente();
+        return;
+      }
       v.innerHTML = html;
-      main.appendChild(v);
+      document.body.appendChild(v);
     }
-
     function goBack() {
-      // Quitar vista actual del historial
+      clearViews();
       historial.pop();
-      if (historial.length) {
-        // restaurar la anterior sin volver a pushearla
-        const prev = historial[historial.length - 1];
-        setView(prev.view, prev.data, false);
+      if(historial.length) {
+        let {view,data} = historial.pop();
+        setView(view,data);
       } else {
         showPrincipal();
       }
@@ -1620,7 +1586,6 @@
     function guardarNota(id){
       notas[id] = document.getElementById('nota-txt').value;
       localStorage.setItem('notas', JSON.stringify(notas));
-      // Mensaje dentro de la UI sería mejor; por ahora alert para visibilidad
       alert('Nota guardada');
       goBack();
     }
@@ -1640,7 +1605,7 @@
       let el = document.getElementById('temporizador-panel');
       if(!el) return;
       el.innerHTML = `
-        <div class="temporizador-time">${formatTime(Math.max(0, temporizador.time))}</div>
+        <div class="temporizador-time">${formatTime(temporizador.time)}</div>
         <div class="temporizador-btns">
           <button class="temporizador-btn" onclick="startTemporizador()">Iniciar</button>
           <button class="temporizador-btn" onclick="pauseTemporizador()">Pausar</button>
@@ -1710,21 +1675,9 @@
       }catch(e){}
       updateTemporizadorPanel();
     }
-
-    // ==== BUSCADOR ====
-    document.getElementById('buscador').oninput = function(e) {
-      let q = (e.target.value||"").toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,"");
-      if (!q) return;
-      let filtradas = recetas.filter(r =>
-        (r.nombre||"").toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,"").includes(q) ||
-        (r.categoria||"").toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,"").includes(q) ||
-        (r.ingredientes||[]).some(i=> (i.nombre||"").toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,"").includes(q))
-      );
-      if(filtradas.length) showModalBusqueda(filtradas);
-    };
-
+    // ==== BUSCADOR MODAL ====
     function showModalBuscadorInteligente() {
-      // NO llamamos a clearViews aquí; queremos overlay sobre la pantalla actual.
+      clearViews();
       let m = document.createElement('div');
       m.className = "modal";
       m.innerHTML = `<div class="modal-content">
@@ -1733,7 +1686,7 @@
         <button class="modal-btn" onclick="filtroTiempo()">Filtrar por Tiempo</button>
         <button class="modal-btn" onclick="filtroDificultad()">Filtrar por Dificultad</button>
         <button class="modal-btn" onclick="setView('favoritos')">Favoritos</button>
-        <button class="modal-btn" onclick="closeModal();">Cerrar</button>
+        <button class="modal-btn" onclick="closeModal();showPrincipal()">Cerrar</button>
       </div>`;
       document.body.appendChild(m);
     }
@@ -1750,7 +1703,7 @@
           ${filtradas.map(r=>
             `<button class="modal-btn" onclick="closeModal();setView('receta',{id:'${r.id}'})">${r.nombre}</button>`).join('') || '<div>No hay resultados.</div>'}
         </div>
-        <button class="modal-btn" onclick="closeModal();">Cerrar</button>
+        <button class="modal-btn" onclick="closeModal();showPrincipal()">Cerrar</button>
       </div>`;
       document.body.appendChild(m);
     }
@@ -1775,25 +1728,31 @@
       let filtradas = recetas.filter(r=>(r.dificultad||"").toLowerCase().includes((q||"").toLowerCase()));
       showModalBusqueda(filtradas);
     }
-
     // ==== BOTONES PRINCIPALES ====
-    document.getElementById('btn-modo').onclick = function() {
-      document.body.classList.toggle('modo-oscuro');
-    };
-    // abrir modal directamente (no usar setView para el modal)
-    document.getElementById('btn-buscador-inteligente').onclick = showModalBuscadorInteligente;
-    document.getElementById('btn-menu').onclick = () => setView('menu');
-    document.getElementById('btn-estrella').onclick = () => setView('favoritos');
-    document.getElementById('btn-notas').onclick = () => {
-      let id = recetaActual?.id || Object.keys(notas)[0];
-      if(id) setView('notas',{id});
-    };
-
-    // arrancar
-    window.onload = function() {
+    document.addEventListener("DOMContentLoaded", function() {
+      document.getElementById('btn-modo').onclick = function() {
+        document.body.classList.toggle('modo-oscuro');
+      };
+      document.getElementById('btn-buscador-inteligente').onclick = () => setView('filtros');
+      document.getElementById('btn-menu').onclick = () => setView('menu');
+      document.getElementById('btn-estrella').onclick = () => setView('favoritos');
+      document.getElementById('btn-notas').onclick = () => {
+        let id = recetaActual?.id || Object.keys(notas)[0];
+        if(id) setView('notas',{id});
+      };
+      document.getElementById('buscador').oninput = function(e) {
+        let q = (e.target.value||"").toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,"");
+        if (!q) return;
+        let filtradas = recetas.filter(r =>
+          r.nombre.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,"").includes(q) ||
+          r.categoria.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,"").includes(q) ||
+          r.ingredientes?.some(i=>i.nombre.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,"").includes(q))
+        );
+        if(filtradas.length)
+          showModalBusqueda(filtradas);
+      };
       showPrincipal();
-    };
+    });
   </script>
 </body>
 </html>
-
