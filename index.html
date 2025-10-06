@@ -62,90 +62,88 @@ main{max-width:980px;margin:0 auto;padding:18px;flex:1 1 auto;width:100%}
   <div class="app" id="app">
     <header>
       <h1>Dulce Patxi</h1>
-      <!-- bienvenida EXACTA: la línea "By  Yahya" justo debajo de "Bachir Krai" -->
       <div class="welcome">Bienvenidos en Dulces de Bachir Krai
 By  Yahya</div>
     </header>
 
     <main>
-      <!-- VISTA PRINCIPAL -->
+      <!-- MAIN -->
       <section id="view-main" class="view active">
         <div class="search-row">
           <input id="searchInput" class="search-input" placeholder="Buscar receta..." aria-label="Buscar receta">
-          <div class="search-icon">🔎</div>
+          <div class="search-icon">ðŸ”Ž</div>
         </div>
 
         <div class="grid" id="mainButtons">
-          <button class="btn large" id="btnModo">Modo</button>
-          <button class="btn large" id="btnSmart">Buscador inteligente</button>
-          <button class="btn large" id="btnMenu">menu</button>
-          <button class="btn large" id="btnEstrella">recetas estrella</button>
-          <button class="btn large" id="btnNotas">Notas personales</button>
+          <button class="btn large" data-href="#modo" id="btnModo">Modo</button>
+          <button class="btn large" data-href="#smart" id="btnSmart">Buscador inteligente</button>
+          <button class="btn large" data-href="#menu" id="btnMenuView">menu</button>
+          <button class="btn large" data-href="#stars" id="btnEstrella">recetas estrella</button>
+          <button class="btn large" data-href="#notes" id="btnNotas">Notas personales</button>
         </div>
       </section>
 
       <!-- MENU -->
       <section id="view-menu" class="view">
         <div class="page-head">
-          <button class="back" data-action="back">Atrás</button>
-          <div class="title">Menú</div>
+          <button class="back" data-href="#main">AtrÃ¡s</button>
+          <div class="title">MenÃº</div>
         </div>
         <div class="list">
-          <div class="card"><button class="btn" id="menu_cat">Categorías</button></div>
-          <div class="card"><button class="btn" id="menu_star">Recetas estrella</button></div>
-          <div class="card"><button class="btn" id="menu_last">Última receta</button></div>
+          <div class="card"><button class="btn" data-href="#categories" id="menu_cat">CategorÃ­as</button></div>
+          <div class="card"><button class="btn" data-href="#stars" id="menu_star">Recetas estrella</button></div>
+          <div class="card"><button class="btn" data-href="#last" id="menu_last">Ãšltima receta</button></div>
         </div>
       </section>
 
-      <!-- BUSCADOR INTELIGENTE -->
+      <!-- SMART -->
       <section id="view-smart" class="view">
         <div class="page-head">
-          <button class="back" data-action="back">Atrás</button>
+          <button class="back" data-href="#main">AtrÃ¡s</button>
           <div class="title">Buscador inteligente</div>
         </div>
         <div class="list">
           <div class="card">
             <div class="name">Filtrar por tiempo</div>
-            <div class="muted">Franjas A (1–20), B (21–40), C (41+)</div>
+            <div class="muted">Franjas A (1â€“20), B (21â€“40), C (41+)</div>
             <div style="margin-top:10px"><button class="btn" id="filterTimeBtn">Seleccionar</button></div>
           </div>
 
           <div class="card">
             <div class="name">Filtrar por dificultad</div>
-            <div class="muted">F (Fácil), M (Medio), D (Difícil)</div>
+            <div class="muted">F (FÃ¡cil), M (Medio), D (DifÃ­cil)</div>
             <div style="margin-top:10px"><button class="btn" id="filterDifficultyBtn">Seleccionar</button></div>
           </div>
 
           <div class="card">
-            <div class="name">Filtrar por categoría</div>
-            <div class="muted">Escribe la categoría</div>
-            <div style="margin-top:10px"><button class="btn" id="filterCategoryBtn">Seleccionar</button></div>
+            <div class="name">Filtrar por ingrediente</div>
+            <div class="muted">Escribe el ingrediente</div>
+            <div style="margin-top:10px"><button class="btn" id="filterIngredientBtn">Seleccionar</button></div>
           </div>
         </div>
       </section>
 
-      <!-- LISTA (resultados, categorías, favoritos) -->
+      <!-- LIST -->
       <section id="view-list" class="view">
         <div class="page-head">
-          <button class="back" data-action="back">Atrás</button>
-          <div class="title" id="listTitle">Recetas</div>
+          <button class="back" data-href="#main">AtrÃ¡s</button>
+          <div class="title" id="listTitle">Listado</div>
         </div>
         <div id="listContent" class="list"></div>
       </section>
 
-      <!-- RECETA -->
+      <!-- RECIPE -->
       <section id="view-recipe" class="view">
         <div class="page-head" style="align-items:flex-start;">
           <div style="display:flex;gap:10px;align-items:center;">
-            <button class="back" data-action="back">Atrás</button>
+            <button class="back" data-href="#main">AtrÃ¡s</button>
             <div class="title" id="recipeTitle">Receta</div>
           </div>
 
-          <!-- temporizador personalizado al lado derecho -->
           <div style="margin-left:auto;display:flex;gap:8px;align-items:center;">
             <label class="muted" for="customTimerSelect" style="font-weight:700;">Temporizador</label>
             <select id="customTimerSelect" class="timer-select" aria-label="Temporizador minutos"></select>
-            <button id="customTimerAdd" class="small-btn">Añadir</button>
+            <button id="customTimerAdd" class="small-btn">AÃ±adir</button>
           </div>
         </div>
 
@@ -164,19 +162,19 @@ By  Yahya</div>
         </div>
       </section>
 
-      <!-- NOTAS AGREGADAS -->
+      <!-- NOTES AGG -->
       <section id="view-notes" class="view">
         <div class="page-head">
-          <button class="back" data-action="back">Atrás</button>
+          <button class="back" data-href="#main">AtrÃ¡s</button>
           <div class="title">Notas y observaciones</div>
         </div>
         <div id="notesContainer" class="list"></div>
       </section>
 
-      <!-- NOTA DE RECETA -->
+      <!-- NOTE -->
       <section id="view-note" class="view">
         <div class="page-head">
-          <button class="back" data-action="back">Atrás</button>
+          <button class="back" data-href="#main">AtrÃ¡s</button>
           <div class="title" id="noteTitle">Nota</div>
         </div>
         <div class="card">
@@ -190,12 +188,9 @@ By  Yahya</div>
 
     </main>
 
-    <div class="footer">© Dulces Patxi</div>
+    <div class="footer">Â© Dulces Patxi</div>
 
-    <!-- barra inferior de temporizadores -->
     <div id="timerBar" class="timer-bar" style="display:none"></div>
-
-    <!-- overlay root -->
     <div id="overlayRoot" style="display:none"></div>
   </div>
 
@@ -1449,193 +1444,281 @@ By  Yahya</div>
       }
     ];
 
-
-
-
-/* ------------- ESTADO Y STORAGE ------------------------ */
-const STORAGE = {
-  NOTES: 'dp_notes_v2',
-  FAVS: 'dp_favs_v2',
-  TIMERS: 'dp_timers_v2',
-  LAST_RECIPE: 'dp_last_recipe_v2'
-};
-let historyStack = ['view-main'];
+const STORAGE = { NOTES:'dp_notes_v3', FAVS:'dp_favs_v3', TIMERS:'dp_timers_v3', LAST:'dp_last_v3' };
 let notes = JSON.parse(localStorage.getItem(STORAGE.NOTES) || '{}');
 let favs = JSON.parse(localStorage.getItem(STORAGE.FAVS) || '[]');
-let timers = JSON.parse(localStorage.getItem(STORAGE.TIMERS) || '[]'); // {id, recipeId, label, remaining, running, endAt}
+let timers = JSON.parse(localStorage.getItem(STORAGE.TIMERS) || '[]'); // array of {id, recipeId, label, remaining, running, endAt}
 let timerTicker = null;
 
-/* ------------- HELPERS ------------------------------- */
+const qs = sel => document.querySelector(sel);
 const $ = id => document.getElementById(id);
+
 function normalize(s){ return String(s||'').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,''); }
 function escapeHtml(s){ return String(s||'').replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m])); }
 function saveNotes(){ localStorage.setItem(STORAGE.NOTES, JSON.stringify(notes)); }
 function saveFavs(){ localStorage.setItem(STORAGE.FAVS, JSON.stringify(favs)); }
 function saveTimers(){ localStorage.setItem(STORAGE.TIMERS, JSON.stringify(timers)); }
 
-/* ------------- NAVIGATION ---------------------------- */
-function showView(viewId, data){
-  // push current view to historyStack and render new
-  historyStack.push(viewId);
-  renderView(viewId, data);
-}
-function replaceView(viewId, data){
-  historyStack[historyStack.length-1] = viewId;
-  renderView(viewId, data);
-}
-function goBack(){
-  if(historyStack.length <= 1) return;
-  historyStack.pop();
-  const prev = historyStack[historyStack.length - 1];
-  renderView(prev);
-}
-function renderView(viewId, data){
-  // hide all
-  document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
-  const el = $(viewId);
-  if(!el) return;
-  el.classList.add('active');
-  // route render
-  if(viewId === 'view-list') renderList(data);
-  if(viewId === 'view-recipe') renderRecipe(data);
-  if(viewId === 'view-notes') renderNotesAggregated();
-  if(viewId === 'view-note') renderNoteEditor(data);
-  // reset search when returning to main
-  if(viewId === 'view-main') $('searchInput').value = '';
-}
-/* global back buttons */
-document.addEventListener('click', (ev) => {
-  const b = ev.target.closest('[data-action="back"]');
-  if(b){ ev.preventDefault(); goBack(); }
-});
-
-/* ------------- INITIALIZE UI ------------------------- */
-$('btnModo').addEventListener('click', ()=>{
-  document.documentElement.classList.toggle('light');
-});
-$('btnSmart').addEventListener('click', ()=> showView('view-smart'));
-$('btnMenu').addEventListener('click', ()=> showView('view-menu'));
-$('btnEstrella').addEventListener('click', ()=> {
-  const list = recetas.filter(r => favs.includes(r.id));
-  showView('view-list', { title: 'Recetas estrella', list });
-});
-$('btnNotas').addEventListener('click', ()=> showView('view-notes'));
-
-/* menu buttons */
-$('menu_cat').addEventListener('click', ()=> showCategories());
-$('menu_star').addEventListener('click', ()=> {
-  const list = recetas.filter(r => favs.includes(r.id));
-  showView('view-list', { title:'Recetas estrella', list });
-});
-$('menu_last').addEventListener('click', ()=>{
-  const last = localStorage.getItem(STORAGE.LAST_RECIPE);
-  if(last) showView('view-recipe', { id: last });
-  else alert('No hay última receta registrada.');
-});
-
-/* search input */
-$('searchInput').addEventListener('keydown', (e)=>{
-  if(e.key === 'Enter'){
-    const q = $('searchInput').value.trim();
-    if(q) performSearch(q);
+/* Router */
+const routes = {
+  '': ()=> showMain(),
+  '#main': ()=> showMain(),
+  '#menu': ()=> showMenu(),
+  '#smart': ()=> showSmart(),
+  '#categories': ()=> showCategories(),
+  '#stars': ()=> showStars(),
+  '#notes': ()=> showNotesAgg(),
+  '#last': ()=> showLast(),
+};
+function route(){
+  const h = location.hash || '#main';
+  // route with param support: #recipe:id   or #receta:id
+  if(h.startsWith('#recipe:') || h.startsWith('#receta:')){
+    const id = h.split(':')[1];
+    renderRecipeView({ id });
+    return;
   }
-});
-$('searchInput').addEventListener('input', (e)=>{
-  const q = e.target.value.trim();
-  if(!q) return;
-  const matches = recetas.filter(r =>
-    normalize(r.nombre).includes(normalize(q)) ||
-    normalize(r.categoria || '').includes(normalize(q)) ||
-    (r.ingredientes && r.ingredientes.some(i => normalize(i.nombre).includes(normalize(q))))
-  );
-  if(matches.length) showSearchModal(matches);
+  // note editor: #note:id
+  if(h.startsWith('#note:')){
+    const id = h.split(':')[1];
+    renderNoteEditor({ id });
+    return;
+  }
+  // list by category: #list:category
+  if(h.startsWith('#list:')){
+    const cat = decodeURIComponent(h.split(':')[1]||'');
+    renderListView({ title: cat, list: recetas.filter(r=> normalize(r.categoria) === normalize(cat) ) });
+    return;
+  }
+  // generic routes
+  if(routes[h]) routes[h]();
+  else showMain();
+}
+window.addEventListener('hashchange', route);
+
+/* Views helpers */
+function hideAllViews(){ document.querySelectorAll('.view').forEach(v => v.classList.remove('active')); }
+function showMain(){ hideAllViews(); $('view-main').classList.add('active'); $('searchInput').value = ''; }
+function showMenu(){ hideAllViews(); $('view-menu').classList.add('active'); }
+function showSmart(){ hideAllViews(); $('view-smart').classList.add('active'); }
+function showCategories(){ // build category list then route to #list:category when clicked
+  const categories = [...new Set(recetas.map(r => r.categoria || 'Sin categorÃ­a'))].sort();
+  renderListView({ title: 'CategorÃ­as', list: categories.map(c=>({name:c})) , isCategoryList:true});
+  location.hash = '#categories';
+}
+function showStars(){ const list = recetas.filter(r=> favs.includes(r.id)); renderListView({ title:'Recetas estrella', list }); location.hash = '#stars'; }
+function showNotesAgg(){ renderNotesAggregated(); location.hash = '#notes'; }
+function showLast(){ const last = localStorage.getItem(STORAGE.LAST); if(last) location.hash = '#recipe:'+last; else alert('No hay Ãºltima receta'); }
+
+/* attach header buttons */
+document.addEventListener('click', (ev)=>{
+  const btn = ev.target.closest('[data-href]');
+  if(btn){ ev.preventDefault(); location.hash = btn.getAttribute('data-href'); return; }
+  const back = ev.target.closest('.back');
+  if(back && back.getAttribute('data-href')){ ev.preventDefault(); location.hash = back.getAttribute('data-href'); return; }
 });
 
-/* ------------- SEARCH MODAL -------------------------- */
+/* Search */
+$('searchInput').addEventListener('keydown', (e)=>{ if(e.key === 'Enter'){ const q = $('searchInput').value.trim(); if(q) performSearch(q); }});
+$('searchInput').addEventListener('input', (e)=>{ const q = e.target.value.trim(); if(!q) return; const matches = recetas.filter(r => normalize(r.nombre).includes(normalize(q)) || normalize(r.categoria||'').includes(normalize(q)) || (r.ingredientes && r.ingredientes.some(i=> normalize(i.nombre).includes(normalize(q))))); if(matches.length) showSearchModal(matches); });
+
+/* Search modal */
 function showSearchModal(list){
-  const root = $('overlayRoot');
-  root.innerHTML = '';
-  root.style.display = 'block';
-  const ov = document.createElement('div'); ov.className = 'overlay';
-  const md = document.createElement('div'); md.className = 'modal';
-  md.innerHTML = `<h3 style="margin:0 0 8px 0;">Resultados</h3><div id="modalResults" style="display:flex;flex-direction:column;gap:8px;max-height:50vh;overflow:auto"></div>
-    <div style="text-align:center;margin-top:12px;"><button class="btn" id="closeModalBtn">Cerrar</button></div>`;
+  const root = $('overlayRoot'); root.innerHTML=''; root.style.display='block';
+  const ov = document.createElement('div'); ov.className='overlay';
+  const md = document.createElement('div'); md.className='modal';
+  md.innerHTML = `<h3 style="margin:0 0 8px 0;">Resultados</h3><div id="modalResults" style="display:flex;flex-direction:column;gap:8px;max-height:50vh;overflow:auto"></div><div style="text-align:center;margin-top:12px;"><button class="btn" id="closeModalBtn">Cerrar</button></div>`;
   ov.appendChild(md); root.appendChild(ov);
   const container = md.querySelector('#modalResults');
-  container.innerHTML = list.map(r => `<div class="card"><div style="display:flex;justify-content:space-between;align-items:center"><div><div class="name">${escapeHtml(r.nombre)}</div><div class="muted">${escapeHtml(r.categoria||'')}</div></div><div><button class="btn" data-open="${r.id}">Abrir</button></div></div></div>`).join('');
-  md.querySelectorAll('[data-open]').forEach(b => {
-    b.addEventListener('click', (ev)=>{
-      const id = ev.currentTarget.getAttribute('data-open');
-      closeOverlay();
-      showView('view-recipe', { id });
-    });
-  });
+  container.innerHTML = list.map(r => {
+    return `<div class="card"><div style="display:flex;justify-content:space-between;align-items:center"><div><div class="name">${escapeHtml(r.nombre)}</div><div class="muted">${escapeHtml(r.categoria||'')}</div></div><div><button class="btn" data-open="${escapeHtml(r.id)}">Abrir</button></div></div></div>`;
+  }).join('');
+  md.querySelectorAll('[data-open]').forEach(b => b.addEventListener('click', (ev)=>{ const id = ev.currentTarget.getAttribute('data-open'); closeOverlay(); location.hash = '#recipe:'+id; }));
   md.querySelector('#closeModalBtn').addEventListener('click', closeOverlay);
   ov.addEventListener('click', (ev)=>{ if(ev.target === ov) closeOverlay(); });
 }
 function closeOverlay(){ $('overlayRoot').innerHTML=''; $('overlayRoot').style.display='none'; }
 
-/* ------------- SMART FILTERS ------------------------ */
+/* Smart filters (accept uppercase/lowercase) */
 $('filterTimeBtn').addEventListener('click', ()=>{
-  const raw = prompt('Franja A: 1 - 20 min\nFranja B: 21 - 40 min\nFranja C: 41+\nElige A, B o C:') || '';
+  const raw = prompt('Elige franja: A (1-20), B (21-40), C (41+)\nEscribe A, B o C:') || '';
   const c = raw.trim().toLowerCase();
-  if(!['a','b','c'].includes(c)){ alert('Opción no válida'); return; }
+  if(!['a','b','c'].includes(c)){ alert('OpciÃ³n no vÃ¡lida'); return; }
   const list = recetas.filter(r => {
     const m = recipeMaxMinutes(r);
-    if(c === 'a') return m <= 20;
-    if(c === 'b') return m >=21 && m <= 40;
-    if(c === 'c') return m >=41;
-    return false;
+    if(c==='a') return m <=20;
+    if(c==='b') return m >=21 && m <=40;
+    return m >=41;
   });
-  showView('view-list', { title: `Franja ${c.toUpperCase()}`, list });
+  renderListView({ title: `Franja ${c.toUpperCase()}`, list }); location.hash = '#list';
 });
 $('filterDifficultyBtn').addEventListener('click', ()=>{
-  const raw = prompt('¿ A que nivel de dificultad te atreves, Facil, Medio o Dificil ?\nElige un nivel: F, M, D:') || '';
+  const raw = prompt('Â¿ A que nivel de dificultad te atreves, Facil, Medio o Dificil ?\nElige: F, M, D:') || '';
   const c = raw.trim().toLowerCase();
-  if(!['f','m','d'].includes(c)){ alert('Opción no válida'); return; }
+  if(!['f','m','d'].includes(c)){ alert('OpciÃ³n no vÃ¡lida'); return; }
   const list = recetas.filter(r => {
     const m = recipeMaxMinutes(r);
-    if(c === 'f') return m === 0 || m <= 20;
-    if(c === 'm') return m >= 21 && m <= 30;
-    if(c === 'd') return m > 30;
-    return false;
+    if(c==='f') return m === 0 || m <=20;
+    if(c==='m') return m >=21 && m <=30;
+    return m > 30;
   });
-  showView('view-list', { title: `Nivel ${c.toUpperCase()}`, list });
+  renderListView({ title: `Nivel ${c.toUpperCase()}`, list }); location.hash = '#list';
 });
-$('filterCategoryBtn').addEventListener('click', ()=>{
-  const raw = prompt('¿Qué categoría buscas? Escribe el nombre:') || '';
-  const q = raw.trim().toLowerCase();
+$('filterIngredientBtn').addEventListener('click', ()=>{
+  const raw = prompt('Â¿QuÃ© ingrediente? Escribe su nombre:') || '';
+  const q = raw.trim();
   if(!q) return;
-  const list = recetas.filter(r => (r.categoria||'').toLowerCase().includes(q));
-  showView('view-list', { title: `Categoría: ${q}`, list });
+  const list = recetas.filter(r => r.ingredientes && r.ingredientes.some(i=> normalize(i.nombre).includes(normalize(q))));
+  renderListView({ title: `Ingrediente: ${q}`, list }); location.hash = '#list';
 });
 
-/* ------------- CATEGORIES RENDER -------------------- */
-function showCategories(){
-  const set = [...new Set(recetas.map(r => (r.categoria||'Sin categoría').trim()))].sort();
-  const list = set.map(cat => ({ nombre: cat }));
-  showView('view-list', { title: 'Categorías', list, isCategoryList:true });
-}
-function renderList(data){
+/* Render list view (recipes or categories) */
+function renderListView(data){
+  hideAllViews();
+  $('view-list').classList.add('active');
   const container = $('listContent');
-  container.innerHTML = '';
-  const title = data?.title || 'Recetas';
+  const title = data?.title || 'Listado';
   $('listTitle').textContent = title;
+  container.innerHTML = '';
   if(!data || !data.list) { container.innerHTML = '<div class="empty">No hay elementos.</div>'; return; }
-
-  // categories view (special)
+  // if category list (string entries)
   if(data.isCategoryList){
-    container.innerHTML = data.list.map(c => `<div class="card"><div style="display:flex;justify-content:space-between;align-items:center"><div class="name">${escapeHtml(c.nombre)}</div><div><button class="btn" data-cat="${escapeHtml(c.nombre)}">Abrir</button></div></div></div>`).join('');
-    container.querySelectorAll('[data-cat]').forEach(b=>{
-      b.addEventListener('click', (ev)=>{
-        const cat = ev.currentTarget.getAttribute('data-cat');
-        const list = recetas.filter(r => (r.categoria||'').trim() === cat);
-        showView('view-list', { title:cat, list });
-      });
-    });
+    container.innerHTML = data.list.map(c => `<div class="card"><div style="display:flex;justify-content:space-between;align-items:center"><div class="name">${escapeHtml(c.name)}</div><div><button class="btn" data-cat="${escapeHtml(c.name)}">Abrir</button></div></div></div>`).join('');
+    container.querySelectorAll('[data-cat]').forEach(b => b.addEventListener('click', e => { const cat = e.currentTarget.getAttribute('data-cat'); const list = recetas.filter(r=> (r.categoria||'').trim() === cat); renderListView({ title: cat, list }); }));
     return;
   }
-
-  // recipes list
   const list = data.list;
-  if(!list.length){ container.innerHT
+  if(!list.length){ container.innerHTML = '<div class="empty">No hay resultados.</div>'; return; }
+  container.innerHTML = list.map(r => `<div class="card"><div style="display:flex;justify-content:space-between;align-items:center"><div><div class="name">${escapeHtml(r.nombre)}</div><div class="muted">${escapeHtml(r.categoria||'')}</div></div><div style="display:flex;gap:8px;align-items:center"><button class="btn" data-open="${escapeHtml(r.id)}">Abrir</button><button class="btn" data-fav="${escapeHtml(r.id)}">${favs.includes(r.id)?'â˜…':'â˜†'}</button></div></div></div>`).join('');
+  container.querySelectorAll('[data-open]').forEach(b => b.addEventListener('click', e => { const id = e.currentTarget.getAttribute('data-open'); location.hash = '#recipe:'+id; }));
+  container.querySelectorAll('[data-fav]').forEach(b => b.addEventListener('click', e => { const id = e.currentTarget.getAttribute('data-fav'); toggleFav(id); e.currentTarget.textContent = favs.includes(id)?'â˜…':'â˜†'; }));
+}
+
+/* Recipe rendering */
+function renderRecipeView(data){
+  hideAllViews();
+  $('view-recipe').classList.add('active');
+  const id = data?.id;
+  const recipe = recetas.find(r=> r.id === id);
+  if(!recipe){ $('recipeTitle').textContent = 'Receta no encontrada'; $('recipeContainer').innerHTML = '<div class="empty">Receta no encontrada</div>'; return; }
+  localStorage.setItem(STORAGE.LAST, id);
+  $('recipeTitle').textContent = recipe.nombre;
+  $('recipeMeta').textContent = `${recipe.categoria || ''}${recipe.porciones ? ' Â· ' + recipe.porciones + ' porciones' : ''}`;
+  // ingredients
+  const ing = (recipe.ingredientes || []).map(i=>`<li>${escapeHtml(i.nombre)}${i.cantidad? ' <strong>(' + escapeHtml(String(i.cantidad)) + (i.unidad? ' ' + escapeHtml(i.unidad):'') + ')</strong>':''}</li>`).join('');
+  $('ingredientsSection').innerHTML = `<b>Ingredientes:</b><ul>${ing}</ul>`;
+  const el = (recipe.elaboracion || []).map(s=>`<li>${escapeHtml(s)}</li>`).join('');
+  $('elaboracionSection').innerHTML = `<b>ElaboraciÃ³n:</b><ol>${el}</ol>`;
+  // detected timers
+  const detected = detectTimersFromElaboracion(recipe);
+  const detCont = $('detectedTimersContainer'); detCont.innerHTML = '';
+  if(detected.length){
+    detCont.innerHTML = `<div class="muted"><strong>Temporizadores sugeridos:</strong></div>` + detected.map((d,idx)=>`<div style="display:flex;align-items:center;gap:8px;margin:8px 0"><div style="flex:1">${escapeHtml(d.label)} â€” ${d.minutes} min</div><div><button class="small-btn" data-add="${recipe.id}#${idx}">AÃ±adir</button></div></div>`).join('');
+    detCont.querySelectorAll('[data-add]').forEach(b=> b.addEventListener('click', ev=>{ const val = ev.currentTarget.getAttribute('data-add'); const [rid, idx] = val.split('#'); const d = detected[Number(idx)]; addTimer(rid, `${recipe.nombre} (${d.minutes}m)`, d.minutes, true); showToast('Temporizador aÃ±adido: ' + d.minutes + ' min'); }));
+  }
+  // custom timer select
+  const sel = $('customTimerSelect'); sel.innerHTML=''; for(let i=1;i<=90;i++){ const o = document.createElement('option'); o.value=i; o.textContent = `${i} min`; sel.appendChild(o); }
+  $('customTimerAdd').onclick = ()=> { const mins = parseInt(sel.value,10) || 1; addTimer(recipe.id, `${recipe.nombre} (${mins}m)`, mins, true); showToast('Temporizador aÃ±adido: ' + mins + ' min'); };
+  // share and notes
+  $('shareRecipeBtn').onclick = ()=> shareRecipeFormatted(recipe);
+  $('notesRecipeBtn').onclick = ()=> { location.hash = '#note:'+recipe.id; };
+}
+
+/* Notes */
+function renderNoteEditor(data){
+  hideAllViews(); $('view-note').classList.add('active');
+  const id = data?.id; const rec = recetas.find(r=>r.id===id);
+  $('noteTitle').textContent = rec? rec.nombre : (id || 'Nota');
+  $('noteText').value = notes[id] || '';
+  $('saveNoteBtn').onclick = ()=> { notes[id] = $('noteText').value || ''; saveNotes(); showToast('Nota guardada'); };
+  $('shareNoteBtn').onclick = ()=> { const txt = `Nota - ${rec?.nombre || id}\n\n${notes[id] || ''}`; shareText(txt); };
+}
+function renderNotesAggregated(){
+  hideAllViews(); $('view-notes').classList.add('active');
+  const container = $('notesContainer'); const entries = Object.entries(notes||{});
+  if(!entries.length){ container.innerHTML = '<div class="empty">No hay notas guardadas.</div>'; return; }
+  container.innerHTML = entries.map(([rid, txt])=>{ const rec = recetas.find(r=>r.id===rid); return `<div class="card"><div style="display:flex;justify-content:space-between;align-items:flex-start"><div><div class="name">${escapeHtml(rec?.nombre || rid)}</div><div class="muted">${escapeHtml(rec?.categoria || '')}</div><div style="margin-top:8px;">${escapeHtml(txt).replace(/\n/g,'<br>')}</div></div><div style="display:flex;flex-direction:column;gap:8px"><button class="btn" data-open="${escapeHtml(rid)}">Abrir</button><button class="btn" data-share="${escapeHtml(rid)}">Compartir</button></div></div></div>`; }).join('');
+  container.querySelectorAll('[data-open]').forEach(b=> b.addEventListener('click', e=> { const id = e.currentTarget.getAttribute('data-open'); location.hash = '#recipe:'+id; }));
+  container.querySelectorAll('[data-share]').forEach(b=> b.addEventListener('click', e=> { const id = e.currentTarget.getAttribute('data-share'); const rec = recetas.find(r=>r.id===id); const txt = `Notas - ${rec?.nombre || id}\n\n${notes[id] || ''}`; shareText(txt); }));
+}
+
+/* Favorites */
+function toggleFav(id){ if(favs.includes(id)) favs = favs.filter(x=>x!==id); else favs.push(id); saveFavs(); }
+
+/* Timers */
+function addTimer(recipeId, label, minutes, autoStart){
+  const id = 't' + Date.now() + Math.floor(Math.random()*9999);
+  const sec = Math.max(1, Math.floor(minutes*60));
+  const t = { id, recipeId, label: String(label), remaining: sec, running: !!autoStart, endAt: autoStart ? Date.now() + sec*1000 : null, createdAt: Date.now() };
+  timers.push(t); saveTimers(); renderTimerBar();
+}
+function startTimer(id){ const t = timers.find(x=>x.id===id); if(!t) return; if(!t.running){ t.endAt = Date.now() + (t.remaining||0)*1000; t.running = true; saveTimers(); renderTimerBar(); } }
+function pauseTimer(id){ const t = timers.find(x=>x.id===id); if(!t) return; if(t.running){ t.remaining = Math.max(0, Math.ceil((t.endAt - Date.now())/1000)); t.endAt = null; t.running = false; saveTimers(); renderTimerBar(); } }
+function removeTimer(id){ timers = timers.filter(x=>x.id!==id); saveTimers(); renderTimerBar(); }
+function tickTimers(){ const now = Date.now(); let changed=false; timers.forEach(t=>{ if(t.running && t.endAt){ const rem = Math.ceil((t.endAt - now)/1000); if(rem <= 0){ t.running=false; t.remaining=0; t.endAt=null; changed=true; showToast('Temporizador terminado: '+t.label); try{ navigator.vibrate && navigator.vibrate(300); }catch(e){} } } }); if(changed) saveTimers(); renderTimerBar(); }
+function renderTimerBar(){ const bar = $('timerBar'); if(!timers.length){ bar.style.display='none'; bar.innerHTML=''; return; } bar.style.display='flex'; const now = Date.now(); bar.innerHTML = timers.map(t=>{ const remaining = t.running && t.endAt ? Math.max(0, Math.ceil((t.endAt - now)/1000)) : (t.remaining||0); const mm = Math.floor(remaining/60); const ss = remaining%60; return `<div class="timer-pill" title="${escapeHtml(t.label)}"><div style="font-weight:900">${escapeHtml(t.label)}</div><div style="opacity:0.9">${mm}:${String(ss).padStart(2,'0')}</div><div class="timer-controls">${t.running?`<button data-pause="${t.id}">Pausar</button>`:`<button data-start="${t.id}">Iniciar</button>`}<button data-remove="${t.id}">Eliminar</button></div></div>`; }).join('');
+  bar.querySelectorAll('[data-start]').forEach(b=> b.onclick = (ev)=> startTimer(ev.currentTarget.getAttribute('data-start')) );
+  bar.querySelectorAll('[data-pause]').forEach(b=> b.onclick = (ev)=> pauseTimer(ev.currentTarget.getAttribute('data-pause')) );
+  bar.querySelectorAll('[data-remove]').forEach(b=> b.onclick = (ev)=> removeTimer(ev.currentTarget.getAttribute('data-remove')) );
+}
+if(!timerTicker) timerTicker = setInterval(()=>{ tickTimers(); }, 800);
+
+/* Parser for durations */
+function detectTimersFromElaboracion(recipe){
+  const steps = recipe.elaboracion || []; const found = [];
+  const rxMin = /(\d{1,3})\s*(?:min(?:uto)?s?|m\b)/i;
+  const rxHour = /(\d{1,2})\s*(?:h(?:ora)?s?)/i;
+  for(const s of steps){
+    let minutes = 0;
+    const hm = s.match(rxHour); const mm = s.match(rxMin);
+    if(hm && !mm){ minutes = parseInt(hm[1],10)*60; } else if(mm){ minutes = parseInt(mm[1],10); if(hm) minutes += parseInt(hm[1],10)*60; } else continue;
+    const label = s.length>80 ? (s.slice(0,80) + '...') : s;
+    if(!found.some(f=> Math.abs(f.minutes-minutes)<1 && f.label===label)) found.push({ label, minutes });
+  }
+  return found;
+}
+function recipeMaxMinutes(r){ if(r.tiempo) return Number(r.tiempo)||0; const d = detectTimersFromElaboracion(r); if(!d.length) return 0; return Math.max(...d.map(x=>x.minutes)); }
+
+/* Sharing */
+function shareRecipeFormatted(recipe){
+  const header = `${recipe.nombre}\n\n`; const ing = (recipe.ingredientes||[]).map(i=>`- ${i.nombre}${i.cantidad? ' ('+i.cantidad+(i.unidad? ' '+i.unidad:'')+')':''}`).join('\n'); const el = (recipe.elaboracion||[]).map((s,i)=>`${i+1}. ${s}`).join('\n\n'); const txt = `${header}Ingredientes:\n${ing}\n\nElaboraciÃ³n:\n${el}`;
+  if(navigator.share) navigator.share({ title: recipe.nombre, text: txt }).catch(()=> showShareFallback(txt)); else showShareFallback(txt);
+}
+function shareText(text){ if(navigator.share) navigator.share({ text }).catch(()=> showShareFallback(text)); else showShareFallback(text); }
+function showShareFallback(text){
+  const root = $('overlayRoot'); root.innerHTML=''; root.style.display='block';
+  const ov = document.createElement('div'); ov.className='overlay'; const md = document.createElement('div'); md.className='modal';
+  md.innerHTML = `<h3>Compartir</h3><div style="max-height:40vh;overflow:auto;padding:8px;border-radius:8px;background:rgba(0,0,0,0.15);margin-top:8px">${escapeHtml(text).replace(/\n/g,'<br>')}</div><div class="share-row"><button id="wa" class="small-btn">WhatsApp</button><button id="tg" class="small-btn">Telegram</button><button id="mail" class="small-btn">Email</button><button id="sms" class="small-btn">SMS</button><button id="copy" class="small-btn">Copiar</button></div><div style="text-align:center;margin-top:12px;"><button class="btn" id="closeShare">Cerrar</button></div>`;
+  ov.appendChild(md); root.appendChild(ov);
+  md.querySelector('#wa').onclick = ()=> window.open('https://wa.me/?text=' + encodeURIComponent(text), '_blank');
+  md.querySelector('#tg').onclick = ()=> window.open('https://t.me/share/url?text=' + encodeURIComponent(text), '_blank');
+  md.querySelector('#mail').onclick = ()=> window.open('mailto:?subject=' + encodeURIComponent('Receta') + '&body=' + encodeURIComponent(text), '_self');
+  md.querySelector('#sms').onclick = ()=> window.open('sms:?body=' + encodeURIComponent(text), '_self');
+  md.querySelector('#copy').onclick = ()=> { navigator.clipboard.writeText(text).then(()=> alert('Copiado al portapapeles')); };
+  md.querySelector('#closeShare').onclick = closeOverlay;
+  ov.addEventListener('click',(e)=>{ if(e.target===ov) closeOverlay(); });
+}
+
+/* Utilities */
+function showToast(msg, time=2200){ const existing = document.getElementById('dp_toast'); if(existing) existing.remove(); const t=document.createElement('div'); t.id='dp_toast'; t.style.position='fixed'; t.style.bottom='90px'; t.style.left='50%'; t.style.transform='translateX(-50%)'; t.style.background='rgba(0,0,0,0.75)'; t.style.color='white'; t.style.padding='10px 14px'; t.style.borderRadius='10px'; t.style.zIndex='14000'; t.textContent=msg; document.body.appendChild(t); setTimeout(()=> t.remove(), time); }
+
+/* Init */
+function init(){
+  // wire back links in header already handled by click delegate
+  // wire some static buttons
+  document.getElementById('menu_cat').addEventListener('click', ()=> { showCategories(); location.hash = '#categories'; });
+  document.getElementById('menu_star').addEventListener('click', ()=> { showStars(); });
+  document.getElementById('menu_last').addEventListener('click', ()=> { showLast(); });
+  document.getElementById('btnEstrella').addEventListener('click', ()=> { showStars(); location.hash = '#stars'; });
+  document.getElementById('btnNotas').addEventListener('click', ()=> { showNotesAgg(); location.hash = '#notes'; });
+  document.getElementById('btnSmart').addEventListener('click', ()=> { location.hash = '#smart'; });
+  document.getElementById('btnMenuView').addEventListener('click', ()=> { location.hash = '#menu'; });
+
+  route();
+  renderTimerBar();
+  setInterval(()=> tickTimers(), 800);
+}
+document.addEventListener('DOMContentLoaded', init);
+</script>
+</body>
+</html>
