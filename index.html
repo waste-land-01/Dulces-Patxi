@@ -1,29 +1,12 @@
 import React, { useState, useMemo } from 'react';
-import { Search, SlidersHorizontal, Star, X, Clock, Salad, Utensils, Zap, MinusCircle, Maximize2 } from 'lucide-react';
+import { Search, Star, Clock, Salad, Utensils } from 'lucide-react';
 
-/**
- * --- Estructura de Estado de Filtros ---
- * Se mantiene la estructura de filtros para la lógica de filtrado.
- */
+// --- Estructura de Estado de Filtros (Simplificada) ---
 const initialFilterState = {
-    // RANGOS (Min y Max)
-    preparationTime: { min: 5, max: 120 },
-    cookingTime: { min: 5, max: 120 },
     totalTime: { min: 10, max: 240 },
     ingredientCount: { min: 3, max: 20 },
-    // LISTA DE VALORES
     difficulty: [1, 2, 3, 4, 5],
-    rating: [1, 2, 3, 4, 5],
-    // VALORES ESPECIALES
-    excludedIngredient: '', 
 };
-
-// Límite de rangos
-const filterLimits = {
-    totalTime: { min: 10, max: 240, unit: 'min' },
-    ingredientCount: { min: 3, max: 20, unit: 'unidades' },
-};
-
 
 // --- Componente para mostrar las estrellas de dificultad ---
 const DifficultyStars = ({ rating }) => {
@@ -76,50 +59,19 @@ const RecipeCard = ({ recipe }) => (
     </div>
 );
 
-
 // --- Mock de Recetas para Visualización ---
 const mockRecipes = [
     { id: 1, title: "Lomo Saltado Peruano Auténtico", category: "Carnes", prepTime: 20, cookingTime: 25, totalTime: 45, ingredients: 8, difficulty: 4, rating: 4.5, image: "https://placehold.co/600x400/EF4444/FFFFFF?text=Lomo+Saltado", tags: ["carne", "peruano", "salado"] },
     { id: 2, title: "Sopa de Tomate y Albahaca Rápida", category: "Sopas", prepTime: 10, cookingTime: 15, totalTime: 25, ingredients: 5, difficulty: 2, rating: 3.8, image: "https://placehold.co/600x400/10B981/FFFFFF?text=Sopa+Tomate", tags: ["vegetariano", "sopa", "rápida"] },
     { id: 3, title: "Curry de Garbanzos y Espinacas Vegano", category: "Vegetariano", prepTime: 15, cookingTime: 30, totalTime: 45, ingredients: 12, difficulty: 3, rating: 4.2, image: "https://placehold.co/600x400/3B82F6/FFFFFF?text=Curry+Vegano", tags: ["vegano", "curry", "salado"] },
     { id: 4, title: "Tarta de Manzana Clásica Holandesa", category: "Postres", prepTime: 30, cookingTime: 60, totalTime: 90, ingredients: 10, difficulty: 5, rating: 4.9, image: "https://placehold.co/600x400/F97316/FFFFFF?text=Tarta+Manzana", tags: ["postre", "dulce", "horneado"] },
-    { id: 5, title: "Ensalada César con Pollo Grillado", category: "Ensaladas", prepTime: 15, cookingTime: 10, totalTime: 25, ingredients: 8, difficulty: 2, rating: 4.0, image: "https://placehold.co/600x400/D97706/FFFFFF?text=Ensalada+Cesar", tags: ["ensalada", "pollo", "rápida"] },
-    { id: 6, title: "Brownies de Chocolate Oscuro", category: "Postres", prepTime: 15, cookingTime: 30, totalTime: 45, ingredients: 7, difficulty: 3, rating: 4.7, image: "https://placehold.co/600x400/9333EA/FFFFFF?text=Brownies", tags: ["postre", "chocolate", "dulce"] },
 ];
-
-// --- Componente de Botón de Filtro Rápido ---
-const QuickFilterButton = ({ label, icon: Icon, colorClass, onClick }) => (
-    <button 
-        onClick={onClick}
-        className={`w-full py-3 px-4 rounded-xl text-lg font-bold shadow-md transition duration-200 transform hover:scale-[1.02] active:scale-[0.98]
-            ${colorClass} text-white flex items-center justify-center`}
-    >
-        {label} <Icon className="w-5 h-5 ml-3" />
-    </button>
-);
 
 
 export default function App() {
     // Estado del texto de búsqueda
     const [searchTerm, setSearchTerm] = useState('');
-    // Estado de los 5 filtros
-    const [filterState, setFilterState] = useState(initialFilterState);
-    // Controlar si el panel de filtros está abierto (Lo mantendremos FALSE por ahora)
-    const [isFilterPanelOpen, setIsFilterPanelOpen] = useState(false);
-
-    // Función universal para actualizar cualquier filtro (temporalmente solo para mock)
-    const updateFilter = (key, value) => {
-        setFilterState(prev => ({
-            ...prev,
-            [key]: value,
-        }));
-    };
-
-    // Función para restablecer los filtros a su estado inicial
-    const resetFilters = () => {
-        setFilterState(initialFilterState);
-    };
-
+    
     // --- Lógica de filtrado (useMemo) ---
     const filteredRecipes = useMemo(() => {
         let results = mockRecipes;
@@ -132,53 +84,8 @@ export default function App() {
                 recipe.tags.some(tag => tag.includes(term))
             );
         }
-
-        // 2. Aplicar lógica de filtros (simplificada por ahora, solo para mantener la estructura)
-        results = results.filter(recipe => {
-            
-            // a. Tiempo Total (solo usando el máximo como filtro base)
-            if (recipe.totalTime > filterState.totalTime.max) return false;
-
-            // b. Conteo de Ingredientes (solo usando el máximo como filtro base)
-            if (recipe.ingredients > filterState.ingredientCount.max) return false;
-
-            // c. Dificultad (Estrellas)
-            if (!filterState.difficulty.includes(recipe.difficulty)) return false;
-
-            // d. Rating (Top Puntuación)
-            // if (!filterState.rating.includes(Math.floor(recipe.rating))) return false;
-
-            // e. Ingrediente Excluido (simple chequeo de tag)
-            if (filterState.excludedIngredient && recipe.tags.includes(filterState.excludedIngredient.toLowerCase())) return false;
-
-
-            return true;
-        });
-
         return results;
-    }, [searchTerm, filterState]);
-
-    // Función para simular la apertura de modales (y probar la lógica)
-    const handleFilterClick = (filterName) => {
-        console.log(`Abriendo modal para: ${filterName}`);
-        // Aquí iría la lógica para mostrar el modal de React que contiene el input.
-        // Por ahora, simularemos un cambio de estado para ver el impacto en el filtrado.
-        
-        if (filterName === 'tiempo') {
-            // Ejemplo: Filtrar por tiempo máximo de 40 min
-            updateFilter('totalTime', { min: 10, max: 40 });
-        } else if (filterName === 'dificultad') {
-            // Ejemplo: Filtrar solo dificultad 1 y 2
-            updateFilter('difficulty', [1, 2]);
-        } else if (filterName === 'excluir') {
-            // Ejemplo: Excluir 'dulce'
-            updateFilter('excludedIngredient', 'dulce');
-        } else if (filterName === 'ingredientes') {
-            // Ejemplo: Máximo 7 ingredientes
-            updateFilter('ingredientCount', { min: 3, max: 7 });
-        }
-        
-    };
+    }, [searchTerm]);
 
 
     return (
@@ -202,40 +109,12 @@ export default function App() {
                         />
                         <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
                     </div>
-
-                    {/* Botones de Filtro Rápido (Replicando la estructura de la imagen) */}
-                    <div className="grid grid-cols-2 md:grid-cols-5 gap-3">
-                        <QuickFilterButton 
-                            label="Tiempo Máximo" 
-                            icon={Clock} 
-                            colorClass="bg-indigo-500 hover:bg-indigo-600"
-                            onClick={() => handleFilterClick('tiempo')}
-                        />
-                        <QuickFilterButton 
-                            label="Dificultad" 
-                            icon={Zap} 
-                            colorClass="bg-yellow-500 hover:bg-yellow-600"
-                            onClick={() => handleFilterClick('dificultad')}
-                        />
-                        <QuickFilterButton 
-                            label="Excluir Ingrediente" 
-                            icon={MinusCircle} 
-                            colorClass="bg-red-500 hover:bg-red-600"
-                            onClick={() => handleFilterClick('excluir')}
-                        />
-                         <QuickFilterButton 
-                            label="Máx. Ingredientes" 
-                            icon={Salad} 
-                            colorClass="bg-green-500 hover:bg-green-600"
-                            onClick={() => handleFilterClick('ingredientes')}
-                        />
-                        <QuickFilterButton 
-                            label="Top Puntuación" 
-                            icon={Star} 
-                            colorClass="bg-purple-500 hover:bg-purple-600"
-                            onClick={() => handleFilterClick('puntuacion')}
-                        />
+                    
+                    {/* Sección donde irán los botones de filtro (vacía por ahora) */}
+                    <div className="h-6">
+                        {/* Espacio para los botones */}
                     </div>
+
                 </div>
             </header>
 
@@ -247,15 +126,6 @@ export default function App() {
                         Resultados de la Búsqueda 
                         <span className="ml-2 text-indigo-600">({filteredRecipes.length} recetas)</span>
                     </h2>
-                    {/* Botón de Resetear Filtros */}
-                    <button
-                        onClick={resetFilters}
-                        className="text-sm font-medium text-red-500 hover:text-red-700 transition duration-150 flex items-center"
-                        title="Resetear todos los filtros aplicados"
-                    >
-                        <X className="w-4 h-4 mr-1" />
-                        Resetear
-                    </button>
                 </div>
 
 
@@ -268,7 +138,7 @@ export default function App() {
                     ) : (
                         <div className="col-span-1 sm:col-span-2 text-center py-10 bg-white rounded-xl shadow-md border border-gray-100">
                             <p className="text-lg text-gray-500 font-medium">
-                                No se encontraron recetas que coincidan con los filtros aplicados.
+                                No se encontraron recetas que coincidan con la búsqueda.
                             </p>
                         </div>
                     )}
