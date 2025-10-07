@@ -71,87 +71,45 @@ const RecipeCard = ({ recipe }) => (
     </div>
 );
 
-// --- Componente de Deslizador de Rango (Range Slider) con doble pulgar real ---
+// --- Componente de Deslizador de Rango (Range Slider) con un solo pulgar (Versión Estable) ---
 const RangeFilter = ({ label, icon: Icon, value, limit, onChange, stateKey }) => {
     
-    // Calcula la posición en porcentaje de los valores min y max dentro del rango absoluto
-    const minPercent = ((value.min - limit.min) / (limit.max - limit.min)) * 100;
-    const maxPercent = ((value.max - limit.min) / (limit.max - limit.min)) * 100;
-
-    // Manejador para el cambio del valor MÍNIMO
-    const handleMinChange = (e) => {
-        const newMin = parseInt(e.target.value, 10);
-        // Asegurarse de que el mínimo nunca sea mayor que el máximo actual
-        const finalMin = Math.min(newMin, value.max);
-        onChange(stateKey, { min: finalMin, max: value.max });
-    };
-
-    // Manejador para el cambio del valor MÁXIMO
+    // Aquí usamos solo el valor máximo (value.max) del rango para el deslizador simple.
+    // Aunque el estado original es un objeto {min, max}, el deslizador simple controla 'max'.
+    
     const handleMaxChange = (e) => {
         const newMax = parseInt(e.target.value, 10);
-        // Asegurarse de que el máximo nunca sea menor que el mínimo actual
-        const finalMax = Math.max(newMax, value.min);
-        onChange(stateKey, { min: value.min, max: finalMax });
+        // Mantenemos el 'min' fijo y solo actualizamos el 'max' para el filtro.
+        onChange(stateKey, { min: limit.min, max: newMax });
     };
 
-    // Estilo común para los inputs de rango. Usamos clases que anulan el estilo del track
-    // para que solo se vean los pulgares nativos y el relleno custom.
-    const inputStyle = "absolute w-full h-1 bg-transparent cursor-pointer z-20 opacity-0"; 
-    /* * Nota sobre opacity-0: La hacemos transparente para que solo se vea el relleno azul custom.
-    * Si el pulgar nativo del navegador es difícil de ver, considera eliminar `opacity-0` 
-    * y dejarlo visible, pero usando clases de Tailwind para darle un poco más de altura: `h-6`.
-    * Por ahora, lo dejamos en `opacity-0` para priorizar el relleno azul.
-    */
+    // Estilo para el input de rango simple (estilizado con clases de Tailwind)
+    // Nota: El pulgar se estiliza con el tema del navegador.
+    const sliderClasses = "w-full h-2 bg-indigo-100 rounded-lg appearance-none cursor-pointer range-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-opacity-50";
 
     return (
         <div className="p-4 bg-gray-50 rounded-lg shadow-inner mb-4">
             
-            <div className="flex justify-between items-center mb-2">
+            <div className="flex justify-between items-center mb-4">
                 <h4 className="flex items-center text-sm font-semibold text-gray-700">
                     <Icon className="w-4 h-4 mr-2 text-indigo-500" />
                     {label}
                 </h4>
                 {/* Muestra el rango actual */}
                 <span className="text-indigo-600 font-bold text-sm">
-                    {value.min} - {value.max} {limit.unit}
+                    Máx: {value.max} {limit.unit}
                 </span>
             </div>
             
-            <div className="relative h-6 w-full">
-                {/* 1. Track de fondo completo (barra gris) */}
-                <div className="absolute w-full h-1 bg-indigo-100 rounded-full top-1/2 transform -translate-y-1/2" />
-                
-                {/* 2. Relleno del rango entre los dos pulgares (barra azul) */}
-                <div 
-                    className="absolute h-1 bg-indigo-600 rounded-full top-1/2 transform -translate-y-1/2 z-10" 
-                    style={{ 
-                        left: `${minPercent}%`, 
-                        width: `${maxPercent - minPercent}%` 
-                    }}
-                />
-
-                {/* 3. Input para el valor MÍNIMO (pulgar izquierdo) */}
-                <input
-                    type="range"
-                    min={limit.min}
-                    max={limit.max}
-                    value={value.min} 
-                    onChange={handleMinChange}
-                    className={inputStyle}
-                    style={{ zIndex: 30 }} // Aseguramos que el pulgar sea clicable
-                />
-
-                {/* 4. Input para el valor MÁXIMO (pulgar derecho) */}
-                <input
-                    type="range"
-                    min={limit.min}
-                    max={limit.max}
-                    value={value.max} 
-                    onChange={handleMaxChange}
-                    className={inputStyle}
-                    style={{ zIndex: 40 }} // Aseguramos que este pulgar esté encima para fácil interacción
-                />
-            </div>
+            {/* Input de rango simple */}
+            <input
+                type="range"
+                min={limit.min}
+                max={limit.max}
+                value={value.max} 
+                onChange={handleMaxChange}
+                className={sliderClasses}
+            />
             
             <div className="flex justify-between text-xs text-gray-500 mt-2">
                 <span>{limit.min} {limit.unit}</span>
@@ -257,16 +215,17 @@ export default function App() {
         results = results.filter(recipe => {
             
             // a. Tiempo de Preparación
-            if (recipe.prepTime < filterState.preparationTime.min || recipe.prepTime > filterState.preparationTime.max) return false;
+            // Ahora solo filtramos por el MÁXIMO, ya que el min es fijo
+            if (recipe.prepTime > filterState.preparationTime.max) return false;
 
             // b. Tiempo de Cocción
-            if (recipe.cookingTime < filterState.cookingTime.min || recipe.cookingTime > filterState.cookingTime.max) return false;
+            if (recipe.cookingTime > filterState.cookingTime.max) return false;
 
             // c. Tiempo Total
-            if (recipe.totalTime < filterState.totalTime.min || recipe.totalTime > filterState.totalTime.max) return false;
+            if (recipe.totalTime > filterState.totalTime.max) return false;
 
             // d. Conteo de Ingredientes
-            if (recipe.ingredients < filterState.ingredientCount.min || recipe.ingredients > filterState.ingredientCount.max) return false;
+            if (recipe.ingredients > filterState.ingredientCount.max) return false;
 
             // e. Dificultad (Estrellas)
             if (!filterState.difficulty.includes(recipe.difficulty)) return false;
@@ -338,7 +297,7 @@ export default function App() {
 
                             {/* TIEMPOS */}
                             <RangeFilter 
-                                label="Tiempo de Preparación" 
+                                label="Tiempo Máx. de Preparación" 
                                 icon={Utensils} 
                                 value={filterState.preparationTime} 
                                 limit={filterLimits.preparationTime}
@@ -346,7 +305,7 @@ export default function App() {
                                 stateKey="preparationTime"
                             />
                             <RangeFilter 
-                                label="Tiempo de Cocción" 
+                                label="Tiempo Máx. de Cocción" 
                                 icon={Clock} 
                                 value={filterState.cookingTime} 
                                 limit={filterLimits.cookingTime}
@@ -354,7 +313,7 @@ export default function App() {
                                 stateKey="cookingTime"
                             />
                             <RangeFilter 
-                                label="Tiempo Total" 
+                                label="Tiempo Máx. Total" 
                                 icon={Utensils} 
                                 value={filterState.totalTime} 
                                 limit={filterLimits.totalTime}
@@ -364,7 +323,7 @@ export default function App() {
 
                             {/* INGREDIENTES */}
                             <RangeFilter 
-                                label="Conteo de Ingredientes" 
+                                label="Máx. Conteo de Ingredientes" 
                                 icon={Salad} 
                                 value={filterState.ingredientCount} 
                                 limit={filterLimits.ingredientCount}
