@@ -1,362 +1,1760 @@
-import React, { useState, useMemo } from 'react';
-import { Search, SlidersHorizontal, Star, X, Clock, Salad, Utensils } from 'lucide-react';
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dulces Patxi | Página Principal</title>
+    <!-- Incluye Tailwind CSS (o usa tus estilos base) -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Incluye FontAwesome para iconos si no usas emojis -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        /* ================================================= */
+        /* == ESTILOS PERSONALIZADOS (DISEÑO 2 REFINADO) == */
+        /* ================================================= */
 
-/**
- * --- Estructura de Estado de Filtros ---
- * Usamos el estado definido previamente para inicializar los filtros.
- */
-const initialFilterState = {
-    preparationTime: { min: 5, max: 120 },
-    cookingTime: { min: 5, max: 120 },
-    totalTime: { min: 10, max: 240 },
-    ingredientCount: { min: 3, max: 20 },
-    difficulty: [1, 2, 3, 4, 5],
-};
-
-const filterLimits = {
-    preparationTime: { min: 5, max: 120, unit: 'min' },
-    cookingTime: { min: 5, max: 120, unit: 'min' },
-    totalTime: { min: 10, max: 240, unit: 'min' },
-    ingredientCount: { min: 3, max: 20, unit: 'unidades' },
-};
-
-// --- Componente para mostrar las estrellas de dificultad ---
-const DifficultyStars = ({ rating }) => {
-    return (
-        <div className="flex items-center space-x-0.5">
-            {[1, 2, 3, 4, 5].map((star) => (
-                <Star
-                    key={star}
-                    className={`w-4 h-4 transition-colors duration-150 ${
-                        star <= rating ? 'text-yellow-400 fill-yellow-400' : 'text-gray-300'
-                    }`}
-                />
-            ))}
-        </div>
-    );
-};
-
-// --- Componente de Tarjeta de Receta (Mock para visualización) ---
-const RecipeCard = ({ recipe }) => (
-    <div className="bg-white rounded-xl shadow-lg hover:shadow-xl transition-shadow duration-300 overflow-hidden border border-gray-100">
-        <div className="relative h-48 sm:h-56">
-            <img 
-                src={recipe.image} 
-                alt={recipe.title} 
-                className="w-full h-full object-cover" 
-                onError={(e) => { e.target.onerror = null; e.target.src = "https://placehold.co/600x400/1E3A8A/FFFFFF?text=Receta"; }}
-            />
-            <div className="absolute top-3 right-3 bg-indigo-600 text-white text-xs font-semibold px-3 py-1 rounded-full shadow-md flex items-center">
-                <Clock className="w-3 h-3 mr-1" />
-                {recipe.totalTime} min
-            </div>
-        </div>
-        <div className="p-4 sm:p-5">
-            <h3 className="text-xl font-bold text-gray-800 mb-1 line-clamp-2">{recipe.title}</h3>
-            <div className="flex items-center justify-between mb-3">
-                <DifficultyStars rating={recipe.difficulty} />
-                <span className="text-sm font-medium text-indigo-600">{recipe.category}</span>
-            </div>
-            <div className="flex justify-between text-sm text-gray-600 border-t border-gray-100 pt-3">
-                <div className="flex items-center">
-                    <Utensils className="w-4 h-4 mr-1 text-gray-400" />
-                    <span>Prep: {recipe.prepTime} min</span>
-                </div>
-                <div className="flex items-center">
-                    <Salad className="w-4 h-4 mr-1 text-gray-400" />
-                    <span>Ingr: {recipe.ingredients}</span>
-                </div>
-            </div>
-        </div>
-    </div>
-);
-
-// --- Componente de Filtro Numérico (Input de número simple para evitar problemas de compatibilidad) ---
-const NumberFilter = ({ label, icon: Icon, value, limit, onChange, stateKey }) => {
-    
-    // Solo permitimos modificar el valor MÁXIMO (comportamiento de "Máximo permitido")
-    const handleMaxChange = (e) => {
-        const rawValue = e.target.value === '' ? limit.min : parseInt(e.target.value, 10);
-        const newMax = Math.max(limit.min, Math.min(limit.max, rawValue));
-        
-        // Mantenemos el 'min' fijo y solo actualizamos el 'max' para el filtro.
-        onChange(stateKey, { min: limit.min, max: newMax });
-    };
-
-    return (
-        <div className="p-4 bg-gray-50 rounded-lg shadow-inner mb-4">
-            
-            <div className="flex justify-between items-center mb-4">
-                <h4 className="flex items-center text-sm font-semibold text-gray-700">
-                    <Icon className="w-4 h-4 mr-2 text-indigo-500" />
-                    {label}
-                </h4>
-            </div>
-            
-            <div className="flex items-center space-x-3">
-                <span className="text-sm text-gray-600">Máx:</span>
-                <input
-                    type="number"
-                    min={limit.min}
-                    max={limit.max}
-                    value={value.max} 
-                    onChange={handleMaxChange}
-                    className="w-20 p-2 border border-gray-300 rounded-lg text-center focus:ring-indigo-500 focus:border-indigo-500"
-                />
-                <span className="text-sm font-medium text-indigo-600">{limit.unit}</span>
-            </div>
-            
-            <p className="text-xs text-gray-500 mt-2">Rango: {limit.min} - {limit.max} {limit.unit}</p>
-        </div>
-    );
-};
-
-
-// --- Mock de Recetas para Visualización ---
-const mockRecipes = [
-    { id: 1, title: "Lomo Saltado Peruano Auténtico", category: "Carnes", prepTime: 20, cookingTime: 25, totalTime: 45, ingredients: 8, difficulty: 4, image: "https://placehold.co/600x400/EF4444/FFFFFF?text=Lomo+Saltado" },
-    { id: 2, title: "Sopa de Tomate y Albahaca Rápida", category: "Sopas", prepTime: 10, cookingTime: 15, totalTime: 25, ingredients: 5, difficulty: 2, image: "https://placehold.co/600x400/10B981/FFFFFF?text=Sopa+Tomate" },
-    { id: 3, title: "Curry de Garbanzos y Espinacas Vegano", category: "Vegetariano", prepTime: 15, cookingTime: 30, totalTime: 45, ingredients: 12, difficulty: 3, image: "https://placehold.co/600x400/3B82F6/FFFFFF?text=Curry+Vegano" },
-    { id: 4, title: "Tarta de Manzana Clásica Holandesa", category: "Postres", prepTime: 30, cookingTime: 60, totalTime: 90, ingredients: 10, difficulty: 5, image: "https://placehold.co/600x400/F97316/FFFFFF?text=Tarta+Manzana" },
-];
-
-
-// --- Componente de Filtro de Dificultad (Estrellas/Checkboxes) ---
-const DifficultyFilter = ({ value, onChange }) => {
-    const handleToggleStar = (star) => {
-        const newDifficulty = value.includes(star)
-            ? value.filter(s => s !== star)
-            : [...value, star].sort((a, b) => a - b); 
-        
-        // Evita que el array quede vacío para no "romper" la búsqueda. Si se deseleccionan todas, se selecciona todo de nuevo.
-        onChange('difficulty', newDifficulty.length > 0 ? newDifficulty : [1, 2, 3, 4, 5]);
-    };
-
-    const isAllSelected = value.length === 5;
-    
-    return (
-        <div className="p-4 bg-gray-50 rounded-lg shadow-inner">
-            <h4 className="flex items-center text-sm font-semibold text-gray-700 mb-3">
-                <Star className="w-4 h-4 mr-2 text-indigo-500 fill-indigo-500" />
-                Nivel de Dificultad (Estrellas)
-            </h4>
-            <div className="flex justify-between space-x-2">
-                {[1, 2, 3, 4, 5].map((star) => {
-                    const isSelected = value.includes(star);
-                    return (
-                        <button
-                            key={star}
-                            onClick={() => handleToggleStar(star)}
-                            className={`flex flex-col items-center p-2 rounded-lg transition-all duration-200 w-1/5 ${
-                                isSelected ? 'bg-indigo-600 text-white shadow-md' : 'bg-white text-gray-600 hover:bg-indigo-50 border border-gray-200'
-                            }`}
-                        >
-                            <span className="text-lg font-bold">
-                                {star}
-                            </span>
-                            <span className="text-xs mt-0.5">
-                                {star === 1 ? '1 estrella' : `${star} estrellas`}
-                            </span>
-                        </button>
-                    );
-                })}
-            </div>
-            <p className="text-xs text-gray-500 mt-3 italic">
-                {isAllSelected 
-                    ? 'Mostrando todas las dificultades (1 a 5)' 
-                    : `Estrellas seleccionadas: ${value.join(', ')}`}
-            </p>
-        </div>
-    );
-};
-
-
-export default function App() {
-    // Estado del texto de búsqueda
-    const [searchTerm, setSearchTerm] = useState('');
-    // Estado de los 5 filtros
-    const [filterState, setFilterState] = useState(initialFilterState);
-    // Controlar si el panel de filtros está abierto
-    const [isFilterPanelOpen, setIsFilterPanelOpen] = useState(false);
-
-    // Función universal para actualizar cualquier filtro (maneja tanto rangos como arrays)
-    const updateFilter = (key, value) => {
-        setFilterState(prev => ({
-            ...prev,
-            [key]: value,
-        }));
-    };
-
-    // Función para restablecer los filtros a su estado inicial
-    const resetFilters = () => {
-        setFilterState(initialFilterState);
-    };
-
-    // --- Lógica de filtrado simulada (useMemo) ---
-    const filteredRecipes = useMemo(() => {
-        let results = mockRecipes;
-
-        // 1. Filtrado por texto de búsqueda (Título)
-        if (searchTerm) {
-            results = results.filter(recipe => 
-                recipe.title.toLowerCase().includes(searchTerm.toLowerCase())
-            );
+        /* Colores vivos y golosos */
+        :root {
+            --color-fondo: #f8f0e5; /* Beige Vainilla */
+            --color-texto: #402c22; /* Marrón Chocolate */
+            --color-primario: #724e3a; /* Chocolate */
+            --color-acento-naranja: #ff9933; /* Naranja Calabaza/Caramelo */
+            --color-acento-menu: #6a05ad; /* Púrpura Oscuro */
+            --color-acento-notas: #5d8a63; /* Verde Musgo Suave */
+            --color-acento-estrella: #9c5e3d; /* Marrón Tostado */
+            --color-acento-modo: #3b82f6; /* Azul Brillante */
+            --color-by-yahya: #60a5fa; /* Azul Suave */
+            --color-tarjeta: #ffffff;
+            --sombra-fuerte: 0 6px 0 var(--color-primario);
+            --sombra-suave: 0 8px 15px rgba(0, 0, 0, 0.1);
         }
 
-        // 2. Filtrado por rangos y dificultad (Aplicaremos la lógica real aquí)
-        results = results.filter(recipe => {
+        body {
+            background-color: var(--color-fondo);
+            color: var(--color-texto);
+            font-family: 'Inter', sans-serif;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        /* Modo Oscuro */
+        body.modo-oscuro {
+            --color-fondo: #2c2c2c;
+            --color-texto: #f8f0e5;
+            --color-tarjeta: #3a3a3a;
+            --sombra-fuerte: 0 6px 0 #1f1f1f;
+        }
+
+        /* ==================== */
+        /* ENCABEZADO Y MARCA */
+        /* ==================== */
+        .header-brand {
+            text-align: center;
+            padding: 20px 0 30px;
+            line-height: 1.1;
+            /* Flex para alinear la firma "by yahya" */
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .header-brand h1 {
+            font-size: 3em; /* Grande */
+            color: var(--color-primario);
+            margin: 0;
+            font-family: 'Impact', 'Arial Black', sans-serif; /* Fuerte */
+            letter-spacing: 2px;
+        }
+        .header-brand h2 {
+            /* Letra más grande que Normal */
+            font-size: 1.35em; 
+            color: var(--color-texto);
+            font-weight: 400;
+            margin: 5px 0 0;
+            display: flex;
+            align-items: center;
+            justify-content: center; /* Centra el texto */
+            gap: 15px; /* Espacio entre el texto y la firma */
+        }
+        .header-brand p.byline {
+            font-size: 1.1em; /* Letra mediana/gruesa */
+            color: var(--color-by-yahya);
+            font-weight: 700; /* Más gruesa */
+            /* Posicionamiento a la derecha del h2, aunque sigue la línea vertical del flex-direction: column */
+            align-self: flex-end; 
             
-            // a. Tiempo de Preparación
-            if (recipe.prepTime > filterState.preparationTime.max) return false;
-
-            // b. Tiempo de Cocción
-            if (recipe.cookingTime > filterState.cookingTime.max) return false;
-
-            // c. Tiempo Total
-            if (recipe.totalTime > filterState.totalTime.max) return false;
-
-            // d. Conteo de Ingredientes
-            if (recipe.ingredients > filterState.ingredientCount.max) return false;
-
-            // e. Dificultad (Estrellas)
-            if (!filterState.difficulty.includes(recipe.difficulty)) return false;
-
-            return true;
-        });
-
-        return results;
-    }, [searchTerm, filterState]);
-
-
-    return (
-        <div className="min-h-screen bg-gray-50 font-sans">
-            {/* Header / Barra de Búsqueda Fija */}
-            <header className="bg-white sticky top-0 z-10 shadow-lg p-4 sm:p-6 border-b border-indigo-100">
-                <div className="max-w-4xl mx-auto flex items-center space-x-3">
-                    {/* Campo de Búsqueda de Texto */}
-                    <div className="relative flex-grow">
-                        <input
-                            type="text"
-                            placeholder="Buscar por nombre de receta o ingrediente clave..."
-                            value={searchTerm}
-                            onChange={(e) => setSearchTerm(e.target.value)}
-                            className="w-full py-3 pl-10 pr-4 border border-gray-300 rounded-full focus:ring-indigo-500 focus:border-indigo-500 transition duration-150 shadow-sm text-gray-700"
-                        />
-                        <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
-                    </div>
-
-                    {/* Botón para Abrir Filtros */}
-                    <button
-                        onClick={() => setIsFilterPanelOpen(!isFilterPanelOpen)}
-                        className={`p-3 rounded-full transition duration-300 shadow-md flex items-center justify-center ${
-                            isFilterPanelOpen ? 'bg-indigo-700 text-white' : 'bg-indigo-600 text-white hover:bg-indigo-700'
-                        }`}
-                        title="Abrir/Cerrar Filtros Avanzados"
-                    >
-                        <SlidersHorizontal className="w-6 h-6" />
-                    </button>
-                </div>
-            </header>
-
-            <main className="max-w-4xl mx-auto p-4 sm:p-6 pt-0">
-                
-                {/* Panel de Filtros Desplegable */}
-                {isFilterPanelOpen && (
-                    <div className="bg-white p-4 sm:p-6 rounded-2xl shadow-xl mt-4 border border-indigo-200 transition-all duration-300 ease-out">
-                        <div className="flex justify-between items-center mb-4 border-b pb-3">
-                            <h2 className="text-2xl font-extrabold text-indigo-700 flex items-center">
-                                <SlidersHorizontal className="w-6 h-6 mr-2" />
-                                Filtros Avanzados
-                            </h2>
-                            <button
-                                onClick={resetFilters}
-                                className="text-sm font-medium text-red-500 hover:text-red-700 transition duration-150 flex items-center"
-                            >
-                                <X className="w-4 h-4 mr-1" />
-                                Resetear Filtros
-                            </button>
-                        </div>
-                        
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 lg:gap-6">
-                            {/* DIFICULTAD (Estrellas) */}
-                            <div className="md:col-span-2">
-                                <DifficultyFilter 
-                                    value={filterState.difficulty} 
-                                    onChange={updateFilter} 
-                                />
-                            </div>
-
-                            {/* TIEMPOS Y CANTIDADES (usando NumberFilter) */}
-                            <NumberFilter 
-                                label="Tiempo Máx. de Preparación" 
-                                icon={Utensils} 
-                                value={filterState.preparationTime} 
-                                limit={filterLimits.preparationTime}
-                                onChange={updateFilter}
-                                stateKey="preparationTime"
-                            />
-                            <NumberFilter 
-                                label="Tiempo Máx. de Cocción" 
-                                icon={Clock} 
-                                value={filterState.cookingTime} 
-                                limit={filterLimits.cookingTime}
-                                onChange={updateFilter}
-                                stateKey="cookingTime"
-                            />
-                            <NumberFilter 
-                                label="Tiempo Máx. Total" 
-                                icon={Utensils} 
-                                value={filterState.totalTime} 
-                                limit={filterLimits.totalTime}
-                                onChange={updateFilter}
-                                stateKey="totalTime"
-                            />
-
-                            <NumberFilter 
-                                label="Máx. Conteo de Ingredientes" 
-                                icon={Salad} 
-                                value={filterState.ingredientCount} 
-                                limit={filterLimits.ingredientCount}
-                                onChange={updateFilter}
-                                stateKey="ingredientCount"
-                            />
-                            
-                        </div>
-                    </div>
-                )}
-                
-                {/* Indicador de Resultados */}
-                <div className="py-4 mt-6 border-b border-gray-200">
-                    <h2 className="text-2xl font-bold text-gray-800">
-                        Resultados de la Búsqueda 
-                        <span className="ml-2 text-indigo-600">({filteredRecipes.length} recetas)</span>
-                    </h2>
-                </div>
+            /* === CAMBIOS SOLICITADOS === */
+            margin: 10px 10% 20px 0; /* Aumentado el margen superior a 10px para separarlo */
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2); /* Añadido efecto sombra */
+            /* ========================= */
+        }
+        
+        /* Aseguramos que la firma "by yahya" se vea correctamente alineada a la derecha de Bachir Krai */
+        .header-brand-line {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+            max-width: 600px;
+        }
+        .header-brand-line > * {
+            flex-grow: 1;
+        }
+        .byline-container {
+            flex-grow: 0;
+            padding-left: 10px;
+        }
 
 
-                {/* Contenedor de Recetas */}
-                <div className="mt-6 grid grid-cols-1 sm:grid-cols-2 gap-6 pb-12">
-                    {filteredRecipes.length > 0 ? (
-                        filteredRecipes.map(recipe => (
-                            <RecipeCard key={recipe.id} recipe={recipe} />
-                        ))
-                    ) : (
-                        <div className="col-span-1 sm:col-span-2 text-center py-10 bg-white rounded-xl shadow-md border border-gray-100">
-                            <p className="text-lg text-gray-500 font-medium">
-                                No se encontraron recetas que coincidan con los filtros aplicados.
-                            </p>
-                            <button
-                                onClick={resetFilters}
-                                className="mt-4 inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-full shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-                            >
-                                <X className="w-4 h-4 mr-1" />
-                                Resetear filtros
-                            </button>
-                        </div>
-                    )}
-                </div>
+        /* ==================== */
+        /* BLOQUES DE ACCIÓN */
+        /* ==================== */
+        .action-blocks {
+            width: 100%;
+            max-width: 500px;
+            display: flex;
+            flex-direction: column;
+            gap: 18px; /* Mayor espacio entre bloques */
+            margin-top: 30px;
+        }
+        .btn-large {
+            padding: 20px 15px;
+            font-size: 1.3em; /* Letra grande */
+            font-weight: 800; /* Muy negrita */
+            text-align: center;
+            border-radius: 15px;
+            border: none;
+            cursor: pointer;
+            box-shadow: 0 6px 0 var(--shadow-color); /* Efecto 3D */
+            transition: transform 0.1s, box-shadow 0.1s;
+            color: white;
+            letter-spacing: 0.5px;
+        }
+        .btn-large:active {
+            transform: translateY(6px);
+            box-shadow: none;
+        }
 
-            </main>
+        /* Colores específicos de los bloques */
+        .btn-search { background-color: var(--color-acento-naranja); --shadow-color: #cc7a29; color: var(--color-texto); }
+        .btn-mode { background-color: var(--color-acento-modo); --shadow-color: #28599e; }
+        .btn-menu { background-color: var(--color-acento-menu); --shadow-color: #4f0380; }
+        .btn-star { background-color: var(--color-acento-estrella); --shadow-color: #7b4528; }
+        .btn-notes { background-color: var(--color-acento-notas); --shadow-color: #496d50; }
+        
+        /* ESTILO PARA LAS TARJETAS DE CATEGORÍA */
+        .category-card {
+            background-color: var(--color-acento-menu);
+            color: white;
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 4px 0 #4f0380;
+            transition: transform 0.2s, box-shadow 0.2s;
+            cursor: pointer;
+            text-align: center;
+        }
+        .category-card:active {
+            transform: translateY(4px);
+            box-shadow: none;
+        }
+        .category-card i {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+        .category-card h3 {
+            font-size: 1.2em;
+            font-weight: 700;
+        }
+
+
+        /* ==================== */
+        /* ESTILOS DE RECETAS */
+        /* ==================== */
+        .recipe-card {
+            background-color: var(--color-tarjeta);
+            color: var(--color-texto);
+            border: 1px solid rgba(0,0,0,0.1);
+            transition: transform 0.2s, box-shadow 0.2s;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.06);
+        }
+        .recipe-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -4px rgba(0, 0, 0, 0.1);
+        }
+        .difficulty-pill {
+            display: inline-block;
+            padding: 2px 8px;
+            border-radius: 9999px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+        .diff-baja { background-color: #d1fae5; color: #065f46; } /* Verde claro */
+        .diff-media { background-color: #fef9c3; color: #854d0e; } /* Amarillo claro */
+        .diff-alta { background-color: #fee2e2; color: #991b1b; } /* Rojo claro */
+        .modo-oscuro .diff-baja { background-color: #065f46; color: #d1fae5; }
+        .modo-oscuro .diff-media { background-color: #854d0e; color: #fef9c3; }
+        .modo-oscuro .diff-alta { background-color: #991b1b; color: #fee2e2; }
+
+        /* Estilos específicos para la vista de detalle */
+        .detail-card {
+            background-color: var(--color-tarjeta);
+            color: var(--color-texto);
+            border-radius: 15px;
+            box-shadow: var(--sombra-suave);
+        }
+        .detail-section-title {
+            color: var(--color-primario);
+            font-size: 1.5rem;
+            font-weight: 700;
+            border-bottom: 2px solid var(--color-acento-naranja);
+            padding-bottom: 5px;
+            margin-bottom: 15px;
+        }
+        .detail-list-item {
+            padding: 8px 0;
+            border-bottom: 1px dashed #e0e0e0;
+        }
+        .modo-oscuro .detail-list-item {
+            border-bottom: 1px dashed #555;
+        }
+
+
+        /* ==================== */
+        /* MODAL (Buscador Inteligente) */
+        /* ==================== */
+        .modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.6);
+            display: none; /* Oculto por defecto */
+            justify-content: center;
+            align-items: flex-start; /* Alineado arriba para mejor visualización */
+            padding-top: 40px;
+            z-index: 100;
+            overflow-y: auto; /* Permite scroll si hay muchos resultados */
+        }
+        .modal-content {
+            background-color: var(--color-tarjeta);
+            color: var(--color-texto);
+            padding: 30px;
+            border-radius: 15px;
+            width: 90%;
+            max-width: 500px; /* Aumentado ligeramente para resultados */
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            margin-bottom: 40px; /* Espacio inferior */
+        }
+        .modal-title {
+            font-size: 1.5em;
+            font-weight: bold;
+            color: var(--color-primario);
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        .modal-input {
+            width: 100%;
+            padding: 12px 20px;
+            border: 2px solid var(--color-acento-naranja);
+            border-radius: 30px;
+            margin-bottom: 20px;
+            font-size: 1em;
+            color: var(--color-texto);
+            background-color: var(--color-fondo);
+        }
+        .modal-filter-button {
+            width: 100%;
+            padding: 12px;
+            margin-bottom: 10px;
+            border: 1px solid rgba(0,0,0,0.1);
+            border-radius: 8px;
+            text-align: left;
+            font-size: 1em;
+            background-color: var(--color-fondo);
+            color: var(--color-texto);
+            transition: background-color 0.1s;
+        }
+        .modal-filter-button:hover {
+            background-color: var(--color-acento-naranja);
+            color: white;
+            border-color: var(--color-acento-naranja);
+        }
+        .modal-close-button {
+            background-color: var(--color-primario);
+            color: white;
+            padding: 10px;
+            margin-top: 15px;
+            border-radius: 8px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        /* Estilos específicos para las tarjetas de resultado en el modal */
+        .modal-recipe-card {
+            background-color: var(--color-fondo);
+            border: 1px solid rgba(0,0,0,0.1);
+        }
+    </style>
+</head>
+<body class="flex flex-col items-center min-h-screen p-5">
+
+    <!-- ===================================== -->
+    <!-- CONTENEDORES DE VISTA PRINCIPALES -->
+    <!-- ===================================== -->
+
+    <!-- 1. La pantalla principal (PP) - Contenedor central -->
+    <div id="pantalla-principal" class="w-full flex flex-col items-center max-w-lg">
+
+        <!-- ENCABEZADO IMPRESCINDIBLE -->
+        <header class="header-brand w-full">
+            <h1 class="text-center">DULCES PATXI</h1>
+            <div class="header-brand-line">
+                <h2 class="text-center font-normal">BIENVENIDOS A DULCES DE BACHIR KRAI</h2>
+            </div>
+            <!-- La firma se alinea con la derecha del contenedor principal, justo debajo -->
+            <p class="byline">by yahya</p>
+        </header>
+
+        <!-- BLOQUES DE ACCIÓN (BOTONES GRANDES) -->
+        <div class="action-blocks">
+            
+            <button onclick="showBuscadorInteligente()" class="btn-large btn-search">
+                BUSCADOR INTELIGENTE 🧠
+            </button>
+
+            <button onclick="setView('menu')" class="btn-large btn-menu">
+                MENÚ Y CATEGORÍAS 📚
+            </button>
+            
+            <button onclick="setView('favoritos')" class="btn-large btn-star">
+                RECETAS ESTRELLA ★ <span id="favorites-count" class="ml-2"></span>
+            </button>
+
+            <button onclick="setView('notas')" class="btn-large btn-notes">
+                NOTAS Y OBSERVACIONES 🗒️
+            </button>
+            
+            <button id="btn-modo" onclick="toggleModoOscuro()" class="btn-large btn-mode">
+                MODO (☀️/🌙)
+            </button>
+
         </div>
-    );
-}
+    </div>
+
+    <!-- 2. VISTA DE MENÚ Y CATEGORÍAS -->
+    <div id="menu-view" class="hidden w-full flex flex-col items-center max-w-lg p-4">
+        <div class="relative w-full text-center py-4 bg-purple-100 rounded-lg shadow-md border-b-4 border-purple-400 mb-6">
+            <button onclick="setView('principal')" class="absolute top-4 left-4 p-2 rounded-full hover:bg-purple-200 transition shadow-lg">
+                <i class="fas fa-arrow-left text-purple-800 text-lg"></i>
+            </button>
+            <h2 class="text-2xl font-extrabold text-gray-700">Explora las Categorías 🍰</h2>
+        </div>
+        <div id="categories-list-container" class="w-full grid grid-cols-2 gap-4">
+            <!-- Las tarjetas de categoría se renderizarán aquí -->
+        </div>
+    </div>
+    
+    <!-- 3. VISTA DE NOTAS Y OBSERVACIONES -->
+    <div id="notas-view" class="hidden w-full flex flex-col items-center max-w-lg p-4">
+        <div class="relative w-full text-center py-4 bg-orange-100 rounded-lg shadow-md border-b-4 border-orange-400 mb-6">
+            <button onclick="setView('principal')" class="absolute top-4 left-4 p-2 rounded-full hover:bg-orange-200 transition shadow-lg">
+                <i class="fas fa-arrow-left text-orange-800 text-lg"></i>
+            </button>
+            <h2 class="text-2xl font-extrabold text-gray-700">Tus Notas y Observaciones 🗒️</h2>
+            <p id="user-id-display-notes" class="text-xs text-gray-500 mt-1"></p>
+        </div>
+        <div id="notes-list-container" class="w-full mt-4">
+            <!-- Las notas se cargarán aquí por JavaScript -->
+            <p class="text-center text-gray-500 mt-12">Cargando notas...</p>
+        </div>
+    </div>
+
+    <!-- 4. VISTA DE LISTA DE RECETAS (CATEGORÍA/FAVORITOS) -->
+    <div id="recetas-view" class="hidden w-full flex flex-col items-center max-w-lg p-4">
+        <div class="relative w-full text-center py-4 bg-purple-100 rounded-lg shadow-md border-b-4 border-purple-400 mb-6">
+            <button onclick="window.history.back()" class="absolute top-4 left-4 p-2 rounded-full hover:bg-purple-200 transition shadow-lg">
+                <i class="fas fa-arrow-left text-purple-800 text-lg"></i>
+            </button>
+            <h2 id="recipes-title" class="text-2xl font-extrabold text-gray-700">Recetas de [Categoría] 🍰</h2>
+        </div>
+        <div id="recipes-list-container" class="w-full space-y-4">
+            <!-- Las tarjetas de recetas se renderizarán aquí -->
+            <p class="text-center text-gray-500 mt-12">Cargando recetas...</p>
+        </div>
+    </div>
+
+
+    <!-- 5. VISTA DE RECETAS FAVORITAS (Reutiliza la estructura de Recetas) -->
+    <div id="favoritos-view" class="hidden w-full flex flex-col items-center max-w-lg p-4">
+        <div class="relative w-full text-center py-4 bg-red-100 rounded-lg shadow-md border-b-4 border-red-400 mb-6">
+            <button onclick="setView('principal')" class="absolute top-4 left-4 p-2 rounded-full hover:bg-red-200 transition shadow-lg">
+                <i class="fas fa-arrow-left text-red-800 text-lg"></i>
+            </button>
+            <h2 class="text-2xl font-extrabold text-gray-700">Tus Recetas Estrella ★</h2>
+            <p id="user-id-display-favorites" class="text-xs text-gray-500 mt-1"></p>
+        </div>
+        <div id="favorites-list-container" class="w-full space-y-4">
+            <!-- Las tarjetas de recetas favoritas se renderizarán aquí -->
+            <p class="text-center text-gray-500 mt-12">Cargando favoritos...</p>
+        </div>
+    </div>
+    
+    <!-- 6. NUEVA VISTA DE DETALLE DE RECETA -->
+    <div id="detalle-receta-view" class="hidden w-full flex flex-col items-center max-w-lg p-4">
+        <div class="relative w-full text-center py-4 bg-gray-100 rounded-lg shadow-md border-b-4 border-gray-400 mb-6">
+            <button onclick="window.history.back()" class="absolute top-4 left-4 p-2 rounded-full hover:bg-gray-200 transition shadow-lg">
+                <i class="fas fa-arrow-left text-gray-800 text-lg"></i>
+            </button>
+            <h2 id="recipe-detail-title" class="text-2xl font-extrabold text-gray-700">Detalle de Receta</h2>
+        </div>
+        
+        <div id="recipe-detail-container" class="w-full space-y-6">
+            <!-- El contenido detallado se renderizará aquí -->
+        </div>
+
+    </div>
+
+    <!-- ===================================== -->
+    <!-- MODAL DEL BUSCADOR INTELIGENTE -->
+    <!-- ===================================== -->
+    <div id="buscador-modal" class="modal">
+        <div class="modal-content">
+            <h3 class="modal-title">Buscador Inteligente 🧠</h3>
+
+            <!-- Buscador Rápido (Integrado) -->
+            <input type="text" 
+                   id="modal-buscador-input" 
+                   class="modal-input" 
+                   placeholder="🔍 Busca por nombre o ingrediente..."
+                   oninput="handleSearchInput(this.value)">
+            
+            <!-- Mensaje de Búsqueda -->
+            <p id="search-message" class="text-center text-gray-500 text-sm mb-4">
+                Empieza a escribir para buscar recetas por nombre o ingrediente.
+            </p>
+
+            <!-- Filtros Activos -->
+            <div id="active-filters-container" class="min-h-[2rem] w-full mb-3 flex flex-wrap gap-2 justify-center">
+                <!-- Los chips de filtro activo se renderizarán aquí -->
+            </div>
+
+
+            <!-- Resultados de la búsqueda -->
+            <div id="search-results-container" class="w-full space-y-3 mt-4">
+                <!-- Los resultados se mostrarán aquí -->
+            </div>
+            
+            <div class="pt-4 border-t border-gray-200 mt-6">
+                <h4 class="text-lg font-bold text-gray-700 mb-3">Opciones de Filtrado Rápido</h4>
+                
+                <!-- Filtros existentes -->
+                <button onclick="openFilterSelection('time')" class="modal-filter-button">Filtrar por tiempo máximo ⏰</button>
+                <button onclick="openFilterSelection('difficulty')" class="modal-filter-button">Filtrar por dificultad 🏅</button>
+                <button onclick="openFilterSelection('exclude')" class="modal-filter-button">Excluir ingrediente 🚫</button>
+                
+                <!-- NUEVOS FILTROS -->
+                <button onclick="openFilterSelection('ingredients')" class="modal-filter-button">Ingredientes mínimos 🧺</button>
+                <button onclick="openFilterSelection('rating')" class="modal-filter-button">Top Puntuación (★ Rating)</button>
+                
+                <!-- Ver Favoritos (Acción incluida en el modal) -->
+                <button onclick="setView('favoritos'); hideBuscadorInteligente()" class="modal-filter-button">Ver Recetas Estrella ★</button>
+            </div>
+
+
+            <!-- Cerrar Modal -->
+            <button onclick="hideBuscadorInteligente()" class="modal-close-button w-full">Cerrar</button>
+        </div>
+    </div>
+
+    <!-- ===================================== -->
+    <!-- NUEVA MODAL DE SELECCIÓN DE FILTRO -->
+    <!-- ===================================== -->
+    <div id="filter-modal" class="modal">
+        <div class="modal-content">
+            <h3 id="filter-modal-title" class="modal-title">Seleccionar Filtro</h3>
+            
+            <div id="filter-options-container" class="w-full space-y-3">
+                <!-- Opciones de filtro (botones o inputs) se cargarán aquí -->
+            </div>
+
+            <button onclick="hideFilterModal()" class="modal-close-button w-full">Cancelar</button>
+        </div>
+    </div>
+    
+
+    <script type="module">
+        // Importaciones de Firebase
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+        import { getAuth, signInAnonymously, signInWithCustomToken, onAuthStateChanged, setPersistence, browserSessionPersistence } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        // Importamos los métodos necesarios para leer, añadir y eliminar documentos
+        import { getFirestore, collection, query, onSnapshot, doc, setDoc, deleteDoc, getDoc } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+        import { setLogLevel } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+
+        // =====================================
+        // VARIABLES Y MOCK DATA
+        // =====================================
+        let app, db, auth, userId = null;
+        // Colecciones privadas
+        const notesCollectionName = 'user_notes'; 
+        const favoritesCollectionName = 'user_favorites'; 
+        
+        // Estado local de favoritos (un array de IDs de recetas)
+        let userFavorites = []; 
+        let userNotes = {}; 
+
+        let isAuthReady = false; 
+        
+        // ESTADO DE FILTROS GLOBALES DEL BUSCADOR (AHORA CINCO FILTROS)
+        let activeFilters = {
+            time: null,       // { value: 60, text: 'Máx 60m' }
+            difficulty: null, // { value: 'Baja', text: 'Dificultad: Baja' }
+            exclude: null,    // { value: 'nueces', text: 'Sin: nueces' }
+            ingredients: null,// { value: 5, text: 'Máx 5 Ingredientes' } <--- NUEVO
+            rating: null      // { value: 4, text: 'Mínimo 4 Estrellas' } <--- NUEVO
+        };
+        let currentFilterType = null; 
+        
+
+        const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-app-id';
+        const firebaseConfig = typeof __firebase_config !== 'undefined' ? JSON.parse(__firebase_config) : null;
+        const initialAuthToken = typeof __initial_auth_token !== 'undefined' ? __initial_auth_token : null;
+        
+        let viewHistory = ['principal']; 
+
+        /**
+         * Mock Data de Categorías.
+         */
+        const CATEGORIES = [
+            { id: 'ayer', name: 'Tartas del Ayer 👵', icon: 'fas fa-layer-group' }, 
+            { id: 'premium', name: 'Tartas Premium 💎', icon: 'fas fa-gem' },
+            { id: 'bizcochos', name: 'Bizcochos & Muffins 🧁', icon: 'fas fa-cupcake' }, 
+            { id: 'galletas', name: 'Galletas y Bocados 🍪', icon: 'fas fa-cookie-bite' },
+            { id: 'confites', name: 'Confites y Caramelos 🍬', icon: 'fas fa-candy-cane' },
+            { id: 'frios', name: 'Postres Fríos 🍦', icon: 'fas fa-ice-cream' },
+            { id: 'chocolate', name: 'Solo Chocolate 🍫', icon: 'fas fa-chocolate' },
+            { id: 'innovacion', name: 'Dulces Atrevidos ✨', icon: 'fas fa-sparkles' },
+            { id: 'bases', name: 'Rellenos & Coberturas 🥣', icon: 'fas fa-blender' }, 
+        ];
+
+        /**
+         * MOCK DATA de Recetas (Simulación de catálogo global).
+         * AÑADIMOS min_ingredients y rating.
+         */
+        const MOCK_RECIPES = [
+            { 
+                id: 'r1', 
+                name: 'Tarta de la Abuela (Clásica)', 
+                category_id: 'ayer', 
+                time: '1h 30m', 
+                time_minutes: 90, 
+                difficulty: 'Baja',
+                min_ingredients: 7, // Conteo de ingredientes para el filtro
+                rating: 5, // Puntuación de la receta
+                imageUrl: "https://placehold.co/400x200/ff9933/ffffff?text=Tarta+Abuela",
+                ingredients: [
+                    "200g de galletas tipo María", "100g de mantequilla derretida", 
+                    "1L de leche entera", "200ml de nata para montar",
+                    "3 yemas de huevo", "150g de azúcar", "1 sobre de flan o natillas"
+                ],
+                steps: [
+                    "Mezclar las galletas trituradas con la mantequilla y forrar la base del molde.",
+                    "Calentar la leche con la nata y el azúcar.",
+                    "Disolver el sobre de flan en un poco de leche fría y añadir a la mezcla caliente.",
+                    "Cocer hasta que espese. Verter sobre la base de galletas.",
+                    "Refrigerar al menos 4 horas. Decorar con cacao en polvo o chocolate rallado."
+                ]
+            },
+            { 
+                id: 'r2', 
+                name: 'Bizcocho de Yogurt y Limón', 
+                category_id: 'ayer', 
+                time: '1h 5m', 
+                time_minutes: 65,
+                difficulty: 'Baja',
+                min_ingredients: 7, 
+                rating: 4,
+                imageUrl: "https://placehold.co/400x200/6a05ad/ffffff?text=Bizcocho+Limón",
+                ingredients: ["1 Yogurt de limón", "3 medidas de harina", "2 medidas de azúcar", "1 medida de aceite", "3 huevos", "Ralladura y zumo de 1 limón", "1 sobre de levadura"],
+                steps: ["Precalentar el horno a 180°C.", "Mezclar los ingredientes secos.", "Añadir el yogurt, aceite, huevos y limón. Batir bien.", "Hornear durante 45 minutos. Dejar enfriar y glasear al gusto."]
+            },
+            { 
+                id: 'r3', 
+                name: 'Muffins de Arándanos con Crumble', 
+                category_id: 'bizcochos', 
+                time: '45m', 
+                time_minutes: 45,
+                difficulty: 'Media',
+                min_ingredients: 6, 
+                rating: 4,
+                imageUrl: "https://placehold.co/400x200/724e3a/ffffff?text=Muffins",
+                ingredients: ["250g de harina", "100g de azúcar", "1 huevo", "100ml de leche", "50g de mantequilla", "150g de arándanos frescos", "Crumble de avena"],
+                steps: ["Preparar la masa de muffins mezclando los ingredientes húmedos y secos.", "Incorporar los arándanos suavemente.", "Rellenar las cápsulas y espolvorear el crumble.", "Hornear 25 minutos a 200°C."]
+            },
+            { 
+                id: 'r4', 
+                name: 'Sacher Torte Original', 
+                category_id: 'premium', 
+                time: '2h 15m', 
+                time_minutes: 135,
+                difficulty: 'Alta',
+                min_ingredients: 4, 
+                rating: 5,
+                imageUrl: "https://placehold.co/400x200/724e3a/ffffff?text=Sacher+Torte",
+                ingredients: ["200g de chocolate negro (70%)", "150g de mantequilla", "5 huevos", "200g de mermelada de albaricoque", "Ingredientes para el glaseado de chocolate"],
+                steps: ["Preparar el bizcocho de chocolate por separado. Cortar en dos capas.", "Rellenar con mermelada de albaricoque.", "Bañar con el glaseado de chocolate templado.", "Refrigerar al menos 6 horas antes de servir."]
+            },
+            { 
+                id: 'r5', 
+                name: 'Galletas de Mantequilla y Vainilla', 
+                category_id: 'galletas', 
+                time: '1h', 
+                time_minutes: 60,
+                difficulty: 'Baja',
+                min_ingredients: 5, 
+                rating: 3,
+                imageUrl: "https://placehold.co/400x200/ff9933/ffffff?text=Galletas",
+                ingredients: ["300g de harina de trigo", "200g de mantequilla sin sal", "100g de azúcar glas", "1 huevo", "Extracto de vainilla"],
+                steps: ["Batir la mantequilla con el azúcar hasta cremar.", "Añadir el huevo y la vainilla. Mezclar la harina.", "Refrigerar la masa 30 minutos.", "Cortar y hornear 12 minutos a 180°C."]
+            },
+            { 
+                id: 'r6', 
+                name: 'Helado de Crema Tostada', 
+                category_id: 'frios', 
+                time: '4h 30m', 
+                time_minutes: 270,
+                difficulty: 'Media',
+                min_ingredients: 4, 
+                rating: 5,
+                imageUrl: "https://placehold.co/400x200/6a05ad/ffffff?text=Helado",
+                ingredients: ["500ml de nata para montar", "200ml de leche condensada", "Esencia de vainilla", "Azúcar (para tostar)"],
+                steps: ["Montar la nata.", "Mezclar la leche condensada y vainilla.", "Unir ambas mezclas.", "Congelar y remover cada hora hasta obtener la textura deseada. Espolvorear azúcar tostado antes de servir."]
+            },
+            { 
+                id: 'r7', 
+                name: 'Trufas de Chocolate Intenso', 
+                category_id: 'chocolate', 
+                time: '30m', 
+                time_minutes: 30,
+                difficulty: 'Baja',
+                min_ingredients: 3, 
+                rating: 5,
+                imageUrl: "https://placehold.co/400x200/402c22/ffffff?text=Trufas",
+                ingredients: ["200g de chocolate negro", "100ml de nata", "Cacao en polvo"],
+                steps: ["Calentar la nata y verter sobre el chocolate troceado.", "Remover hasta que esté liso.", "Dejar enfriar y formar bolitas.", "Rebozar en cacao."]
+            },
+            { 
+                id: 'r8', 
+                name: 'Churros Caseros', 
+                category_id: 'bizcochos', 
+                time: '1h 15m', 
+                time_minutes: 75,
+                difficulty: 'Alta',
+                min_ingredients: 4, 
+                rating: 2,
+                imageUrl: "https://placehold.co/400x200/ff9933/ffffff?text=Churros",
+                ingredients: ["250ml de agua", "150g de harina", "1/2 cucharadita de sal", "Aceite para freír"],
+                steps: ["Hervir el agua con la sal.", "Retirar del fuego y añadir la harina de golpe. Mezclar.", "Introducir la masa en una churrera y freír en aceite caliente."]
+            },
+            { 
+                id: 'r9', 
+                name: 'Ganache de Chocolate Negro', 
+                category_id: 'bases', 
+                time: '20m', 
+                time_minutes: 20,
+                difficulty: 'Baja',
+                min_ingredients: 3, 
+                rating: 4,
+                imageUrl: "https://placehold.co/400x200/402c22/ffffff?text=Ganache",
+                ingredients: ["200g de chocolate negro de calidad", "200ml de nata para montar (35% M.G.)", "20g de mantequilla (opcional)"],
+                steps: ["Trocear el chocolate en un bol resistente al calor.", "Calentar la nata hasta que hierva y verterla sobre el chocolate.", "Dejar reposar 5 minutos y remover hasta obtener una crema lisa.", "Añadir la mantequilla (si se usa) y mezclar. Dejar enfriar o refrigerar según el uso."]
+            },
+            { 
+                id: 'r10', 
+                name: 'Tarta Red Velvet Premium', 
+                category_id: 'premium', 
+                time: '2h', 
+                time_minutes: 120,
+                difficulty: 'Alta',
+                min_ingredients: 5, 
+                rating: 5,
+                imageUrl: "https://placehold.co/400x200/9c5e3d/ffffff?text=Red+Velvet",
+                ingredients: ["Harina, cacao, colorante rojo, suero de leche", "Crema de queso para el relleno"],
+                steps: ["Preparar los bizcochos Red Velvet.", "Batir la crema de queso para el frosting.", "Montar las capas y decorar."]
+            },
+        ];
+
+        // =====================================
+        // INICIALIZACIÓN DE FIREBASE Y AUTH
+        // =====================================
+        async function initializeAppAndAuth() {
+            if (!firebaseConfig) {
+                console.error("Error: firebaseConfig no está disponible. No se puede iniciar Firestore.");
+                return;
+            }
+
+            // setLogLevel('Debug'); 
+
+            try {
+                app = initializeApp(firebaseConfig);
+                auth = getAuth(app);
+                db = getFirestore(app);
+
+                await setPersistence(auth, browserSessionPersistence);
+
+                onAuthStateChanged(auth, async (user) => {
+                    if (user) {
+                        userId = user.uid;
+                        console.log("Usuario autenticado. UID:", userId);
+                        isAuthReady = true;
+                        // Cargar listeners que dependen del usuario
+                        loadNotesAndSetupListener();
+                        loadFavoritesAndSetupListener(); 
+                        renderMenuView();
+                    } else {
+                        try {
+                            if (initialAuthToken) {
+                                await signInWithCustomToken(auth, initialAuthToken);
+                            } else {
+                                await signInAnonymously(auth);
+                                console.log("Usuario anónimo autenticado.");
+                            }
+                        } catch (error) {
+                            console.error("Error durante la autenticación:", error);
+                        }
+                    }
+                });
+
+            } catch (error) {
+                console.error("Error al inicializar Firebase:", error);
+            }
+        }
+
+        // =====================================
+        // LÓGICA DE FAVORITOS (FIREBASE)
+        // =====================================
+
+        function getFavoritesCollectionRef() {
+            if (!db || !userId) {
+                console.error("DB o userId no listos para Favoritos.");
+                return null;
+            }
+            const path = `artifacts/${appId}/users/${userId}/${favoritesCollectionName}`;
+            return collection(db, path);
+        }
+
+        function loadFavoritesAndSetupListener() {
+            const favoritesRef = getFavoritesCollectionRef();
+            const userDisplayNotes = document.getElementById('user-id-display-notes');
+            const userDisplayFavorites = document.getElementById('user-id-display-favorites');
+            
+            if (!favoritesRef) {
+                userDisplayNotes.textContent = `ID de Usuario: ${userId || 'Cargando...'}`;
+                userDisplayFavorites.textContent = `ID de Usuario: ${userId || 'Cargando...'}`;
+                return;
+            }
+
+            userDisplayNotes.textContent = `ID de Usuario: ${userId}`;
+            userDisplayFavorites.textContent = `ID de Usuario: ${userId}`;
+
+            onSnapshot(favoritesRef, (snapshot) => {
+                const newFavorites = [];
+                snapshot.forEach((doc) => {
+                    newFavorites.push(doc.id); 
+                });
+                
+                userFavorites = newFavorites; 
+                
+                // Actualiza el contador de favoritos en el botón principal
+                document.getElementById('favorites-count').textContent = `(${userFavorites.length})`;
+
+                // Si estamos en una vista que muestra recetas, la forzamos a actualizar
+                const currentView = viewHistory[viewHistory.length - 1];
+                if (currentView === 'favoritos') {
+                    renderFavoritesView();
+                } else if (currentView === 'recetas') {
+                    const categoryId = document.getElementById('recipes-title').dataset.categoryId;
+                    if (categoryId) {
+                        renderCategoryRecipesView(categoryId);
+                    }
+                } else if (currentView === 'detalle-receta') {
+                    const recipeId = document.getElementById('recipe-detail-container').dataset.recipeId;
+                    if (recipeId) {
+                        updateFavoriteButton(recipeId);
+                    }
+                }
+
+                console.log(`Favoritos actualizados: ${userFavorites.length}`);
+            }, (error) => {
+                console.error("Error al escuchar favoritos en Firestore:", error);
+            });
+        }
+        
+        window.toggleFavorite = async function(recipeId) {
+            if (!isAuthReady) {
+                console.warn("Autenticación no completa. No se puede alternar el favorito.");
+                return;
+            }
+
+            const favoritesRef = getFavoritesCollectionRef();
+            if (!favoritesRef) return;
+
+            const docRef = doc(favoritesRef, recipeId);
+            const isCurrentlyFavorite = userFavorites.includes(recipeId);
+
+            try {
+                if (isCurrentlyFavorite) {
+                    await deleteDoc(docRef);
+                    console.log(`Receta ${recipeId} eliminada de favoritos.`);
+                } else {
+                    await setDoc(docRef, { 
+                        addedAt: new Date(), 
+                        recipeName: MOCK_RECIPES.find(r => r.id === recipeId)?.name || 'Desconocida' 
+                    });
+                    console.log(`Receta ${recipeId} añadida a favoritos.`);
+                }
+            } catch (error) {
+                console.error("Error al alternar favorito:", error);
+            }
+        }
+
+        // Función auxiliar para actualizar el icono de favorito en cualquier parte de la UI
+        function updateFavoriteButton(recipeId) {
+            const isFavorite = userFavorites.includes(recipeId);
+            const button = document.getElementById(`fav-btn-${recipeId}`);
+            if (button) {
+                const icon = button.querySelector('i');
+                if (icon) {
+                    if (isFavorite) {
+                        icon.className = 'fas fa-star text-red-500';
+                    } else {
+                        icon.className = 'far fa-star text-gray-300 hover:text-red-700 transition';
+                    }
+                }
+            }
+        }
+
+
+        // =====================================
+        // LÓGICA DE NOTAS Y OBSERVACIONES (FIREBASE)
+        // =====================================
+        
+        function getNotesCollectionRef() {
+            if (!db || !userId) return null;
+            const path = `artifacts/${appId}/users/${userId}/${notesCollectionName}`;
+            return collection(db, path);
+        }
+        
+        // Carga y establece el listener de las notas
+        function loadNotesAndSetupListener() {
+            const notesRef = getNotesCollectionRef();
+            const userDisplay = document.getElementById('user-id-display-notes');
+
+            if (!notesRef) {
+                console.warn("No se puede cargar la query de notas. DB o userId no están listos.");
+                userDisplay.textContent = `ID de Usuario: ${userId || 'Cargando...'}`;
+                return;
+            }
+            
+            userDisplay.textContent = `ID de Usuario: ${userId}`;
+
+            // onSnapshot para actualización en tiempo real
+            onSnapshot(notesRef, (snapshot) => {
+                const newNotes = {};
+                snapshot.forEach((doc) => {
+                    const data = doc.data();
+                    if (data.timestamp && data.timestamp.toDate) {
+                         data.timestamp = data.timestamp.toDate();
+                    }
+                    newNotes[doc.id] = { id: doc.id, ...data };
+                });
+
+                userNotes = newNotes; // Almacenar las notas en el estado local
+                
+                // Si la vista de notas está abierta, actualizarla
+                if (document.getElementById('notas-view').classList.contains('flex')) {
+                    renderNotesView(); 
+                }
+                
+                // Si la vista de detalle de receta está abierta, actualizar el campo de nota
+                const currentView = viewHistory[viewHistory.length - 1];
+                if (currentView === 'detalle-receta') {
+                    const recipeId = document.getElementById('recipe-detail-container').dataset.recipeId;
+                    if (recipeId) {
+                         // Esto actualizará el campo de texto y el botón de nota
+                        const noteTextarea = document.getElementById(`note-textarea-${recipeId}`);
+                        if (noteTextarea) {
+                           noteTextarea.value = userNotes[recipeId]?.text || '';
+                        }
+                        updateNoteButton(recipeId);
+                    }
+                }
+                
+                // Re-renderizar las listas de recetas para actualizar los iconos de notas
+                const categoryId = document.getElementById('recipes-title')?.dataset.categoryId;
+                if (currentView === 'recetas' && categoryId) {
+                    renderCategoryRecipesView(categoryId);
+                } else if (currentView === 'favoritos') {
+                    renderFavoritesView();
+                }
+
+
+                console.log(`Notas cargadas/actualizadas: ${Object.keys(userNotes).length}`);
+            }, (error) => {
+                console.error("Error al escuchar las notas en Firestore:", error);
+                document.getElementById('notes-list-container').innerHTML = `<p class="text-red-600">Error al cargar las notas: ${error.message}</p>`;
+            });
+        }
+        
+        // Función para guardar una nota específica
+        window.saveNote = async function(recipeId) {
+            if (!isAuthReady) {
+                console.warn("Autenticación no completa. No se puede guardar la nota.");
+                return;
+            }
+
+            const notesRef = getNotesCollectionRef();
+            const noteTextarea = document.getElementById(`note-textarea-${recipeId}`);
+            const saveBtn = document.getElementById(`note-save-btn-${recipeId}`);
+            
+            if (!notesRef || !noteTextarea || !saveBtn) return;
+            
+            const noteText = noteTextarea.value.trim();
+            const recipe = getRecipeById(recipeId);
+            const docRef = doc(notesRef, recipeId);
+            
+            saveBtn.textContent = 'Guardando...';
+            saveBtn.disabled = true;
+
+            try {
+                if (noteText === '') {
+                    // Si el texto está vacío, eliminamos la nota si existe
+                    if (userNotes[recipeId]) {
+                         await deleteDoc(docRef);
+                         console.log(`Nota para ${recipe.name} eliminada.`);
+                    }
+                    // Si no existe y está vacío, no hacemos nada
+                    saveBtn.textContent = 'Guardar Nota';
+                    saveBtn.disabled = false;
+                    return; 
+                }
+
+                // Guardar/Actualizar la nota
+                await setDoc(docRef, {
+                    text: noteText,
+                    timestamp: new Date(),
+                    recipeName: recipe?.name || 'Receta Desconocida'
+                });
+
+                console.log(`Nota para ${recipe.name} guardada/actualizada.`);
+
+            } catch (error) {
+                console.error("Error al guardar la nota:", error);
+                // Utiliza un mensaje box o una notificación temporal en lugar de alert()
+                console.error(`Error al guardar la nota: ${error.message}`); 
+            } finally {
+                saveBtn.textContent = 'Guardar Nota';
+                saveBtn.disabled = false;
+            }
+        }
+        
+        // Función auxiliar para actualizar el icono de nota en cualquier parte de la UI
+        function updateNoteButton(recipeId) {
+             const hasNote = !!userNotes[recipeId]?.text;
+             const button = document.getElementById(`note-btn-${recipeId}`);
+             if (button) {
+                const icon = button.querySelector('i');
+                if (icon) {
+                    if (hasNote) {
+                        icon.className = 'fas fa-sticky-note text-orange-500';
+                    } else {
+                        icon.className = 'far fa-sticky-note text-gray-300 hover:text-orange-700 transition';
+                    }
+                }
+             }
+        }
+
+
+        // =====================================
+        // LÓGICA DEL BUSCADOR INTELIGENTE Y FILTROS
+        // =====================================
+        
+        /**
+         * Aplica los CINCO filtros activos a una lista de recetas.
+         * @param {Array} recipes - Lista de recetas.
+         * @returns {Array} - Lista de recetas filtradas.
+         */
+        function applyActiveFilters(recipes) {
+            let filtered = recipes;
+            const filters = activeFilters;
+            
+            // 1. Filtrar por Tiempo Máximo
+            if (filters.time) {
+                const maxMinutes = filters.time.value;
+                filtered = filtered.filter(recipe => {
+                    return typeof recipe.time_minutes === 'number' && recipe.time_minutes <= maxMinutes;
+                });
+            }
+
+            // 2. Filtrar por Dificultad
+            if (filters.difficulty) {
+                const targetDifficulty = filters.difficulty.value;
+                filtered = filtered.filter(recipe => recipe.difficulty === targetDifficulty);
+            }
+            
+            // 3. Filtrar por Ingrediente Excluido
+            if (filters.exclude) {
+                const excludedTerm = filters.exclude.value.toLowerCase().trim();
+                if (excludedTerm) {
+                    filtered = filtered.filter(recipe => {
+                        // Devuelve TRUE si NINGUNO de los ingredientes contiene el término excluido
+                        return !recipe.ingredients.some(ingredient => 
+                            ingredient.toLowerCase().includes(excludedTerm)
+                        );
+                    });
+                }
+            }
+            
+            // 4. Filtrar por Ingredientes Mínimos (NUEVO)
+            if (filters.ingredients) {
+                 const maxIngredients = filters.ingredients.value;
+                 filtered = filtered.filter(recipe => {
+                     return recipe.min_ingredients <= maxIngredients;
+                 });
+            }
+
+            // 5. Filtrar por Rating Mínimo (NUEVO)
+            if (filters.rating) {
+                 const minRating = filters.rating.value;
+                 filtered = filtered.filter(recipe => {
+                     // Aseguramos que el rating es numérico y mayor o igual al filtro
+                     return typeof recipe.rating === 'number' && recipe.rating >= minRating;
+                 });
+            }
+            
+            return filtered;
+        }
+
+        /**
+         * Busca y filtra recetas.
+         * @param {string} term - El término de búsqueda.
+         * @returns {Array} - Lista filtrada de recetas.
+         */
+        function searchAndFilterRecipes(term) {
+            let searchResults = MOCK_RECIPES;
+            const normalizedTerm = term.toLowerCase().trim();
+            
+            if (normalizedTerm) {
+                searchResults = searchResults.filter(recipe => {
+                    // 1. Búsqueda por nombre de receta
+                    const nameMatch = recipe.name.toLowerCase().includes(normalizedTerm);
+                    
+                    // 2. Búsqueda por ingrediente
+                    const ingredientMatch = recipe.ingredients.some(ingredient => 
+                        ingredient.toLowerCase().includes(normalizedTerm)
+                    );
+    
+                    return nameMatch || ingredientMatch;
+                });
+            }
+            
+            // Aplicar los CINCO filtros activos después de la búsqueda por texto
+            return applyActiveFilters(searchResults);
+        }
+
+        /**
+         * Maneja el input de búsqueda en tiempo real.
+         * @param {string} term - El valor actual del input.
+         */
+        window.handleSearchInput = function(term) {
+            const resultsContainer = document.getElementById('search-results-container');
+            const messageElement = document.getElementById('search-message');
+            const trimmedTerm = term.trim();
+            
+            // Obtenemos los resultados combinando la búsqueda por texto y los filtros
+            const results = searchAndFilterRecipes(trimmedTerm);
+            
+            // Verificar si hay algún término o filtro activo para empezar a mostrar resultados
+            const isFilterActive = Object.values(activeFilters).some(f => f !== null);
+
+            if (trimmedTerm.length < 2 && !isFilterActive) {
+                resultsContainer.innerHTML = '';
+                if (trimmedTerm.length > 0) {
+                     messageElement.textContent = 'Escribe al menos 2 caracteres para buscar.';
+                } else {
+                    messageElement.textContent = 'Empieza a escribir para buscar recetas por nombre o ingrediente.';
+                }
+                return;
+            }
+            
+            // Actualizar el mensaje de resultados
+            if (results.length === 0) {
+                resultsContainer.innerHTML = ''; // Limpiar el contenedor de resultados
+                messageElement.textContent = `No se encontraron resultados para los criterios actuales.`;
+            } else {
+                resultsContainer.innerHTML = ''; // Limpiar el contenedor
+                messageElement.textContent = `Mostrando ${results.length} resultados:`;
+                
+                // Usamos una versión simplificada de renderRecipeList para el modal
+                let htmlContent = '';
+                results.forEach(recipe => {
+                    const difficultyClass = getDifficultyClass(recipe.difficulty);
+                    const isFavorite = userFavorites.includes(recipe.id); 
+                    const hasNote = !!userNotes[recipe.id]?.text; 
+
+                    // Tarjeta simplificada para el modal
+                    htmlContent += `
+                        <div class="recipe-card modal-recipe-card p-3 rounded-lg flex justify-between items-center" 
+                             onclick="setView('detalle-receta', { recipeId: '${recipe.id}' }); hideBuscadorInteligente();"> 
+                            
+                            <!-- Columna de Información Principal -->
+                            <div class="flex-grow min-w-0">
+                                <h4 class="text-base font-bold truncate">${recipe.name}</h4>
+                                <div class="flex items-center space-x-3 text-xs text-gray-500 mt-1">
+                                    <!-- Tiempo -->
+                                    <span class="flex items-center">
+                                        <i class="fas fa-clock mr-1 text-blue-500"></i>
+                                        ${recipe.time}
+                                    </span>
+                                    <!-- Dificultad -->
+                                    <span class="${difficultyClass} difficulty-pill">
+                                        ${recipe.difficulty}
+                                    </span>
+                                    <!-- Rating -->
+                                    <span class="flex items-center text-yellow-500">
+                                        <i class="fas fa-star mr-1"></i> ${recipe.rating}
+                                    </span>
+                                    <!-- Icono de Nota (Informativo) -->
+                                    <i class="fas fa-sticky-note ${hasNote ? 'text-orange-500' : 'text-gray-300'}" title="Esta receta tiene una nota."></i>
+                                    <!-- Icono de Favorito (Informativo) -->
+                                    <i class="${isFavorite ? 'fas fa-star text-red-500' : 'far fa-star text-gray-300'}" title="${isFavorite ? 'En Favoritos' : 'No en favoritos'}"></i>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                });
+                
+                resultsContainer.innerHTML = htmlContent;
+            }
+        }
+        
+        /**
+         * Abre la modal de selección de filtro y prepara las opciones.
+         * @param {string} filterType - 'time', 'difficulty', 'exclude', 'ingredients', 'rating'.
+         */
+        window.openFilterSelection = function(filterType) {
+            currentFilterType = filterType; 
+            const titleElement = document.getElementById('filter-modal-title');
+            const optionsContainer = document.getElementById('filter-options-container');
+            let htmlContent = '';
+            const currentFilter = activeFilters[filterType];
+
+
+            if (filterType === 'time') {
+                titleElement.textContent = 'Filtrar por Tiempo Máximo';
+                const timeOptions = [30, 45, 60, 90, 120]; 
+                
+                htmlContent = timeOptions.map(time => `
+                    <button onclick="setFilterValue('time', { value: ${time}, text: 'Máx ${time}m' })" class="modal-filter-button ${currentFilter && currentFilter.value === time ? 'bg-green-100 border-green-500' : ''}">
+                        <i class="fas fa-clock mr-2"></i> Menos de ${time} minutos
+                    </button>
+                `).join('');
+                
+            } else if (filterType === 'difficulty') {
+                titleElement.textContent = 'Filtrar por Dificultad';
+                const difficultyOptions = ['Baja', 'Media', 'Alta'];
+                
+                htmlContent = difficultyOptions.map(diff => `
+                    <button onclick="setFilterValue('difficulty', { value: '${diff}', text: 'Dificultad: ${diff}' })" class="modal-filter-button ${currentFilter && currentFilter.value === diff ? 'bg-green-100 border-green-500' : ''}">
+                        <span class="${getDifficultyClass(diff)} difficulty-pill mr-2">🏅</span> ${diff}
+                    </button>
+                `).join('');
+            } else if (filterType === 'exclude') {
+                titleElement.textContent = 'Excluir Ingrediente';
+                const currentValue = currentFilter ? currentFilter.value : '';
+
+                htmlContent = `
+                    <div class="space-y-4">
+                        <input type="text" id="exclude-input" class="modal-input mt-2 mb-0" placeholder="Ej: Nueces, Gluten, Leche..." value="${currentValue}">
+                        <button onclick="setFilterValueFromInput('exclude', 'exclude-input', 'Sin: ')" class="w-full bg-red-500 text-white font-bold py-3 rounded-lg hover:bg-red-600 transition shadow-md">
+                             <i class="fas fa-ban mr-2"></i> Aplicar Exclusión
+                        </button>
+                    </div>
+                `;
+            } else if (filterType === 'ingredients') { // NUEVO FILTRO: Ingredientes Mínimos
+                titleElement.textContent = 'Máx Ingredientes ("Lo tengo en Casa" 🧺)';
+                const ingredientOptions = [3, 4, 5, 7, 10]; 
+                
+                htmlContent = ingredientOptions.map(count => `
+                    <button onclick="setFilterValue('ingredients', { value: ${count}, text: 'Máx ${count} Ingredientes' })" class="modal-filter-button ${currentFilter && currentFilter.value === count ? 'bg-green-100 border-green-500' : ''}">
+                        <i class="fas fa-shopping-basket mr-2"></i> Solo ${count} ingredientes o menos
+                    </button>
+                `).join('');
+                
+            } else if (filterType === 'rating') { // NUEVO FILTRO: Rating Mínimo
+                titleElement.textContent = 'Puntuación Mínima (★ Calidad)';
+                const ratingOptions = [5, 4, 3]; 
+                
+                htmlContent = ratingOptions.map(r => `
+                    <button onclick="setFilterValue('rating', { value: ${r}, text: 'Mínimo ${r} Estrellas' })" class="modal-filter-button ${currentFilter && currentFilter.value === r ? 'bg-green-100 border-green-500' : ''}">
+                        <i class="fas fa-star mr-2 text-yellow-500"></i> ${r} Estrellas o más
+                    </button>
+                `).join('');
+            }
+
+
+            // Botón para eliminar el filtro actual (si existe)
+            if (currentFilter) {
+                 htmlContent += `<button onclick="clearFilter('${filterType}')" class="modal-filter-button bg-red-100 text-red-700 hover:bg-red-200 mt-4">
+                     <i class="fas fa-times-circle mr-2"></i> Eliminar Filtro Activo
+                 </button>`;
+            }
+
+
+            optionsContainer.innerHTML = htmlContent;
+            document.getElementById('filter-modal').style.display = 'flex';
+        }
+        
+        /**
+         * Implementa la lógica para establecer el filtro de un input de texto
+         */
+        window.setFilterValueFromInput = function(type, inputId, textPrefix) {
+            const input = document.getElementById(inputId);
+            const term = input.value.trim();
+            
+            if (term.length > 0) {
+                 setFilterValue(type, { value: term, text: `${textPrefix}${term}` });
+            } else {
+                 clearFilter(type);
+            }
+        }
+        
+        /**
+         * Establece el valor de un filtro específico y actualiza el buscador.
+         * @param {string} type - 'time', 'difficulty', 'exclude', 'ingredients', 'rating'.
+         * @param {Object} filterObject - { value: *, text: string }
+         */
+        window.setFilterValue = function(type, filterObject) {
+            activeFilters[type] = filterObject;
+            hideFilterModal();
+            updateActiveFiltersDisplay();
+            
+            // Forzar una nueva búsqueda con el filtro
+            const currentTerm = document.getElementById('modal-buscador-input').value;
+            handleSearchInput(currentTerm);
+        }
+        
+        /**
+         * Limpia un filtro activo específico.
+         * @param {string} type - 'time', 'difficulty', 'exclude', 'ingredients', 'rating'.
+         */
+        window.clearFilter = function(type) {
+            activeFilters[type] = null;
+            hideFilterModal();
+            updateActiveFiltersDisplay();
+            
+            // Forzar una nueva búsqueda sin filtro
+            const currentTerm = document.getElementById('modal-buscador-input').value;
+            handleSearchInput(currentTerm);
+        }
+        
+        /**
+         * Actualiza la visualización de los chips de filtro activo en el modal del buscador.
+         */
+        function updateActiveFiltersDisplay() {
+            const container = document.getElementById('active-filters-container');
+            let htmlContent = '';
+            
+            // 1. Tiempo (Azul)
+            if (activeFilters.time) {
+                htmlContent += `
+                    <div class="bg-blue-100 text-blue-800 text-sm font-semibold px-3 py-1 rounded-full flex items-center shadow-md">
+                        <i class="fas fa-clock mr-2"></i>
+                        <span>${activeFilters.time.text}</span>
+                        <button onclick="clearFilter('time')" class="ml-2 text-blue-600 hover:text-blue-900 focus:outline-none">
+                            <i class="fas fa-times-circle"></i>
+                        </button>
+                    </div>
+                `;
+            }
+            
+            // 2. Dificultad (Amarillo)
+            if (activeFilters.difficulty) {
+                 htmlContent += `
+                    <div class="bg-yellow-100 text-yellow-800 text-sm font-semibold px-3 py-1 rounded-full flex items-center shadow-md">
+                        <i class="fas fa-medal mr-2"></i>
+                        <span>${activeFilters.difficulty.text}</span>
+                        <button onclick="clearFilter('difficulty')" class="ml-2 text-yellow-600 hover:text-yellow-900 focus:outline-none">
+                            <i class="fas fa-times-circle"></i>
+                        </button>
+                    </div>
+                `;
+            }
+
+            // 3. Excluir Ingrediente (Rojo)
+            if (activeFilters.exclude) {
+                 htmlContent += `
+                    <div class="bg-red-100 text-red-800 text-sm font-semibold px-3 py-1 rounded-full flex items-center shadow-md">
+                        <i class="fas fa-ban mr-2"></i>
+                        <span>${activeFilters.exclude.text}</span>
+                        <button onclick="clearFilter('exclude')" class="ml-2 text-red-600 hover:text-red-900 focus:outline-none">
+                            <i class="fas fa-times-circle"></i>
+                        </button>
+                    </div>
+                `;
+            }
+            
+            // 4. Ingredientes Mínimos (Verde Lima)
+            if (activeFilters.ingredients) {
+                 htmlContent += `
+                    <div class="bg-lime-100 text-lime-800 text-sm font-semibold px-3 py-1 rounded-full flex items-center shadow-md">
+                        <i class="fas fa-shopping-basket mr-2"></i>
+                        <span>${activeFilters.ingredients.text}</span>
+                        <button onclick="clearFilter('ingredients')" class="ml-2 text-lime-600 hover:text-lime-900 focus:outline-none">
+                            <i class="fas fa-times-circle"></i>
+                        </button>
+                    </div>
+                `;
+            }
+
+            // 5. Rating Mínimo (Púrpura)
+            if (activeFilters.rating) {
+                 htmlContent += `
+                    <div class="bg-purple-100 text-purple-800 text-sm font-semibold px-3 py-1 rounded-full flex items-center shadow-md">
+                        <i class="fas fa-star mr-2"></i>
+                        <span>${activeFilters.rating.text}</span>
+                        <button onclick="clearFilter('rating')" class="ml-2 text-purple-600 hover:text-purple-900 focus:outline-none">
+                            <i class="fas fa-times-circle"></i>
+                        </button>
+                    </div>
+                `;
+            }
+
+            container.innerHTML = htmlContent;
+        }
+
+
+        // =====================================
+        // UTILERÍA
+        // =====================================
+
+        function getCategoryNameById(id) {
+            const category = CATEGORIES.find(cat => cat.id === id);
+            return category ? category.name : 'Recetas';
+        }
+
+        function getDifficultyClass(difficulty) {
+            const map = {
+                'Baja': 'diff-baja',
+                'Media': 'diff-media',
+                'Alta': 'diff-alta'
+            };
+            return map[difficulty] || 'bg-gray-200 text-gray-700';
+        }
+
+        function getRecipeById(id) {
+            return MOCK_RECIPES.find(r => r.id === id);
+        }
+
+        // =====================================
+        // RENDERIZADO DE VISTAS
+        // =====================================
+
+        // Función para renderizar el contenido de la vista de Notas
+        function renderNotesView() {
+            const notesContainer = document.getElementById('notes-list-container');
+            
+            // Convertir el objeto userNotes a un array para renderizado, ordenado por timestamp
+            const notesArray = Object.values(userNotes).sort((a, b) => (b.timestamp || 0) - (a.timestamp || 0));
+
+            if (notesArray.length === 0) {
+                notesContainer.innerHTML = `
+                    <div class="text-center p-8 bg-white/70 rounded-xl shadow-lg mt-8">
+                        <p class="text-xl font-semibold mb-2 text-gray-700">¡Todavía no tienes notas!</p>
+                        <p class="text-gray-500">Tus observaciones aparecerán aquí una vez que las añadas a tus recetas.</p>
+                        <p class="text-sm mt-4 text-gray-400"> (Colección privada: ${notesCollectionName}) </p>
+                    </div>
+                `;
+                return;
+            }
+
+            let htmlContent = '<div class="space-y-6">';
+
+            notesArray.forEach(note => {
+                const dateString = note.timestamp ? note.timestamp.toLocaleDateString('es-ES', { 
+                    year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit' 
+                }) : 'Fecha Desconocida';
+                
+                htmlContent += `
+                    <div class="bg-white p-5 rounded-xl shadow-lg border-l-4 border-l-orange-400 transform hover:scale-[1.01] transition duration-200 ease-in-out">
+                        <h4 class="text-lg font-bold text-orange-600 mb-1">${note.recipeName || 'Receta Desconocida'}</h4>
+                        <p class="text-xs text-gray-500 mb-3">${dateString}</p>
+                        <div class="border-t border-gray-200 pt-3">
+                            <p class="text-gray-700 whitespace-pre-wrap">${note.text || 'Sin texto de nota.'}</p>
+                        </div>
+                    </div>
+                `;
+            });
+
+            htmlContent += '</div>';
+            notesContainer.innerHTML = htmlContent;
+        }
+
+        function renderMenuView() {
+            const categoriesContainer = document.getElementById('categories-list-container');
+            let htmlContent = '';
+
+            CATEGORIES.forEach(category => {
+                htmlContent += `
+                    <div class="category-card" onclick="setView('recetas', { categoryId: '${category.id}' })">
+                        <i class="${category.icon}"></i>
+                        <h3>${category.name}</h3>
+                    </div>
+                `;
+            });
+
+            categoriesContainer.innerHTML = htmlContent;
+        }
+        
+        function renderRecipeList(recipes, listContainer) {
+            if (recipes.length === 0) {
+                listContainer.innerHTML = `
+                    <div class="text-center p-8 bg-white/70 rounded-xl shadow-lg mt-8">
+                        <p class="text-xl font-semibold mb-2 text-gray-700">¡Vaya! No hay recetas aquí.</p>
+                        <p class="text-gray-500">Ajusta tus filtros o busca en otras categorías.</p>
+                    </div>
+                `;
+                return;
+            }
+
+            let htmlContent = '';
+            recipes.forEach(recipe => {
+                const difficultyClass = getDifficultyClass(recipe.difficulty);
+                const isFavorite = userFavorites.includes(recipe.id); 
+                const hasNote = !!userNotes[recipe.id]?.text; 
+
+                htmlContent += `
+                    <div class="recipe-card p-4 rounded-lg flex justify-between items-center" 
+                         onclick="setView('detalle-receta', { recipeId: '${recipe.id}' })"> 
+                        
+                        <!-- Columna de Información Principal -->
+                        <div class="flex-grow min-w-0">
+                            <h4 class="text-lg font-bold truncate">${recipe.name}</h4>
+                            <div class="flex items-center space-x-3 text-sm text-gray-500 mt-1">
+                                <!-- Tiempo -->
+                                <span class="flex items-center">
+                                    <i class="fas fa-clock mr-1 text-blue-500"></i>
+                                    ${recipe.time}
+                                </span>
+                                <!-- Dificultad -->
+                                <span class="${difficultyClass} difficulty-pill">
+                                    ${recipe.difficulty}
+                                </span>
+                                <!-- Rating -->
+                                <span class="flex items-center text-yellow-500">
+                                    <i class="fas fa-star mr-1"></i> ${recipe.rating}
+                                </span>
+                            </div>
+                        </div>
+
+                        <!-- Columna de Acciones (Favorito/Nota) -->
+                        <div class="flex space-x-3 ml-4">
+                            <!-- Icono de Nota (Usa la función updateNoteButton para el estado) -->
+                            <button class="text-lg p-1" 
+                                    aria-label="Ver Nota"
+                                    id="note-btn-${recipe.id}"
+                                    onclick="event.stopPropagation(); setView('detalle-receta', { recipeId: '${recipe.id}' })">
+                                <i class="${hasNote ? 'fas fa-sticky-note text-orange-500' : 'far fa-sticky-note text-gray-300'} hover:text-orange-700 transition'"></i>
+                            </button>
+                            <!-- Icono de Favorito (Usa la función toggleFavorite) -->
+                            <button class="text-lg p-1" 
+                                    aria-label="Marcar Favorito"
+                                    id="fav-btn-${recipe.id}"
+                                    onclick="event.stopPropagation(); toggleFavorite('${recipe.id}')">
+                                <i class="${isFavorite ? 'fas fa-star text-red-500' : 'far fa-star text-gray-300'} hover:text-red-700 transition"></i>
+                            </button>
+                        </div>
+                    </div>
+                `;
+            });
+
+            listContainer.innerHTML = htmlContent;
+        }
+
+
+        function renderCategoryRecipesView(categoryId) {
+            const titleElement = document.getElementById('recipes-title');
+            const listContainer = document.getElementById('recipes-list-container');
+            
+            const categoryName = getCategoryNameById(categoryId);
+            titleElement.textContent = categoryName;
+            titleElement.dataset.categoryId = categoryId; // Guardar el ID para el refresh
+
+            const filteredRecipes = MOCK_RECIPES.filter(recipe => recipe.category_id === categoryId);
+
+            renderRecipeList(filteredRecipes, listContainer);
+        }
+        
+        function renderFavoritesView() {
+            const listContainer = document.getElementById('favorites-list-container');
+            
+            const favoriteRecipes = userFavorites.map(recipeId => getRecipeById(recipeId)).filter(Boolean);
+
+            renderRecipeList(favoriteRecipes, listContainer);
+        }
+        
+        /**
+         * Renderiza los detalles de una receta específica.
+         * @param {string} recipeId - El ID de la receta.
+         */
+        window.renderRecipeDetail = async function(recipeId) {
+            const recipe = getRecipeById(recipeId);
+            const container = document.getElementById('recipe-detail-container');
+            const titleElement = document.getElementById('recipe-detail-title');
+            
+            // 1. Obtener la nota del estado local (ya cargada por onSnapshot)
+            const existingNoteText = userNotes[recipeId]?.text || '';
+            
+            // Guardar el ID de la receta actual en el contenedor para refrescar los botones
+            container.dataset.recipeId = recipeId;
+            
+            if (!recipe) {
+                container.innerHTML = '<p class="text-center text-red-500 mt-12">Receta no encontrada.</p>';
+                titleElement.textContent = 'Receta Desconocida';
+                return;
+            }
+            
+            titleElement.textContent = recipe.name;
+
+            const difficultyClass = getDifficultyClass(recipe.difficulty);
+            const isFavorite = userFavorites.includes(recipe.id); 
+            const hasNote = !!existingNoteText;
+            
+            // Renderizado de las secciones
+            const ingredientsList = recipe.ingredients.map(ing => 
+                `<li class="detail-list-item flex items-center"><i class="fas fa-check-circle mr-3 text-green-500"></i><span>${ing}</span></li>`
+            ).join('');
+
+            const stepsList = recipe.steps.map((step, index) => 
+                `<li class="detail-list-item flex"><div class="flex-shrink-0 w-6 h-6 mr-3 rounded-full bg-orange-500 text-white font-bold flex items-center justify-center">${index + 1}</div><p>${step}</p></li>`
+            ).join('');
+
+            container.innerHTML = `
+                <div class="detail-card p-5">
+                    
+                    <!-- Imagen (Simulada) y Datos Clave -->
+                    <div class="mb-5 relative">
+                        <img src="${recipe.imageUrl}" alt="Imagen de ${recipe.name}" class="w-full h-auto rounded-xl object-cover">
+                        <div class="absolute bottom-3 left-3 flex space-x-2 p-2 bg-black/50 rounded-lg">
+                            <span class="${difficultyClass} difficulty-pill shadow-lg">${recipe.difficulty}</span>
+                            <span class="text-white text-xs font-semibold flex items-center">
+                                <i class="fas fa-clock mr-1 text-yellow-300"></i> ${recipe.time}
+                            </span>
+                             <span class="text-white text-xs font-semibold flex items-center">
+                                <i class="fas fa-star mr-1 text-yellow-300"></i> ${recipe.rating}
+                            </span>
+                        </div>
+                    </div>
+                    
+                    <!-- Acciones Rápidas (Favorito / Nota) -->
+                    <div class="flex justify-around items-center mb-6 pt-3 border-t border-gray-200">
+                        <!-- Botón de Favorito -->
+                        <button class="flex flex-col items-center text-sm font-semibold hover:opacity-80 transition"
+                                aria-label="Marcar Favorito"
+                                id="fav-btn-${recipe.id}"
+                                onclick="toggleFavorite('${recipe.id}')">
+                            <i class="${isFavorite ? 'fas fa-star text-red-500' : 'far fa-star text-gray-400'} text-3xl mb-1"></i>
+                            <span class="text-gray-600">Favorito</span>
+                        </button>
+                        
+                        <!-- Botón de Notas (Ahora solo es decorativo/informativo, la interacción está abajo) -->
+                        <div class="flex flex-col items-center text-sm font-semibold opacity-100 transition">
+                            <i class="fas fa-sticky-note ${hasNote ? 'text-orange-500' : 'text-gray-400'} text-3xl mb-1"></i>
+                            <span class="text-gray-600">Con Nota</span>
+                        </div>
+                    </div>
+
+                    <!-- SECCIÓN DE NOTAS DE USUARIO -->
+                    <div class="mb-6 p-4 bg-orange-50 rounded-lg border border-orange-200">
+                        <h3 class="text-xl font-bold text-orange-600 mb-3 flex items-center">
+                            <i class="fas fa-edit mr-2"></i> Mis Notas de Cata y Ajustes
+                        </h3>
+                        <textarea id="note-textarea-${recipe.id}"
+                                  class="w-full p-3 border border-gray-300 rounded-lg focus:ring-orange-500 focus:border-orange-500 h-28"
+                                  placeholder="Escribe aquí tus observaciones, cambios de ingredientes o ajustes de tiempo para esta receta...">${existingNoteText}</textarea>
+                        <button id="note-save-btn-${recipe.id}" 
+                                onclick="saveNote('${recipe.id}')"
+                                class="mt-3 w-full bg-orange-500 text-white font-bold py-2 rounded-lg hover:bg-orange-600 transition shadow-md">
+                            Guardar Nota
+                        </button>
+                        <p class="text-xs text-gray-500 mt-2">La nota se guarda automáticamente en tu colección privada.</p>
+                    </div>
+                    
+                    <!-- Sección de Ingredientes -->
+                    <div class="mb-6">
+                        <h3 class="detail-section-title">Ingredientes 🛒 (Total: ${recipe.min_ingredients})</h3>
+                        <ul class="space-y-1">${ingredientsList}</ul>
+                    </div>
+
+                    <!-- Sección de Pasos -->
+                    <div>
+                        <h3 class="detail-section-title">Pasos 📝</h3>
+                        <ol class="space-y-3">${stepsList}</ol>
+                    </div>
+                </div>
+            `;
+        }
+
+
+        // =====================================
+        // LÓGICA DE VISTA / ROUTER SIMPLIFICADO
+        // =====================================
+
+        window.setView = function(viewName, data = {}) {
+            
+            // 1. Manejo del historial
+            const currentView = viewHistory[viewHistory.length - 1];
+            if (viewName !== currentView) {
+                if (viewName === 'principal' && viewHistory.length > 1) {
+                    // Si vamos a principal y no es el primer elemento, borramos el historial
+                    viewHistory = ['principal']; 
+                } else if (viewName !== 'principal') {
+                    // Empujar solo si no es un cambio de parámetros en la misma vista (como el modal)
+                    viewHistory.push(viewName);
+                }
+            }
+
+
+            // 2. Ocultar todas las vistas principales
+            document.getElementById('pantalla-principal').classList.add('hidden');
+            document.getElementById('notas-view').classList.add('hidden');
+            document.getElementById('menu-view').classList.add('hidden');
+            document.getElementById('recetas-view').classList.add('hidden'); 
+            document.getElementById('favoritos-view').classList.add('hidden'); 
+            document.getElementById('detalle-receta-view').classList.add('hidden'); // Ocultar la nueva vista
+
+
+            // 3. Mostrar la vista solicitada
+            const viewElement = document.getElementById(`${viewName}-view`);
+            if (viewElement) {
+                viewElement.classList.remove('hidden');
+            } else if (viewName === 'principal') {
+                document.getElementById('pantalla-principal').classList.remove('hidden');
+            } else {
+                console.warn(`Vista no encontrada: ${viewName}. Redirigiendo a principal.`);
+                document.getElementById('pantalla-principal').classList.remove('hidden'); // Fallback
+            }
+            
+            // Ocultar el buscador si cambiamos de vista
+            hideBuscadorInteligente();
+            hideFilterModal(); // Asegurar que el filtro también se oculta
+
+            // 4. Lógica de transición específica
+            if (viewName === 'menu') {
+                renderMenuView();
+            } else if (viewName === 'recetas') {
+                if (data.categoryId) {
+                    renderCategoryRecipesView(data.categoryId);
+                } else {
+                    console.error("No se proporcionó categoryId para la vista de recetas.");
+                    setView('menu'); 
+                }
+            } else if (viewName === 'favoritos') {
+                renderFavoritesView();
+            } else if (viewName === 'notas') {
+                renderNotesView(); // Forzar la renderización de la vista de notas
+            }
+             else if (viewName === 'detalle-receta') {
+                if (data.recipeId) {
+                    renderRecipeDetail(data.recipeId);
+                } else {
+                    console.error("No se proporcionó recipeId para la vista de detalle.");
+                    setView('principal');
+                }
+            }
+        }
+        
+        // Sobrescribimos el `window.history.back` para gestionar el historial de vistas de la SPA
+        window.history.back = function() {
+            if (viewHistory.length > 1) {
+                viewHistory.pop(); // Eliminar la vista actual
+                const previousView = viewHistory[viewHistory.length - 1];
+                
+                // Si la vista anterior es 'recetas', recuperamos el categoryId que está guardado en el DOM
+                if (previousView === 'recetas') {
+                    const categoryId = document.getElementById('recipes-title').dataset.categoryId;
+                    if (categoryId) {
+                        setView('recetas', { categoryId: categoryId });
+                        return; 
+                    }
+                }
+                
+                // Si es cualquier otra vista (principal, menu, favoritos), simplemente la cargamos.
+                setView(previousView);
+
+            } else {
+                setView('principal'); // Si no hay más historial, ir a principal
+            }
+        }
+
+
+        // =====================================
+        // FUNCIONES DE UI Y UTILIDAD
+        // =====================================
+
+        window.showBuscadorInteligente = function() {
+            document.getElementById('buscador-modal').style.display = 'flex';
+            // Forzamos la búsqueda para refrescar los resultados con el filtro activo, incluso si el input está vacío
+            const inputElement = document.getElementById('modal-buscador-input');
+            handleSearchInput(inputElement.value);
+            
+            updateActiveFiltersDisplay(); // Mostrar el filtro activo si lo hay
+        }
+
+        window.hideBuscadorInteligente = function() {
+            document.getElementById('buscador-modal').style.display = 'none';
+        }
+        
+        window.hideFilterModal = function() {
+            document.getElementById('filter-modal').style.display = 'none';
+        }
+
+        window.toggleModoOscuro = function() {
+            const body = document.body;
+            body.classList.toggle('modo-oscuro');
+            
+            const btnModo = document.getElementById('btn-modo');
+            if (body.classList.contains('modo-oscuro')) {
+                btnModo.innerHTML = 'MODO (🌙/☀️)';
+            } else {
+                btnModo.innerHTML = 'MODO (☀️/🌙)';
+            }
+        }
+        
+        // Inicialización de la aplicación (UI y Firebase)
+        window.onload = function() {
+            initializeAppAndAuth(); 
+
+            // Manejo de clic fuera del contenido de las modales
+            const buscadorModal = document.getElementById('buscador-modal');
+            buscadorModal.addEventListener('click', (e) => {
+                if (e.target === buscadorModal) { 
+                    hideBuscadorInteligente();
+                }
+            });
+            const filterModal = document.getElementById('filter-modal');
+            filterModal.addEventListener('click', (e) => {
+                if (e.target === filterModal) { 
+                    hideFilterModal();
+                }
+            });
+
+            const btnModo = document.getElementById('btn-modo');
+            if (document.body.classList.contains('modo-oscuro')) {
+                btnModo.innerHTML = 'MODO (🌙/☀️)';
+            } else {
+                btnModo.innerHTML = 'MODO (☀️/🌙)';
+            }
+        };
+
+    </script>
+</body>
+</html>
+
