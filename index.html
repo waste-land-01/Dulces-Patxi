@@ -71,21 +71,17 @@ const RecipeCard = ({ recipe }) => (
     </div>
 );
 
-// --- Componente de Deslizador de Rango (Range Slider) con un solo pulgar (Versión Estable) ---
-const RangeFilter = ({ label, icon: Icon, value, limit, onChange, stateKey }) => {
+// --- Componente de Filtro Numérico (Input de número simple para evitar problemas de compatibilidad) ---
+const NumberFilter = ({ label, icon: Icon, value, limit, onChange, stateKey }) => {
     
-    // Aquí usamos solo el valor máximo (value.max) del rango para el deslizador simple.
-    // Aunque el estado original es un objeto {min, max}, el deslizador simple controla 'max'.
-    
+    // Solo permitimos modificar el valor MÁXIMO (comportamiento de "Máximo permitido")
     const handleMaxChange = (e) => {
-        const newMax = parseInt(e.target.value, 10);
+        const rawValue = e.target.value === '' ? limit.min : parseInt(e.target.value, 10);
+        const newMax = Math.max(limit.min, Math.min(limit.max, rawValue));
+        
         // Mantenemos el 'min' fijo y solo actualizamos el 'max' para el filtro.
         onChange(stateKey, { min: limit.min, max: newMax });
     };
-
-    // Estilo para el input de rango simple (estilizado con clases de Tailwind)
-    // Nota: El pulgar se estiliza con el tema del navegador.
-    const sliderClasses = "w-full h-2 bg-indigo-100 rounded-lg appearance-none cursor-pointer range-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-opacity-50";
 
     return (
         <div className="p-4 bg-gray-50 rounded-lg shadow-inner mb-4">
@@ -95,26 +91,22 @@ const RangeFilter = ({ label, icon: Icon, value, limit, onChange, stateKey }) =>
                     <Icon className="w-4 h-4 mr-2 text-indigo-500" />
                     {label}
                 </h4>
-                {/* Muestra el rango actual */}
-                <span className="text-indigo-600 font-bold text-sm">
-                    Máx: {value.max} {limit.unit}
-                </span>
             </div>
             
-            {/* Input de rango simple */}
-            <input
-                type="range"
-                min={limit.min}
-                max={limit.max}
-                value={value.max} 
-                onChange={handleMaxChange}
-                className={sliderClasses}
-            />
-            
-            <div className="flex justify-between text-xs text-gray-500 mt-2">
-                <span>{limit.min} {limit.unit}</span>
-                <span>{limit.max} {limit.unit}</span>
+            <div className="flex items-center space-x-3">
+                <span className="text-sm text-gray-600">Máx:</span>
+                <input
+                    type="number"
+                    min={limit.min}
+                    max={limit.max}
+                    value={value.max} 
+                    onChange={handleMaxChange}
+                    className="w-20 p-2 border border-gray-300 rounded-lg text-center focus:ring-indigo-500 focus:border-indigo-500"
+                />
+                <span className="text-sm font-medium text-indigo-600">{limit.unit}</span>
             </div>
+            
+            <p className="text-xs text-gray-500 mt-2">Rango: {limit.min} - {limit.max} {limit.unit}</p>
         </div>
     );
 };
@@ -215,7 +207,6 @@ export default function App() {
         results = results.filter(recipe => {
             
             // a. Tiempo de Preparación
-            // Ahora solo filtramos por el MÁXIMO, ya que el min es fijo
             if (recipe.prepTime > filterState.preparationTime.max) return false;
 
             // b. Tiempo de Cocción
@@ -295,8 +286,8 @@ export default function App() {
                                 />
                             </div>
 
-                            {/* TIEMPOS */}
-                            <RangeFilter 
+                            {/* TIEMPOS Y CANTIDADES (usando NumberFilter) */}
+                            <NumberFilter 
                                 label="Tiempo Máx. de Preparación" 
                                 icon={Utensils} 
                                 value={filterState.preparationTime} 
@@ -304,7 +295,7 @@ export default function App() {
                                 onChange={updateFilter}
                                 stateKey="preparationTime"
                             />
-                            <RangeFilter 
+                            <NumberFilter 
                                 label="Tiempo Máx. de Cocción" 
                                 icon={Clock} 
                                 value={filterState.cookingTime} 
@@ -312,7 +303,7 @@ export default function App() {
                                 onChange={updateFilter}
                                 stateKey="cookingTime"
                             />
-                            <RangeFilter 
+                            <NumberFilter 
                                 label="Tiempo Máx. Total" 
                                 icon={Utensils} 
                                 value={filterState.totalTime} 
@@ -321,8 +312,7 @@ export default function App() {
                                 stateKey="totalTime"
                             />
 
-                            {/* INGREDIENTES */}
-                            <RangeFilter 
+                            <NumberFilter 
                                 label="Máx. Conteo de Ingredientes" 
                                 icon={Salad} 
                                 value={filterState.ingredientCount} 
