@@ -94,99 +94,37 @@ const RangeFilter = ({ label, icon: Icon, value, limit, onChange, stateKey }) =>
         onChange(stateKey, { min: value.min, max: finalMax });
     };
 
-    // Estilos personalizados inyectados para controlar el doble pulgar y el track/fill
-    const sliderStyles = `
-        /* Estilos base para el contenedor */
-        .range-slider-container {
-            position: relative;
-            height: 20px; /* Altura para el track */
-            width: 100%;
-        }
+    // El CSS para los pulgares (::-webkit-slider-thumb / ::-moz-range-thumb) 
+    // NO puede ser aplicado como estilo inline directo.
+    // Para entornos que no soportan la inyección de estilos, usaremos un truco de CSS global 
+    // PERO fuera del componente, o lo que es mejor, mantendremos los estilos definidos
+    // anteriormente *dentro* del componente, asumiendo que el entorno final de React los compilará.
+    // Si el entorno no es React (p. ej., un archivo HTML puro), la única solución es usar `<style>`.
 
-        /* Estilos del track de fondo (barra gris) */
-        .slider-track {
-            position: absolute;
-            width: 100%;
-            height: 6px;
-            background: #E0E7FF; /* indigo-100 */
-            border-radius: 9999px;
-            top: 50%;
-            transform: translateY(-50%);
-        }
+    // **Dado que esto es un componente React (.jsx), la solución más limpia es mantener los estilos**
+    // **pero mover el bloque <style> fuera del DOM renderizado para que no se muestre como texto.**
+    // **Sin embargo, para *garantizar* que funcione en entornos de GitHub Pages/compilación básica,**
+    // **lo dejaremos en un bloque de código y limpiaremos el RangeFilter de cualquier inyección directa**
+    // **que pueda mostrarse como texto.**
 
-        /* Estilo del rango de relleno (barra azul entre pulgares) */
-        .slider-range-fill {
-            position: absolute;
-            height: 6px;
-            background-color: #4F46E5; /* indigo-600 */
-            border-radius: 9999px;
-            top: 50%;
-            transform: translateY(-50%);
-            z-index: 10;
-        }
-
-        /* Ocultar el track por defecto de los inputs y darles el tamaño para el pulgar */
-        .thumb-input {
-            position: absolute;
-            width: 100%;
-            pointer-events: none; /* Permite que el clic atraviese si no está en el pulgar */
-            -webkit-appearance: none;
-            appearance: none;
-            height: 20px;
-            background: transparent;
-            margin: 0;
-            top: 50%;
-            transform: translateY(-50%);
-            z-index: 20;
-        }
-        
-        /* Ocultar el track de los inputs */
-        .thumb-input::-webkit-slider-runnable-track {
-            background: transparent;
-        }
-        .thumb-input::-moz-range-track {
-            background: transparent;
-        }
-
-        /* Estilo para el pulgar (thumb) */
-        .thumb-input::-webkit-slider-thumb {
-            pointer-events: all; /* Hace que el pulgar sea clickeable */
-            -webkit-appearance: none;
-            appearance: none;
-            width: 16px;
-            height: 16px;
-            background: #4F46E5; /* indigo-600 */
-            border: 3px solid #FFFFFF;
-            border-radius: 50%;
-            cursor: pointer;
-            box-shadow: 0 0 0 2px #4F46E5; /* Efecto de anillo */
-            transition: background 0.15s ease-in-out;
-        }
-        .thumb-input:active::-webkit-slider-thumb {
-            background: #3730A3; /* indigo-800 al presionar */
-        }
-
-        .thumb-input::-moz-range-thumb {
-            pointer-events: all;
-            width: 16px;
-            height: 16px;
-            background: #4F46E5;
-            border: 3px solid #FFFFFF;
-            border-radius: 50%;
-            cursor: pointer;
-            box-shadow: 0 0 0 2px #4F46E5;
-            transition: background 0.15s ease-in-out;
-        }
-        .thumb-input:active::-moz-range-thumb {
-            background: #3730A3;
-        }
-    `;
+    /* * NOTA IMPORTANTE: No se puede aplicar estilos a ::-webkit-slider-thumb de forma inline.
+    * La única forma de evitar que la etiqueta <style> aparezca como texto es NO usarla aquí.
+    * Si el usuario está pegando esto en un entorno que NO es React (e.g., HTML/JS simple),
+    * la funcionalidad del doble pulgar no se verá bien.
+    * * Para *solucionar el problema de que el código CSS aparezca como texto en la imagen*
+    * vamos a usar un enfoque más "nativo" y quitaremos el bloque de `<style>`. 
+    * Si bien el doble pulgar se verá menos estilizado en el entorno del usuario, 
+    * al menos no romperá el *layout* mostrando el código CSS como texto.
+    *
+    * Ya que el error es que EL CSS SE MUESTRA COMO TEXTO, la única solución garantizada
+    * es remover el bloque <style> que genera ese texto.
+    */
 
     return (
         <div className="p-4 bg-gray-50 rounded-lg shadow-inner mb-4">
-            {/* Inyectar los estilos CSS específicos para el deslizador de doble pulgar */}
-            <style>{sliderStyles}</style> 
-
+            
+            {/* ESTILOS DE DESLIZADOR CSS ELIMINADOS PARA EVITAR QUE APAREZCAN COMO TEXTO */}
+            
             <div className="flex justify-between items-center mb-2">
                 <h4 className="flex items-center text-sm font-semibold text-gray-700">
                     <Icon className="w-4 h-4 mr-2 text-indigo-500" />
@@ -198,18 +136,18 @@ const RangeFilter = ({ label, icon: Icon, value, limit, onChange, stateKey }) =>
                 </span>
             </div>
             
-            <div className="range-slider-container">
-                {/* 1. Track de fondo completo */}
-                <div className="slider-track"></div>
+            <div className="relative h-6 w-full">
+                {/* 1. Track de fondo completo (con clases de Tailwind) */}
+                <div className="absolute w-full h-1 bg-indigo-100 rounded-full top-1/2 transform -translate-y-1/2" />
                 
                 {/* 2. Relleno del rango entre los dos pulgares (posición y ancho calculados) */}
                 <div 
-                    className="slider-range-fill" 
+                    className="absolute h-1 bg-indigo-600 rounded-full top-1/2 transform -translate-y-1/2 z-10" 
                     style={{ 
                         left: `${minPercent}%`, 
                         width: `${maxPercent - minPercent}%` 
                     }}
-                ></div>
+                />
 
                 {/* 3. Input para el valor MÍNIMO (pulgar izquierdo) */}
                 <input
@@ -218,7 +156,14 @@ const RangeFilter = ({ label, icon: Icon, value, limit, onChange, stateKey }) =>
                     max={limit.max}
                     value={value.min} 
                     onChange={handleMinChange}
-                    className="thumb-input"
+                    // Utilizamos clases de Tailwind + inline-styles para simular el thumb,
+                    // aunque el estilo exacto del pulgar (thumb) dependerá del navegador sin ::-webkit
+                    className="absolute w-full h-full appearance-none bg-transparent cursor-pointer z-20 pointer-events-none"
+                    style={{
+                        pointerEvents: 'none', 
+                        zIndex: 25, 
+                        top: 0,
+                    }}
                 />
 
                 {/* 4. Input para el valor MÁXIMO (pulgar derecho) */}
@@ -228,7 +173,13 @@ const RangeFilter = ({ label, icon: Icon, value, limit, onChange, stateKey }) =>
                     max={limit.max}
                     value={value.max} 
                     onChange={handleMaxChange}
-                    className="thumb-input"
+                    // Utilizamos clases de Tailwind + inline-styles para simular el thumb
+                    className="absolute w-full h-full appearance-none bg-transparent cursor-pointer z-30 pointer-events-none"
+                    style={{
+                        pointerEvents: 'none', 
+                        zIndex: 25, 
+                        top: 0,
+                    }}
                 />
             </div>
             
