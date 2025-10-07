@@ -1,150 +1,294 @@
-import React, { useState, useMemo } from 'react';
-import { Search, Star, Clock, Salad, Utensils } from 'lucide-react';
-
-// --- Estructura de Estado de Filtros (Simplificada) ---
-const initialFilterState = {
-    totalTime: { min: 10, max: 240 },
-    ingredientCount: { min: 3, max: 20 },
-    difficulty: [1, 2, 3, 4, 5],
-};
-
-// --- Componente para mostrar las estrellas de dificultad ---
-const DifficultyStars = ({ rating }) => {
-    return (
-        <div className="flex items-center space-x-0.5">
-            {[1, 2, 3, 4, 5].map((star) => (
-                <Star
-                    key={star}
-                    className={`w-4 h-4 transition-colors duration-150 ${
-                        star <= rating ? 'text-yellow-400 fill-yellow-400' : 'text-gray-300'
-                    }`}
-                />
-            ))}
-        </div>
-    );
-};
-
-// --- Componente de Tarjeta de Receta (Mock para visualización) ---
-const RecipeCard = ({ recipe }) => (
-    <div className="bg-white rounded-xl shadow-lg hover:shadow-xl transition-shadow duration-300 overflow-hidden border border-gray-100">
-        <div className="relative h-48 sm:h-56">
-            <img 
-                src={recipe.image} 
-                alt={recipe.title} 
-                className="w-full h-full object-cover" 
-                onError={(e) => { e.target.onerror = null; e.target.src = "https://placehold.co/600x400/1E3A8A/FFFFFF?text=Receta"; }}
-            />
-            <div className="absolute top-3 right-3 bg-indigo-600 text-white text-xs font-semibold px-3 py-1 rounded-full shadow-md flex items-center">
-                <Clock className="w-3 h-3 mr-1" />
-                {recipe.totalTime} min
-            </div>
-        </div>
-        <div className="p-4 sm:p-5">
-            <h3 className="text-xl font-bold text-gray-800 mb-1 line-clamp-2">{recipe.title}</h3>
-            <div className="flex items-center justify-between mb-3">
-                <DifficultyStars rating={recipe.difficulty} />
-                <span className="text-sm font-medium text-indigo-600">{recipe.category}</span>
-            </div>
-            <div className="flex justify-between text-sm text-gray-600 border-t border-gray-100 pt-3">
-                <div className="flex items-center">
-                    <Utensils className="w-4 h-4 mr-1 text-gray-400" />
-                    <span>Prep: {recipe.prepTime} min</span>
-                </div>
-                <div className="flex items-center">
-                    <Salad className="w-4 h-4 mr-1 text-gray-400" />
-                    <span>Ingr: {recipe.ingredients}</span>
-                </div>
-            </div>
-        </div>
-    </div>
-);
-
-// --- Mock de Recetas para Visualización ---
-const mockRecipes = [
-    { id: 1, title: "Lomo Saltado Peruano Auténtico", category: "Carnes", prepTime: 20, cookingTime: 25, totalTime: 45, ingredients: 8, difficulty: 4, rating: 4.5, image: "https://placehold.co/600x400/EF4444/FFFFFF?text=Lomo+Saltado", tags: ["carne", "peruano", "salado"] },
-    { id: 2, title: "Sopa de Tomate y Albahaca Rápida", category: "Sopas", prepTime: 10, cookingTime: 15, totalTime: 25, ingredients: 5, difficulty: 2, rating: 3.8, image: "https://placehold.co/600x400/10B981/FFFFFF?text=Sopa+Tomate", tags: ["vegetariano", "sopa", "rápida"] },
-    { id: 3, title: "Curry de Garbanzos y Espinacas Vegano", category: "Vegetariano", prepTime: 15, cookingTime: 30, totalTime: 45, ingredients: 12, difficulty: 3, rating: 4.2, image: "https://placehold.co/600x400/3B82F6/FFFFFF?text=Curry+Vegano", tags: ["vegano", "curry", "salado"] },
-    { id: 4, title: "Tarta de Manzana Clásica Holandesa", category: "Postres", prepTime: 30, cookingTime: 60, totalTime: 90, ingredients: 10, difficulty: 5, rating: 4.9, image: "https://placehold.co/600x400/F97316/FFFFFF?text=Tarta+Manzana", tags: ["postre", "dulce", "horneado"] },
-];
-
-
-export default function App() {
-    // Estado del texto de búsqueda
-    const [searchTerm, setSearchTerm] = useState('');
-    
-    // --- Lógica de filtrado (useMemo) ---
-    const filteredRecipes = useMemo(() => {
-        let results = mockRecipes;
-
-        // 1. Filtrado por texto de búsqueda (Título y Tags)
-        if (searchTerm) {
-            const term = searchTerm.toLowerCase();
-            results = results.filter(recipe => 
-                recipe.title.toLowerCase().includes(term) ||
-                recipe.tags.some(tag => tag.includes(term))
-            );
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Buscador Inteligente de Recetas</title>
+    <!-- Carga de Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Carga de Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        /* Estilos personalizados para asegurar la fuente Inter */
+        html {
+            font-family: 'Inter', sans-serif;
         }
-        return results;
-    }, [searchTerm]);
+        /* Estilo para tarjetas en pantallas pequeñas */
+        @media (max-width: 640px) {
+            .grid-recipes {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body class="min-h-screen bg-gray-50">
 
+    <div id="app">
+        <!-- Contenido generado por JavaScript -->
+    </div>
 
-    return (
-        <div className="min-h-screen bg-gray-50 font-sans">
-            {/* Header / Barra de Búsqueda Fija */}
-            <header className="bg-white sticky top-0 z-10 shadow-lg p-4 sm:p-6 border-b border-indigo-100">
-                <div className="max-w-4xl mx-auto flex flex-col space-y-4">
-                    
-                    <h1 className="text-3xl font-extrabold text-center text-indigo-700">
-                        Buscador Inteligente <span className="text-pink-500">🧠</span>
-                    </h1>
+    <script>
+        // --- MOCK DE RECETAS Y LÍMITES ---
+        const initialFilterState = {
+            totalTime: { value: 240, min: 10, max: 240 },
+            ingredientCount: { value: 20, min: 3, max: 20 },
+            difficulty: { value: 5, min: 1, max: 5 },
+            // Simulamos el estado de los filtros rápidos (Max Time, Max Ingredients, Min Difficulty)
+        };
 
-                    {/* Campo de Búsqueda de Texto */}
-                    <div className="relative flex-grow">
-                        <input
-                            type="text"
-                            placeholder="Buscar por nombre de receta, ingrediente o categoría..."
-                            value={searchTerm}
-                            onChange={(e) => setSearchTerm(e.target.value)}
-                            className="w-full py-3 pl-10 pr-4 border border-gray-300 rounded-full focus:ring-indigo-500 focus:border-indigo-500 transition duration-150 shadow-sm text-gray-700"
+        let filterState = { ...initialFilterState };
+        let searchTerm = '';
+        
+        const mockRecipes = [
+            { id: 1, title: "Lomo Saltado Peruano Auténtico", category: "Carnes", prepTime: 20, cookingTime: 25, totalTime: 45, ingredients: 8, difficulty: 4, rating: 4.5, image: "https://placehold.co/600x400/EF4444/FFFFFF?text=Lomo+Saltado", tags: ["carne", "peruano", "salado"] },
+            { id: 2, title: "Sopa de Tomate y Albahaca Rápida", category: "Sopas", prepTime: 10, cookingTime: 15, totalTime: 25, ingredients: 5, difficulty: 2, rating: 3.8, image: "https://placehold.co/600x400/10B981/FFFFFF?text=Sopa+Tomate", tags: ["vegetariano", "sopa", "rápida"] },
+            { id: 3, title: "Curry de Garbanzos y Espinacas Vegano", category: "Vegetariano", prepTime: 15, cookingTime: 30, totalTime: 45, ingredients: 12, difficulty: 3, rating: 4.2, image: "https://placehold.co/600x400/3B82F6/FFFFFF?text=Curry+Vegano", tags: ["vegano", "curry", "salado"] },
+            { id: 4, title: "Tarta de Manzana Clásica Holandesa", category: "Postres", prepTime: 30, cookingTime: 60, totalTime: 90, ingredients: 10, difficulty: 5, rating: 4.9, image: "https://placehold.co/600x400/F97316/FFFFFF?text=Tarta+Manzana", tags: ["postre", "dulce", "horneado"] },
+            { id: 5, title: "Ensalada César con Pollo Grillado", category: "Ensaladas", prepTime: 15, cookingTime: 10, totalTime: 25, ingredients: 8, difficulty: 2, rating: 4.0, image: "https://placehold.co/600x400/D97706/FFFFFF?text=Ensalada+Cesar", tags: ["ensalada", "pollo", "rápida"] },
+        ];
+
+        // --- FUNCIONES AUXILIARES ---
+
+        /**
+         * Genera el HTML de las estrellas de dificultad.
+         * @param {number} rating 
+         */
+        function getDifficultyStars(rating) {
+            let html = '<div class="flex items-center space-x-0.5">';
+            for (let i = 1; i <= 5; i++) {
+                const color = i <= rating ? 'text-yellow-400 fill-yellow-400' : 'text-gray-300';
+                // Usamos el código SVG de Lucide para evitar la dependencia de React
+                const svgName = 'Star';
+                const svgHtml = `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-4 h-4 transition-colors duration-150 ${color}"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>`;
+                html += svgHtml;
+            }
+            html += '</div>';
+            return html;
+        }
+
+        /**
+         * Genera el HTML de una tarjeta de receta.
+         * @param {Object} recipe 
+         */
+        function renderRecipeCard(recipe) {
+            const starsHtml = getDifficultyStars(recipe.difficulty);
+            
+            return `
+                <div class="bg-white rounded-xl shadow-lg hover:shadow-xl transition-shadow duration-300 overflow-hidden border border-gray-100">
+                    <div class="relative h-48 sm:h-56">
+                        <img 
+                            src="${recipe.image}" 
+                            alt="${recipe.title}" 
+                            class="w-full h-full object-cover" 
+                            onerror="this.onerror=null;this.src='https://placehold.co/600x400/1E3A8A/FFFFFF?text=Receta';"
                         />
-                        <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
-                    </div>
-                    
-                    {/* Sección donde irán los botones de filtro (vacía por ahora) */}
-                    <div className="h-6">
-                        {/* Espacio para los botones */}
-                    </div>
-
-                </div>
-            </header>
-
-            <main className="max-w-4xl mx-auto p-4 sm:p-6 pt-0">
-                
-                {/* Indicador de Filtros Aplicados y Reset */}
-                <div className="flex justify-between items-center py-4 mt-6 border-b border-gray-200">
-                    <h2 className="text-2xl font-bold text-gray-800">
-                        Resultados de la Búsqueda 
-                        <span className="ml-2 text-indigo-600">({filteredRecipes.length} recetas)</span>
-                    </h2>
-                </div>
-
-
-                {/* Contenedor de Recetas */}
-                <div className="mt-6 grid grid-cols-1 sm:grid-cols-2 gap-6 pb-12">
-                    {filteredRecipes.length > 0 ? (
-                        filteredRecipes.map(recipe => (
-                            <RecipeCard key={recipe.id} recipe={recipe} />
-                        ))
-                    ) : (
-                        <div className="col-span-1 sm:col-span-2 text-center py-10 bg-white rounded-xl shadow-md border border-gray-100">
-                            <p className="text-lg text-gray-500 font-medium">
-                                No se encontraron recetas que coincidan con la búsqueda.
-                            </p>
+                        <div class="absolute top-3 right-3 bg-indigo-600 text-white text-xs font-semibold px-3 py-1 rounded-full shadow-md flex items-center">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-3 h-3 mr-1"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                            ${recipe.totalTime} min
                         </div>
-                    )}
+                    </div>
+                    <div class="p-4 sm:p-5">
+                        <h3 class="text-xl font-bold text-gray-800 mb-1 line-clamp-2">${recipe.title}</h3>
+                        <div class="flex items-center justify-between mb-3">
+                            ${starsHtml}
+                            <span class="text-sm font-medium text-indigo-600">${recipe.category}</span>
+                        </div>
+                        <div class="flex justify-between text-sm text-gray-600 border-t border-gray-100 pt-3">
+                            <div class="flex items-center">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-4 h-4 mr-1 text-gray-400"><path d="M3 2v7c0 1.1.9 2 2 2h4l-3 4v4"/><path d="M21 15v7c0 1.1-.9 2-2 2h-4l3-4v-4"/></svg>
+                                <span>Prep: ${recipe.prepTime} min</span>
+                            </div>
+                            <div class="flex items-center">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-4 h-4 mr-1 text-gray-400"><path d="M12 2A7 7 0 0 0 5 9c0 5.5 7 13 7 13s7-7.5 7-13A7 7 0 0 0 12 2z"/><path d="M12 12a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"/></svg>
+                                <span>Ingr: ${recipe.ingredients}</span>
+                            </div>
+                        </div>
+                    </div>
                 </div>
+            `;
+        }
 
-            </main>
-        </div>
-    );
-}
+        /**
+         * Genera el HTML de un botón de filtro rápido.
+         * @param {string} label 
+         * @param {string} iconName 
+         * @param {string} colorClass 
+         * @param {string} filterAction: Nombre de la acción del filtro.
+         */
+        function renderQuickFilterButton(label, iconHtml, colorClass, filterAction) {
+            return `
+                <button 
+                    onclick="handleFilterClick('${filterAction}')"
+                    class="w-full py-3 px-4 rounded-xl text-lg font-bold shadow-md transition duration-200 transform hover:scale-[1.02] active:scale-[0.98]
+                    ${colorClass} text-white flex items-center justify-center space-x-3"
+                    title="${label}"
+                >
+                    <span>${label}</span> ${iconHtml}
+                </button>
+            `;
+        }
+        
+        // --- LÓGICA DE FILTRADO ---
+        function filterRecipes() {
+            let results = mockRecipes;
+
+            // 1. Filtrado por texto de búsqueda (Título y Tags)
+            if (searchTerm) {
+                const term = searchTerm.toLowerCase();
+                results = results.filter(recipe => 
+                    recipe.title.toLowerCase().includes(term) ||
+                    recipe.tags.some(tag => tag.includes(term))
+                );
+            }
+
+            // 2. Aplicar lógica de filtros (Usamos los valores actuales de filterState)
+            results = results.filter(recipe => {
+                
+                // a. Tiempo Total Máximo
+                if (recipe.totalTime > filterState.totalTime.value) return false;
+
+                // b. Conteo Máximo de Ingredientes
+                if (recipe.ingredients > filterState.ingredientCount.value) return false;
+
+                // c. Dificultad (asumimos dificultad MÍNIMA)
+                if (recipe.difficulty < filterState.difficulty.value) return false;
+                
+                // Nota: Los demás filtros (Excluir Ingrediente, Puntuación) se añadirán con los modales.
+                return true;
+            });
+
+            return results;
+        }
+
+        // --- MANEJADORES DE EVENTOS ---
+
+        /**
+         * Maneja el clic en los botones de filtro rápido.
+         * En esta versión, solo simulamos un cambio de estado para ver el impacto.
+         * @param {string} filterName 
+         */
+        function handleFilterClick(filterName) {
+            // console.log(`Abriendo modal para: ${filterName}`);
+            
+            // Simulación de cambio de filtro (ESTO DEBE SER REEMPLAZADO POR UN MODAL INTERACTIVO)
+            if (filterName === 'tiempo') {
+                filterState.totalTime.value = 45; // Máximo 45 min
+            } else if (filterName === 'dificultad') {
+                filterState.difficulty.value = 3; // Mínimo 3 estrellas
+            } else if (filterName === 'ingredientes') {
+                filterState.ingredientCount.value = 10; // Máximo 10 ingredientes
+            } else if (filterName === 'reset') {
+                filterState = { ...initialFilterState };
+                searchTerm = '';
+                document.getElementById('search-input').value = '';
+            }
+            
+            // Renderiza la vista con los nuevos filtros
+            renderApp();
+        }
+
+        function handleSearchInput(event) {
+            searchTerm = event.target.value;
+            renderApp();
+        }
+
+        // --- RENDERIZADO PRINCIPAL ---
+
+        function renderApp() {
+            const results = filterRecipes();
+            
+            const appDiv = document.getElementById('app');
+            
+            // Íconos SVG para los botones (usando Lucide directamente)
+            const clockIcon = `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>`;
+            const zapIcon = `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>`;
+            const minusCircleIcon = `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5"><circle cx="12" cy="12" r="10"/><line x1="8" y1="12" x2="16" y2="12"/></svg>`;
+            const saladIcon = `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="M15 10c-3 0-5 2.5-5 5"/></svg>`;
+            const starIcon = `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>`;
+            
+            // Generar el HTML de las tarjetas de resultados
+            const recipeCardsHtml = results.length > 0 ?
+                results.map(renderRecipeCard).join('') :
+                `
+                <div class="col-span-1 sm:col-span-2 text-center py-10 bg-white rounded-xl shadow-md border border-gray-100">
+                    <p class="text-lg text-gray-500 font-medium">
+                        No se encontraron recetas que coincidan con los filtros.
+                    </p>
+                </div>
+                `;
+
+            appDiv.innerHTML = `
+                <!-- Header / Barra de Búsqueda Fija -->
+                <header class="bg-white sticky top-0 z-10 shadow-lg p-4 sm:p-6 border-b border-indigo-100">
+                    <div class="max-w-4xl mx-auto flex flex-col space-y-4">
+                        
+                        <h1 class="text-3xl font-extrabold text-center text-indigo-700">
+                            Buscador Inteligente <span class="text-pink-500">🧠</span>
+                        </h1>
+
+                        <!-- Campo de Búsqueda de Texto -->
+                        <div class="relative flex-grow">
+                            <input
+                                type="text"
+                                id="search-input"
+                                placeholder="Buscar por nombre de receta, ingrediente o categoría..."
+                                value="${searchTerm}"
+                                oninput="handleSearchInput(event)"
+                                class="w-full py-3 pl-10 pr-4 border border-gray-300 rounded-full focus:ring-indigo-500 focus:border-indigo-500 transition duration-150 shadow-sm text-gray-700"
+                            />
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+                        </div>
+
+                        <!-- Botones de Filtro Rápido (Replicando la estructura de la imagen) -->
+                        <div class="grid grid-cols-2 md:grid-cols-5 gap-3">
+                            ${renderQuickFilterButton("Tiempo Máximo", clockIcon, "bg-indigo-500 hover:bg-indigo-600", 'tiempo')}
+                            ${renderQuickFilterButton("Dificultad Mínima", zapIcon, "bg-yellow-500 hover:bg-yellow-600", 'dificultad')}
+                            ${renderQuickFilterButton("Excluir Ingrediente", minusCircleIcon, "bg-red-500 hover:bg-red-600", 'excluir')}
+                            ${renderQuickFilterButton("Máx. Ingredientes", saladIcon, "bg-green-500 hover:bg-green-600", 'ingredientes')}
+                            ${renderQuickFilterButton("Top Puntuación", starIcon, "bg-purple-500 hover:bg-purple-600", 'puntuacion')}
+                        </div>
+                    </div>
+                </header>
+
+                <main class="max-w-4xl mx-auto p-4 sm:p-6 pt-0">
+                    
+                    <!-- Indicador de Filtros Aplicados y Reset -->
+                    <div class="flex justify-between items-center py-4 mt-6 border-b border-gray-200">
+                        <h2 class="text-2xl font-bold text-gray-800">
+                            Resultados de la Búsqueda 
+                            <span class="ml-2 text-indigo-600">(${results.length} recetas)</span>
+                        </h2>
+                        <!-- Botón de Resetear Filtros -->
+                        <button
+                            onclick="handleFilterClick('reset')"
+                            class="text-sm font-medium text-red-500 hover:text-red-700 transition duration-150 flex items-center"
+                            title="Resetear todos los filtros aplicados"
+                        >
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-4 h-4 mr-1"><path d="M18 6L6 18"/><path d="M6 6l12 12"/></svg>
+                            Resetear
+                        </button>
+                    </div>
+
+
+                    <!-- Contenedor de Recetas -->
+                    <div class="mt-6 grid grid-cols-1 sm:grid-cols-2 gap-6 pb-12 grid-recipes">
+                        ${recipeCardsHtml}
+                    </div>
+
+                </main>
+            `;
+            
+            // Si el modo de simulación de filtro está activo, mostrar qué filtro se aplicó.
+            if (filterState.totalTime.value !== initialFilterState.totalTime.value) {
+                console.log(`Filtro de Tiempo Máximo aplicado: ${filterState.totalTime.value} min`);
+            }
+        }
+
+        // Inicializar la aplicación al cargar la página
+        window.onload = function() {
+            renderApp();
+        };
+
+    </script>
+</body>
+</html>
